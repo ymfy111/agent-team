@@ -4,7 +4,7 @@
 > 日期：2026-05-15  
 > 所属目录：`docs/specs/`  
 > 相关文档：  
-> - `docs/specs/2026-05-13-智能软件工厂系统设计方案-v0.6.32-revised.md`  
+> - `docs/specs/2026-05-13-智能软件工厂系统设计方案-v0.6.32.md`  
 > - `docs/references/agent-web-kit-架构设计-reference.md`  
 > - `docs/decisions/ADR-0001-agent-web-kit采用非侵入式仅对话框集成.md`
 
@@ -332,6 +332,76 @@ agent-gateway 是 conversationId / runtimeSessionId 的真源；
 
 ---
 
+
+## 10.1 AgentRouteProvider 与状态真源
+
+智能软件工厂正式集成时，前端和 `<agent-widget>` 只传 `agentId`，不传 OpenCode endpoint、workspaceDir、runtimeHost 或 token。
+
+```text
+前端 / chat-integration
+→ mountAgentWidget(agentId, hostContext)
+→ agent-gateway resolveAgent(agentId)
+→ agent-team AgentRouteProvider
+→ RuntimeHost / OpenCode Runtime
+```
+
+职责边界：
+
+```text
+agent-team
+  Worker / RuntimeHost / WorkerRuntimeBinding / AgentRoute / AgentPresence 的业务真源
+
+agent-gateway
+  根据 agentId 查询 AgentRouteProvider
+  创建 / 复用 conversation
+  转发命令
+  订阅 SSE
+  缓存脱敏状态摘要
+
+agent-web-kit widget
+  只渲染对话框和交互卡片
+```
+
+推荐接口：
+
+```http
+GET /internal/agent-routes/:agentId
+POST /internal/agent-routes/resolve-batch
+```
+
+`resolveAgent(agentId)` 返回给前端的状态必须是脱敏摘要：
+
+```ts
+type PublicAgentStatus = {
+  routeStatus: 'active' | 'disabled' | 'unavailable' | 'error'
+  presenceStatus?: 'online' | 'offline' | 'busy' | 'idle' | 'starting' | 'stopping' | 'failed'
+  lastSeenText?: string
+  reasonCode?: string
+}
+```
+
+不得返回：
+
+```text
+endpointRef
+workspaceDir
+runtimeHost 内网地址
+runtime token
+```
+
+心跳与忙闲状态：
+
+```text
+正式模式：
+RuntimeHost / OpenCode supervisor → agent-team runtime-service → agent-gateway Provider 查询
+
+轻量 / Mock：
+RuntimeHost / Mock runtime → agent-gateway heartbeat
+```
+
+在智能软件工厂中，员工在线 / 离线 / 繁忙 / 空闲的业务真源是 agent-team，不是 agent-gateway。Gateway 的 heartbeat 仅用于 Mock、调试、静态配置和轻量模式。
+
+
 ## 11. 入口到上下文映射
 
 | 入口 | target | HostContext 必填 | 说明 |
@@ -398,7 +468,7 @@ conversationId + interactionId
 
 文档发布后，是否让已有小云会话立即感知新上下文，按阶段处理。
 
-### 13.1 P0a：MockChatAdapter 更新
+### 13.1 P0a：MockChatAdapter，不调用真实 AgentRouteProvider 更新
 
 P0a 只更新前端状态和 MockChatAdapter 上下文：
 
@@ -538,3 +608,83 @@ P0b 之前不要求真实会话持久化。P1 需要增加 ConversationContextSn
 2. `AgentInteraction.metadata` 是否进入 `@agent-web/contracts` 正式类型；如暂未进入，先使用 `payload.extra` 或约定字段。
 3. 多团队 Leader 会话是否一 target 一 conversation，还是同 target 可多 conversation，需要在 P0b 接入时根据 Gateway 能力确认。
 4. 小云对话历史是否进入智能软件工厂数据库，还是只由 Gateway / OpenCode 管理，需要在 P1 决策。
+
+## 补充：Gateway Provider 与 routeRevision 对齐
+
+智能软件工厂与 agent-web-kit 集成时，前端仍然只传 `agentId` 与 `hostContext`。正式集成中：
+
+```text
+agent-team API
+  是 Worker / RuntimeHost / AgentRoute / AgentPresence 的业务真源
+
+agent-gateway
+  通过 AgentRouteProvider 查询 agent-team
+  只缓存脱敏路由和状态摘要
+  不保存 Worker / Team / Skill / Project 等业务主数据
+
+agent-web-kit widget
+  只感知 agentId / conversationId / hostContext / PublicAgentStatus
+```
+
+### AgentRouteProvider 返回要求
+
+Provider 返回的 route 统一使用：
+
+```ts
+type AgentRouteProviderResult = {
+  agentId: string
+  routeRevision: number
+  routeStatus: 'active' | 'disabled' | 'unavailable' | 'error'
+  presenceStatus?: 'online' | 'offline' | 'busy' | 'idle' | 'starting' | 'stopping' | 'failed'
+  runtimeType: 'opencode' | 'mock' | 'custom'
+  runtimeHostId?: string
+  endpointRef: string
+  workspaceDir?: string
+  capabilities?: string[]
+  updatedAt?: string
+}
+```
+
+前端可见状态必须脱敏为：
+
+```ts
+type PublicAgentStatus = {
+  routeStatus: 'active' | 'disabled' | 'unavailable' | 'error'
+  presenceStatus?: 'online' | 'offline' | 'busy' | 'idle' | 'starting' | 'stopping' | 'failed'
+  lastSeenText?: string
+  reasonCode?: string
+}
+```
+
+不得向浏览器返回 `endpointRef`、`workspaceDir`、RuntimeHost 内网地址或 token。
+
+### 批量 resolve
+
+为支撑总览、团队页、员工页的批量状态展示，agent-team 应提供批量解析接口：
+
+```http
+POST /internal/agent-routes/resolve-batch
+```
+
+请求：
+
+```json
+{
+  "agentIds": ["leader-team-001", "worker-dev-001", "worker-test-001"]
+}
+```
+
+响应应支持部分成功，不应因单个 agent 不存在导致整体失败。
+
+### 心跳路径
+
+正式集成：
+
+```text
+RuntimeHost / OpenCode supervisor
+→ agent-team runtime-service
+→ agent-team 更新 WorkerRuntimeBinding / AgentRoute / AgentPresence
+→ agent-gateway 通过 Provider 查询
+```
+
+Gateway heartbeat 只用于 Mock、调试、Static / Hybrid 轻量模式，不作为智能软件工厂正式状态真源。

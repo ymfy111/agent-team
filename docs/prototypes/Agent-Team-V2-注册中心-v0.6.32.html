@@ -152,7 +152,7 @@ v0.6.7 changelog (智能体详情工作台)
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能软件工厂 v0.6.32 · 界面走查与任务拆解</title>
+    <title>智能软件工厂 v0.6.32 · P0a 闭环增强原型</title>
   <style>
     /* =========================================
        Design System & Variables
@@ -2606,7 +2606,7 @@ v0.6.7 changelog (智能体详情工作台)
       </div>
       <div class="app-header-title">智能软件工厂</div>
     </div>
-    <span class="app-header-badge">v0.6.32 · 界面走查与任务拆解</span>
+    <span class="app-header-badge">v0.6.32 · P0a 闭环增强</span>
     <span class="app-header-meta">你的数字员工团队</span>
     <div class="app-header-spacer"></div>
     <select class="app-header-mock" id="mockScenarioSelect" onchange="handleMockScenario(this.value)" title="模拟场景（演示用）">
@@ -8604,6 +8604,473 @@ function renderWorkerPool() {
     </div>
   </div>
 </div>
+
+
+
+<!-- === v0.6.32：P0a 最小闭环增强（仅原型 mock，不接真实后端 / Gateway / OpenCode） === -->
+<style>
+  .p0a-flow-trigger {
+    position: fixed; right: 18px; top: 54px; z-index: 10020;
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 12px; border-radius: 999px;
+    border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 8px 22px rgba(37, 99, 235, .14);
+  }
+  .p0a-flow-trigger:hover { background:#dbeafe; transform: translateY(-1px); }
+  .p0a-flow-panel {
+    position: fixed; right: 16px; top: 94px; width: 360px; max-height: calc(100vh - 128px);
+    z-index: 10021; display: none; flex-direction: column; overflow: hidden;
+    border: 1px solid #dbeafe; border-radius: 16px; background: #fff;
+    box-shadow: 0 20px 48px rgba(15, 23, 42, .18);
+  }
+  .p0a-flow-panel.open { display: flex; }
+  .p0a-flow-header { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; background: linear-gradient(135deg,#eff6ff,#fff); display:flex; justify-content:space-between; gap:10px; }
+  .p0a-flow-title { font-size: 14px; font-weight: 800; color: #0f172a; }
+  .p0a-flow-sub { margin-top: 3px; font-size: 11px; color: #64748b; line-height: 1.45; }
+  .p0a-flow-close { border:0; background:transparent; font-size:18px; color:#64748b; cursor:pointer; }
+  .p0a-flow-body { padding: 12px 14px; overflow-y:auto; }
+  .p0a-flow-step { display:flex; gap:10px; padding:9px 8px; border-radius:10px; align-items:flex-start; }
+  .p0a-flow-step + .p0a-flow-step { border-top:1px dashed #e2e8f0; }
+  .p0a-flow-check { width:20px; height:20px; flex:0 0 20px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; background:#f1f5f9; color:#94a3b8; }
+  .p0a-flow-step.done .p0a-flow-check { background:#dcfce7; color:#16a34a; font-weight:800; }
+  .p0a-flow-step-main { flex:1; min-width:0; }
+  .p0a-flow-step-title { font-size:12px; font-weight:700; color:#334155; }
+  .p0a-flow-step-desc { margin-top:2px; font-size:11px; color:#64748b; line-height:1.45; }
+  .p0a-flow-footer { padding: 10px 14px; border-top:1px solid #e2e8f0; background:#f8fafc; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .p0a-flow-progress { font-size:12px; color:#475569; font-weight:700; }
+  .p0a-modal-overlay {
+    position: fixed; inset: 0; z-index: 10030; display:none; align-items:center; justify-content:center;
+    background: rgba(15, 23, 42, .36); backdrop-filter: blur(2px);
+  }
+  .p0a-modal-overlay.open { display:flex; }
+  .p0a-modal { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 80px); overflow:hidden; display:flex; flex-direction:column; border-radius:16px; background:#fff; box-shadow:0 24px 60px rgba(15,23,42,.22); }
+  .p0a-modal-header { padding:16px 18px; border-bottom:1px solid #e2e8f0; background:linear-gradient(135deg,#f8fafc,#fff); display:flex; align-items:center; justify-content:space-between; }
+  .p0a-modal-title { font-size:16px; font-weight:800; color:#0f172a; }
+  .p0a-modal-close { border:0; background:transparent; cursor:pointer; font-size:20px; color:#64748b; }
+  .p0a-modal-body { padding:16px 18px; overflow-y:auto; }
+  .p0a-modal-footer { padding:14px 18px; border-top:1px solid #e2e8f0; background:#f8fafc; display:flex; justify-content:flex-end; gap:10px; }
+  .p0a-form-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+  .p0a-form-group { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+  .p0a-form-group.full { grid-column: 1 / -1; }
+  .p0a-form-group label { font-size:12px; color:#64748b; font-weight:700; }
+  .p0a-form-group input, .p0a-form-group select, .p0a-form-group textarea { border:1px solid #cbd5e1; border-radius:8px; padding:8px 10px; font:inherit; font-size:13px; outline:none; background:#fff; }
+  .p0a-form-group input:focus, .p0a-form-group select:focus, .p0a-form-group textarea:focus { border-color:#60a5fa; box-shadow:0 0 0 3px rgba(96,165,250,.15); }
+  .p0a-toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(16px); z-index:10050; padding:10px 14px; border-radius:999px; background:#0f172a; color:#fff; font-size:13px; box-shadow:0 14px 32px rgba(15,23,42,.28); opacity:0; transition: all .18s ease; pointer-events:none; }
+  .p0a-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .p0a-state-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:#ecfdf5; color:#059669; font-size:11px; font-weight:700; }
+  .skill-action.p0a-remove { color:#ef4444; margin-left:12px; }
+  .p0a-inline-hint { font-size:11px; color:#64748b; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:10px; padding:8px 10px; margin-top:8px; line-height:1.5; }
+</style>
+
+<button class="p0a-flow-trigger" id="p0aFlowTrigger" type="button" onclick="p0aToggleFlowPanel()">✅ P0a 演示</button>
+<div class="p0a-flow-panel" id="p0aFlowPanel" aria-label="P0a 演示主线">
+  <div class="p0a-flow-header">
+    <div><div class="p0a-flow-title">P0a 最小闭环验收</div><div class="p0a-flow-sub">仅用于原型评审：验证 Skill → 模板 → 员工 → 团队/项目 → 文档 → 决策 → 动态。</div></div>
+    <button class="p0a-flow-close" type="button" onclick="p0aToggleFlowPanel(false)">×</button>
+  </div>
+  <div class="p0a-flow-body" id="p0aFlowBody"></div>
+  <div class="p0a-flow-footer"><span class="p0a-flow-progress" id="p0aFlowProgress">0/8 完成</span><button class="btn btn-sm" type="button" onclick="p0aResetFlowState()">重置演示状态</button></div>
+</div>
+<div class="p0a-modal-overlay" id="p0aModalOverlay" onclick="if(event.target.id==='p0aModalOverlay') p0aCloseModal()">
+  <div class="p0a-modal" onclick="event.stopPropagation()">
+    <div class="p0a-modal-header"><div class="p0a-modal-title" id="p0aModalTitle">P0a 操作</div><button class="p0a-modal-close" type="button" onclick="p0aCloseModal()">×</button></div>
+    <div class="p0a-modal-body" id="p0aModalBody"></div>
+    <div class="p0a-modal-footer" id="p0aModalFooter"></div>
+  </div>
+</div>
+<div class="p0a-toast" id="p0aToast"></div>
+
+<script>
+(function(){
+  if (window.__p0aFlowPatchApplied) return;
+  window.__p0aFlowPatchApplied = true;
+
+  const P0A_STEPS = [
+    { id:'skill-published', title:'发布 Skill', desc:'保存草稿不影响运行，发布生效后才刷新模板和员工实例。' },
+    { id:'skill-attached', title:'挂载 Skill 到岗位', desc:'通过 TemplateSkillMapping 建立模板与技能关系。' },
+    { id:'worker-created', title:'基于岗位创建员工', desc:'Worker 记录 templateId，并从模板派生技能。' },
+    { id:'worker-assigned', title:'员工匹配团队 / 项目', desc:'实例进入团队后在运行态页面可见。' },
+    { id:'doc-published', title:'发布项目文档', desc:'文档版本变更并作为 Agent 上下文的 mock 输入。' },
+    { id:'decision-created', title:'生成模拟决策', desc:'文档发布后 Leader 生成一条待决策项。' },
+    { id:'decision-resolved', title:'处理决策', desc:'Decision resolved 后回写团队动态。' },
+    { id:'activity-written', title:'查看 Activity 回写', desc:'关键动作均进入团队动态，验证运行态可观察。' }
+  ];
+
+  window.p0aFlowState = window.p0aFlowState || {};
+  P0A_STEPS.forEach(s => { if (typeof window.p0aFlowState[s.id] === 'undefined') window.p0aFlowState[s.id] = false; });
+
+  function p0aEsc(v) { return (typeof escapeHTML === 'function') ? escapeHTML(String(v ?? '')) : String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function p0aNow() { return Date.now(); }
+  function p0aRoleId(role) { return String(role || '').replace('@',''); }
+  function p0aRoleInfo(roleId) { return (roles || []).find(r => r.id === p0aRoleId(roleId)); }
+  function p0aRoleLabel(roleId) { const r = p0aRoleInfo(roleId); return r ? r.displayName : p0aRoleId(roleId); }
+  function p0aFactoryTeam() { return (currentState.teams || [])[0] || null; }
+  function p0aUniqueWorkerId() {
+    const all = (typeof getAllWorkers === 'function') ? getAllWorkers() : [];
+    let n = 1;
+    while (all.some(w => w.id === 'AGT-P0A-' + String(n).padStart(2, '0'))) n++;
+    return 'AGT-P0A-' + String(n).padStart(2, '0');
+  }
+  function p0aBumpVersion(v) {
+    const parts = String(v || '0.1.0').split('.').map(x => parseInt(x, 10));
+    while (parts.length < 3) parts.push(0);
+    parts[2] = (Number.isFinite(parts[2]) ? parts[2] : 0) + 1;
+    return parts.map(x => Number.isFinite(x) ? x : 0).join('.');
+  }
+  function p0aBumpDocVersion(v) {
+    const s = String(v || '0.1');
+    if (s === '-' || s === 'final') return '1.0';
+    const m = s.match(/^(\d+)(?:\.(\d+))?/);
+    if (!m) return '1.0';
+    const major = parseInt(m[1], 10) || 0;
+    const minor = parseInt(m[2] || '0', 10) || 0;
+    return major + '.' + (minor + 1);
+  }
+
+  window.p0aToast = function(message) {
+    const el = document.getElementById('p0aToast');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(window.__p0aToastTimer);
+    window.__p0aToastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+  };
+
+  window.p0aMarkStep = function(stepId, done = true) {
+    if (!stepId) return;
+    window.p0aFlowState[stepId] = !!done;
+    renderP0aFlowPanel();
+  };
+
+  window.p0aResetFlowState = function() {
+    P0A_STEPS.forEach(s => window.p0aFlowState[s.id] = false);
+    renderP0aFlowPanel();
+    p0aToast('P0a 演示状态已重置');
+  };
+
+  window.p0aToggleFlowPanel = function(force) {
+    const panel = document.getElementById('p0aFlowPanel');
+    if (!panel) return;
+    const open = (typeof force === 'boolean') ? force : !panel.classList.contains('open');
+    panel.classList.toggle('open', open);
+    if (open) renderP0aFlowPanel();
+  };
+
+  function renderP0aFlowPanel() {
+    const body = document.getElementById('p0aFlowBody');
+    const progress = document.getElementById('p0aFlowProgress');
+    if (!body) return;
+    const doneCount = P0A_STEPS.filter(s => window.p0aFlowState[s.id]).length;
+    body.innerHTML = P0A_STEPS.map((s, i) => {
+      const done = !!window.p0aFlowState[s.id];
+      return `<div class="p0a-flow-step ${done ? 'done' : ''}"><span class="p0a-flow-check">${done ? '✓' : (i+1)}</span><div class="p0a-flow-step-main"><div class="p0a-flow-step-title">${p0aEsc(s.title)}</div><div class="p0a-flow-step-desc">${p0aEsc(s.desc)}</div></div></div>`;
+    }).join('');
+    if (progress) progress.textContent = `${doneCount}/${P0A_STEPS.length} 完成`;
+  }
+
+  function p0aOpenModal(title, bodyHtml, footerHtml) {
+    const overlay = document.getElementById('p0aModalOverlay');
+    const titleEl = document.getElementById('p0aModalTitle');
+    const body = document.getElementById('p0aModalBody');
+    const footer = document.getElementById('p0aModalFooter');
+    if (!overlay || !titleEl || !body || !footer) return;
+    titleEl.textContent = title;
+    body.innerHTML = bodyHtml;
+    footer.innerHTML = footerHtml;
+    overlay.classList.add('open');
+  }
+  window.p0aCloseModal = function() { document.getElementById('p0aModalOverlay')?.classList.remove('open'); };
+
+  function p0aAppendActivity(teamId, desc) {
+    const team = (currentState.teams || []).find(t => t.id === teamId) || p0aFactoryTeam();
+    if (!team) return;
+    if (!Array.isArray(team.activities)) team.activities = [];
+    team.activities.unshift({ time: p0aNow(), desc });
+    p0aMarkStep('activity-written');
+  }
+  window.p0aAppendActivity = p0aAppendActivity;
+
+  function p0aRefreshAll() {
+    if (typeof refreshAllViews === 'function') refreshAllViews();
+    renderP0aFlowPanel();
+  }
+
+  function p0aFindWorker(workerIdOrName) {
+    for (const t of currentState.teams || []) {
+      const w = (t.members || []).find(m => m.id === workerIdOrName || m.name === workerIdOrName);
+      if (w) return { worker: w, team: t, inTeam: true };
+    }
+    const w = (currentState.workers || []).find(m => m.id === workerIdOrName || m.name === workerIdOrName);
+    return w ? { worker: w, team: null, inTeam: false } : null;
+  }
+
+  function p0aWithCurrentSkillFromStudio() {
+    const skill = (skills || []).find(s => s.id === selectedSkillId) || skills?.[0];
+    if (!skill) return null;
+    skill.name = document.getElementById('skillStudioName')?.value || skill.name;
+    skill.description = document.getElementById('skillStudioDesc')?.value || skill.description;
+    skill.draftContent = document.getElementById('skillStudioMd')?.value || skill.draftContent || skill.mdContent || skill.content || '';
+    skill.hasDraftChanges = true;
+    skill.updatedAt = new Date().toISOString().slice(0, 10);
+    return skill;
+  }
+
+  window.p0aSaveSkillDraft = function() {
+    const skill = p0aWithCurrentSkillFromStudio();
+    if (!skill) return;
+    // 原型中保留编辑器内容，但不 bump version，不改变 publishedContent 语义。
+    skill.mdContent = skill.draftContent;
+    p0aToast('技能草稿已保存：未影响模板和员工实例');
+    if (typeof renderSkillStudio === 'function') renderSkillStudio();
+  };
+
+  window.p0aPublishSkill = function() {
+    const skill = p0aWithCurrentSkillFromStudio();
+    if (!skill) return;
+    skill.version = p0aBumpVersion(skill.version);
+    skill.content = skill.draftContent;
+    skill.mdContent = skill.draftContent;
+    skill.publishedContent = skill.draftContent;
+    skill.hasDraftChanges = false;
+    skill.enabled = true;
+    p0aMarkStep('skill-published');
+    p0aAppendActivity(null, `技能 ${skill.name} 发布生效为 v${skill.version}，岗位模板和数字员工实例将在派生视图中读取新版本`);
+    p0aToast(`已发布技能 ${skill.name} v${skill.version}`);
+    p0aRefreshAll();
+  };
+
+  const __p0aOrigRenderSkillStudio = window.renderSkillStudio;
+  if (typeof __p0aOrigRenderSkillStudio === 'function') {
+    window.renderSkillStudio = function() {
+      __p0aOrigRenderSkillStudio.apply(this, arguments);
+      const skill = (skills || []).find(s => s.id === selectedSkillId) || skills?.[0];
+      const versionEl = document.getElementById('skillStudioVersion');
+      if (versionEl && skill) versionEl.textContent = `${skill.hasDraftChanges ? 'draft · 未发布更改 · ' : 'published · '}v${skill.version || '0.1.0'}`;
+      const bar = document.querySelector('#skillStudioPanel .skill-action-bar');
+      if (bar) {
+        const buttons = Array.from(bar.querySelectorAll('button'));
+        const saveBtn = buttons.find(b => b.textContent.includes('保存草稿'));
+        const publishBtn = buttons.find(b => b.textContent.includes('发布生效'));
+        const validateBtn = buttons.find(b => b.textContent.includes('校验'));
+        if (validateBtn) validateBtn.onclick = () => p0aToast('SKILL.md 结构校验通过（mock）');
+        if (saveBtn) saveBtn.onclick = window.p0aSaveSkillDraft;
+        if (publishBtn) publishBtn.onclick = window.p0aPublishSkill;
+      }
+    };
+  }
+  window.saveSkill = function() { p0aSaveSkillDraft(); p0aCloseModal(); };
+
+  window.p0aOpenCreateWorkerModal = function(roleId) {
+    const r = p0aRoleInfo(roleId) || roles[0];
+    const roleOptions = (roles || []).map(x => `<option value="${p0aEsc(x.id)}" ${x.id === r.id ? 'selected' : ''}>@${p0aEsc(x.id)} · ${p0aEsc(x.displayName)}</option>`).join('');
+    const teamOptions = ['<option value="unassigned">暂不加入团队（员工池）</option>'].concat((currentState.teams || []).map(t => `<option value="${p0aEsc(t.id)}">${p0aEsc(t.name)} · ${p0aEsc(t.currentProject?.name || '无项目')}</option>`)).join('');
+    const body = `<div class="p0a-form-grid">
+      <div class="p0a-form-group"><label>岗位模板</label><select id="p0aCreateWorkerRole">${roleOptions}</select></div>
+      <div class="p0a-form-group"><label>员工名称</label><input id="p0aCreateWorkerName" value="${p0aEsc(r.displayName)}-P0a" /></div>
+      <div class="p0a-form-group"><label>加入团队</label><select id="p0aCreateWorkerTeam">${teamOptions}</select></div>
+      <div class="p0a-form-group"><label>项目职责</label><select id="p0aCreateWorkerProjectRole"><option>测试工程师</option><option>定制开发</option><option>建模师</option><option>架构师</option><option>设计师</option></select></div>
+      <div class="p0a-form-group full"><label>当前关注点</label><input id="p0aCreateWorkerTask" value="基于 ${p0aEsc(r.displayName)} 模板创建，等待项目任务分配" /></div>
+      <div class="p0a-form-group full"><div class="p0a-inline-hint">创建后 Worker 会记录 <strong>templateId</strong>，技能从 Skill + TemplateSkillMapping 派生，不在 Worker 上维护独立技能主数据。</div></div>
+    </div>`;
+    const footer = `<button class="btn" type="button" onclick="p0aCloseModal()">取消</button><button class="btn btn-primary" type="button" onclick="p0aCreateWorkerFromModal()">确认创建</button>`;
+    p0aOpenModal('基于岗位模板创建数字员工', body, footer);
+  };
+
+  window.p0aCreateWorkerFromModal = function() {
+    const roleId = document.getElementById('p0aCreateWorkerRole')?.value || 'fixer';
+    const roleInfo = p0aRoleInfo(roleId);
+    const teamId = document.getElementById('p0aCreateWorkerTeam')?.value || 'unassigned';
+    const name = (document.getElementById('p0aCreateWorkerName')?.value || `${p0aRoleLabel(roleId)}-P0a`).trim();
+    const projectRole = document.getElementById('p0aCreateWorkerProjectRole')?.value || roleInfo?.displayName || '数字员工';
+    const task = document.getElementById('p0aCreateWorkerTask')?.value || '等待项目任务分配';
+    const worker = {
+      id: p0aUniqueWorkerId(), name, role: '@' + roleId, templateId: roleId,
+      projectRole, status: teamId === 'unassigned' ? 'unclaimed' : 'idle', currentTaskSummary: task,
+      heartbeatTs: p0aNow(), createdFromTemplate: true
+    };
+    if (teamId === 'unassigned') {
+      currentState.workers.unshift(worker);
+    } else {
+      const team = (currentState.teams || []).find(t => t.id === teamId);
+      if (team) {
+        team.members.push({ ...worker, teamId: team.id, teamName: team.name });
+        p0aAppendActivity(team.id, `基于 ${roleInfo?.templateName || roleId} 创建数字员工 ${name}，并加入 ${team.name} / ${team.currentProject?.name || '当前项目'}`);
+        p0aMarkStep('worker-assigned');
+      }
+    }
+    p0aMarkStep('worker-created');
+    p0aCloseModal();
+    p0aToast(`已创建数字员工 ${name}`);
+    p0aRefreshAll();
+  };
+
+  const __p0aOrigRenderRolesPage = window.renderRolesPage;
+  if (typeof __p0aOrigRenderRolesPage === 'function') {
+    window.renderRolesPage = function() {
+      __p0aOrigRenderRolesPage.apply(this, arguments);
+      document.querySelectorAll('#roleCardsContainer .role-template-card').forEach((card, idx) => {
+        const role = roles[idx];
+        const primary = card.querySelector('.card-footer .btn-primary');
+        if (primary && role) {
+          primary.textContent = '+ 创建数字员工';
+          primary.onclick = () => p0aOpenCreateWorkerModal(role.id);
+        }
+      });
+    };
+  }
+
+  window.p0aOpenAttachSkillModal = function(roleId) {
+    const r = p0aRoleInfo(roleId) || roles[0];
+    const mapped = (roleSkillMappings || []).filter(m => m.enabled && m.roleId === r.id).map(m => m.skillId);
+    const candidates = (skills || []).filter(s => s.enabled && s.scope !== 'global' && !mapped.includes(s.id));
+    const skillOptions = candidates.map(s => `<option value="${p0aEsc(s.id)}">${p0aEsc(s.name)} · ${p0aEsc(s.description)}</option>`).join('');
+    const body = candidates.length
+      ? `<div class="p0a-form-group"><label>数字员工模板</label><input value="@${p0aEsc(r.id)} · ${p0aEsc(r.displayName)}" disabled /></div><div class="p0a-form-group"><label>选择技能</label><select id="p0aAttachSkillId">${skillOptions}</select></div><div class="p0a-inline-hint">确认后写入 TemplateSkillMapping；该模板下 Worker.skills 派生视图将立即刷新。</div>`
+      : `<div class="p0a-inline-hint">当前没有可关联的岗位技能。通用技能已自动对全部模板生效。</div>`;
+    const footer = candidates.length
+      ? `<button class="btn" type="button" onclick="p0aCloseModal()">取消</button><button class="btn btn-primary" type="button" onclick="p0aAttachSkillToRole('${p0aEsc(r.id)}')">确认关联</button>`
+      : `<button class="btn btn-primary" type="button" onclick="p0aCloseModal()">知道了</button>`;
+    p0aOpenModal('关联已有技能', body, footer);
+  };
+
+  window.p0aAttachSkillToRole = function(roleId) {
+    const skillId = document.getElementById('p0aAttachSkillId')?.value;
+    if (!skillId) return;
+    const exists = roleSkillMappings.find(m => m.roleId === roleId && m.skillId === skillId);
+    if (exists) exists.enabled = true;
+    else roleSkillMappings.push({ roleId, skillId, source:'role', enabled:true });
+    const skill = skills.find(s => s.id === skillId);
+    p0aMarkStep('skill-attached');
+    p0aAppendActivity(null, `技能 ${skill?.name || skillId} 已挂载到 @${roleId} 模板，相关数字员工技能派生视图已刷新`);
+    p0aCloseModal();
+    p0aToast('技能已关联到岗位模板');
+    p0aRefreshAll();
+    switchSkillTab('mapping');
+    const sel = document.getElementById('mappingRoleSelect');
+    if (sel) sel.value = roleId;
+    renderRoleMapping(roleId);
+  };
+
+  window.p0aDetachSkillFromRole = function(roleId, skillId) {
+    const m = roleSkillMappings.find(x => x.roleId === roleId && x.skillId === skillId && x.enabled);
+    if (m) m.enabled = false;
+    const skill = skills.find(s => s.id === skillId);
+    p0aAppendActivity(null, `技能 ${skill?.name || skillId} 已从 @${roleId} 模板移除，Worker.skills 派生视图已刷新`);
+    p0aToast('技能匹配已移除');
+    p0aRefreshAll();
+    switchSkillTab('mapping');
+    const sel = document.getElementById('mappingRoleSelect');
+    if (sel) sel.value = roleId;
+    renderRoleMapping(roleId);
+  };
+
+  window.renderRoleMapping = function(role) {
+    const list = document.getElementById('roleMappingList');
+    if (!list) return;
+    const roleInfo = roles.find(function(r){ return r.id === role; });
+    const matched = getSkillsForRole(role);
+    list.innerHTML = '<div style="font-size:13px;color:#555;margin-bottom:8px;">' + (roleInfo ? roleInfo.templateName : '@' + role) + ' 最终生效 <strong>' + matched.length + '</strong> 项技能：</div>' + matched.map(function(s){
+      const isGlobal = s.scope === 'global';
+      return '<div style="padding:8px 12px;border:1px solid #eee;border-radius:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><strong>' + p0aEsc(s.name) + '</strong> — ' + p0aEsc(s.description) + (isGlobal ? ' <em style="color:#888">(通用)</em>' : ' <em style="color:#888">(岗位匹配)</em>') + '</span><span style="white-space:nowrap;"><span class="skill-action" onclick="selectSkill(\'' + s.id + '\'); switchSkillTab(\'studio\')">编辑 SKILL.md</span>' + (!isGlobal ? '<span class="skill-action p0a-remove" onclick="p0aDetachSkillFromRole(\'' + role + '\',\'' + s.id + '\')">移除</span>' : '') + '</span></div>';
+    }).join('') + '<button class="btn btn-secondary" onclick="p0aOpenAttachSkillModal(\'' + role + '\')" style="margin-top:12px;">+ 关联已有技能</button>';
+    const placeholderBtn = document.querySelector('#skillMappingPanel > button.btn-secondary');
+    if (placeholderBtn) placeholderBtn.style.display = 'none';
+  };
+
+  window.openWorkerChat = function(id) {
+    const found = p0aFindWorker(id);
+    if (!found) { p0aToast('未找到该数字员工'); return; }
+    if (!found.inTeam || !found.team) {
+      p0aToast('该员工尚未加入团队，需先分配团队后才能通过 Leader 联系');
+      return;
+    }
+    const worker = found.worker;
+    const team = found.team;
+    openChatWith(team.masterId || team.id);
+    p0aMarkStep('chat-leader');
+    p0aToast(`已通过 ${team.masterCodename || 'Leader'} 联系 ${worker.name}`);
+    const hostContextLine = `通过 Leader 联系：${worker.name}\n上下文：workerId=${worker.id}，teamId=${team.id}，projectId=${team.currentProject?.id || '-'}，entry=worker-card`;
+    if (typeof appendChatMsg === 'function') appendChatMsg('system', hostContextLine, [], false);
+  };
+
+  window.publishDoc = function() {
+    const pane = document.querySelector('[data-team-tab-pane="docs"].active');
+    const page = pane?.closest('.page');
+    const teamId = (page?.id || '').replace('page-team-', '');
+    if (!teamId || !page) return;
+    const team = (currentState.teams || []).find(t => t.id === teamId);
+    const ui = getDocsUi(teamId);
+    const doc = team?.currentProject?.docs?.find(d => d.id === ui.selectedDocId);
+    const btn = page.querySelector('[data-docs-publish]');
+    if (!team || !doc || !btn) return;
+    doc.version = p0aBumpDocVersion(doc.version);
+    doc.status = doc.status === 'draft' ? 'in_execution' : doc.status;
+    doc.updatedTs = p0aNow();
+    doc.publishedAt = p0aNow();
+    btn.classList.add('published');
+    btn.innerHTML = `已发布 · v${p0aEsc(doc.version)} · 5s 内可撤销 <span class="undo-link" onclick="event.stopPropagation(); undoPublish('${teamId}')">撤销</span>`;
+    if (ui.publishTimer) clearTimeout(ui.publishTimer);
+    ui.publishTimer = setTimeout(() => { btn.classList.remove('published'); btn.innerHTML = '📢 发布给 Agent'; ui.publishTimer = null; }, 5000);
+    p0aMarkStep('doc-published');
+    p0aAppendActivity(team.id, `发布文档《${doc.title}》v${doc.version} 给 Agent，作为 ${team.name} 当前项目上下文`);
+    const decisionId = 'p0a-doc-decision-' + team.id + '-' + doc.id;
+    if (!(currentState.decisions || []).some(d => d.id === decisionId && d.status === 'pending')) {
+      currentState.decisions.unshift({
+        id: decisionId, teamId: team.id, projectId: team.currentProject?.id, requesterId: team.masterId,
+        type: '文档发布确认', title: `确认《${doc.title}》发布后的执行策略`, urgent: false,
+        timeTs: p0aNow(), expiresAt: p0aNow() + 30 * 60 * 1000, status: 'pending', sourceType:'doc_publish_mock', sourceDocId: doc.id,
+        context: `文档《${doc.title}》已发布为 v${doc.version}。\n\n请选择团队 Leader 后续执行策略。`,
+        options: [{ label:'按新版本继续推进', kind:'primary' }, { label:'暂停执行并补充评审', kind:'normal' }]
+      });
+      currentSelectedDecisionId = decisionId;
+      p0aMarkStep('decision-created');
+    }
+    p0aToast('文档已发布，并生成一条模拟决策');
+    p0aRefreshAll();
+  };
+
+  document.addEventListener('click', function(event) {
+    const btn = event.target.closest('.decision-option-btn');
+    if (!btn || btn.disabled) return;
+    const list = btn.closest('.decision-options-list');
+    if (!list || !currentSelectedDecisionId) return;
+    const d = (currentState.decisions || []).find(x => x.id === currentSelectedDecisionId);
+    if (!d || d.status !== 'pending') return;
+    const options = Array.from(list.querySelectorAll('.decision-option-btn'));
+    const idx = options.indexOf(btn);
+    const selected = d.options?.[idx]?.label || btn.textContent.trim();
+    d.status = 'resolved';
+    d.resolution = selected;
+    d.handledBy = '当前用户（mock）';
+    d.handledAt = p0aNow();
+    p0aMarkStep('decision-resolved');
+    p0aAppendActivity(d.teamId, `决策《${d.title}》已处理：${selected}`);
+    p0aToast('决策已处理并回写团队动态');
+    if (typeof renderDecisions === 'function') renderDecisions();
+    renderP0aFlowPanel();
+  });
+
+  const __p0aOrigRenderWorkerPool = window.renderWorkerPool;
+  if (typeof __p0aOrigRenderWorkerPool === 'function') {
+    window.renderWorkerPool = function() {
+      __p0aOrigRenderWorkerPool.apply(this, arguments);
+      document.querySelectorAll('[onclick^="openWorkerChat"]').forEach(btn => {
+        if ((btn.getAttribute('title') || '').includes('对话')) btn.setAttribute('title', '通过 Leader 联系');
+      });
+    };
+  }
+
+  const __p0aOrigOnload = window.onload;
+  window.onload = function() {
+    if (typeof __p0aOrigOnload === 'function') __p0aOrigOnload.apply(this, arguments);
+    (skills || []).forEach(s => { if (typeof s.publishedContent === 'undefined') s.publishedContent = s.content || s.mdContent || ''; if (typeof s.draftContent === 'undefined') s.draftContent = s.mdContent || s.content || ''; });
+    renderP0aFlowPanel();
+    if (typeof renderRolesPage === 'function') renderRolesPage();
+    if (typeof renderSkillStudio === 'function') renderSkillStudio();
+  };
+})();
+</script>
 
 </body>
 </html>
