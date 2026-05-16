@@ -1,48 +1,106 @@
-# agent-team
+# agent-team / 智能软件工厂
 
-Agent Team 智能体协作网站项目，当前文档基线为 **v0.6.32**。
+> 当前工作版本：**v0.6.33**  
+> 当前阶段：**文档正本化 + P0a 工程施工图**  
+> 状态：先完成设计施工图，不直接进入编码；后续编码由编程智能体按文档执行。
 
-本项目从 Agent Team V2 注册中心 HTML 原型起步，沉淀为“智能软件工厂”的需求、设计、原型、开发计划和任务拆解。智能体对话能力不在本项目中重复实现，后续通过 `agent-web-kit` 以非侵入式、松耦合方式集成。
+智能软件工厂是一个面向 AI 数字员工团队的软件研发协作系统。它把岗位、技能、数字员工、团队、项目、文档、决策和活动流组织成可追踪的工作闭环：
+
+```text
+Skill
+→ AgentTemplate / 岗位模板
+→ Worker / 数字员工实例 + RuntimeBinding
+→ Team / Project
+→ Doc 发布
+→ Decision 处理
+→ Activity 回写
+```
+
+本项目不重复实现通用聊天 UI。对话能力后续通过 `agent-web-kit` 非侵入式集成；智能软件工厂负责业务对象、状态真源、团队协作、文档驱动和决策闭环。
+
+---
+
+## 当前过渡期协作方式
+
+智能软件工厂系统尚未实现前，多个外部智能体无法自动获得统一的岗位、项目、任务、文档和决策上下文。当前协作仍依赖项目负责人手动调度：
+
+```text
+项目负责人 ↔ 设计智能体
+  形成需求、系统设计、施工图、评审意见和文档正本。
+
+项目负责人 ↔ 编程智能体（OpenCode / Codex）
+  根据设计文档创建工程、写代码、跑测试、修复问题。
+
+项目负责人 ↔ 评审智能体
+  对设计、计划、代码或交付结果做独立复审。
+```
+
+因此，当前仓库中的 `README.md`、`docs/文档导航.md`、`docs/project-memory.md`、`docs/specs/`、`docs/tasks/` 和 `docs/collab/` 暂时承担“共同工作区”的职责。
+
+智能软件工厂的产品价值，正是把这种依赖人工搬运上下文的协作方式系统化。系统建成后，每个数字员工会从岗位模板实例化，自动获得岗位职责、技能资产、项目上下文、团队关系、运行时绑定和任务状态；负责人从“手动调度多个智能体”转变为“管理智能体团队和关键决策”。
+
+---
 
 ## 当前入口
 
-- 文档导航：`docs/文档导航.md`
-- 项目记忆：`docs/project-memory.md`
-- 当前 PRD：`docs/specs/2026-05-13-智能软件工厂产品需求规格-v0.6.32.md`
-- 当前系统设计：`docs/specs/2026-05-13-智能软件工厂系统设计方案-v0.6.32.md`
-- agent-web-kit 集成方案：`docs/specs/2026-05-14-智能软件工厂-agent-web-kit集成方案-v0.6.32.md`
-- 当前原型：`docs/prototypes/Agent-Team-V2-注册中心-v0.6.32.html`
-- 开发计划：`docs/plans/2026-05-14-智能软件工厂开发计划-v0.6.32.md`
-- 开发任务拆解：`docs/tasks/2026-05-14-智能软件工厂开发任务拆解-v0.6.32.md`
-- Mock 数据设计：`docs/specs/2026-05-15-智能软件工厂Mock数据设计-v0.6.32.md`
-- P0a 执行顺序清单：`docs/tasks/2026-05-15-P0a开发执行顺序清单-v0.6.32.md`
+详细文档索引只维护在：
 
-## 文档目录
+```text
+docs/文档导航.md
+```
 
-- `docs/specs/`：正式需求规格、系统设计、专项集成方案。
-- `docs/plans/`：阶段计划、Roadmap、开发计划。
-- `docs/tasks/`：开发任务拆解、issue 级任务说明。
-- `docs/decisions/`：ADR / 架构决策 / 产品关键决策。
-- `docs/changes/`：版本变更说明。
-- `docs/reports/`：界面走查、技术评审、测试报告。
-- `docs/prototypes/`：HTML 原型与原型资源。
-- `docs/references/`：外部项目参考资料。
-- `docs/guides/`：文档方法、协作规范、操作指南。
-- `docs/project-memory.md`：长期项目记忆与当前基线说明。
+常用首读顺序：
+
+```text
+1. README.md
+2. docs/文档导航.md
+3. docs/project-memory.md
+4. docs/collab/智能体协作分工-v0.6.33.md
+5. docs/specs/2026-05-17-智能软件工厂P0a工程施工图-v0.6.33.md
+6. docs/tasks/2026-05-17-编程智能体执行清单-v0.6.33.md
+```
+
+根 README 只作为仓库首页，不展开完整文档树；完整文档清单见 `docs/文档导航.md`。
+
+---
 
 ## 当前推进重点
 
-当前版本不继续扩展产品概念，重点进入 **P0a 前端可演示 MVP** 开工准备：
+v0.6.33 是一次过期文档清理和当前正本收敛：
 
-1. 按 monorepo 结构建立工程骨架。
-2. 建立 contracts、domain、mock-seed、state、data-client、ui、chat-integration/mock。
-3. 跑通 P0a 最小闭环：`Skill → AgentTemplate → Worker + RuntimeBinding → Team/Project → Doc 发布 → Decision 处理 → Activity 回写`。
-4. 以 `docs/prototypes/Agent-Team-V2-注册中心-v0.6.32.html` 原型作为闭环演示参照，验证普通员工通过 Leader 联系、Skill 发布、模板挂载技能、创建数字员工、文档发布、决策处理与 Activity 回写。
-5. 小云先使用 `MockChatAdapter`，不阻塞 P0a。
-6. 每个数字员工实例在 mock 中绑定一个 RuntimeHost / OpenCode workspaceDir，并展示技能初始化快照和同步状态。
+```text
+- 清理 docs 中历史版本、过程评审稿、revised/final/copy 类文件。
+- 保留一套 v0.6.33 当前正本。
+- 固化 P0a 范围：只做 Mock 前端闭环。
+- 明确 monorepo 包结构和每个包职责。
+- 明确 RuntimeHost / WorkerRuntimeBinding / AgentRoute / AgentPresence 的状态边界。
+- 明确 agent-team 是正式业务状态真源，Gateway 不是业务状态真源。
+- 明确设计智能体、编程智能体、评审智能体在当前过渡期的协作方式。
+```
 
-## 更新约定
+P0a 先不做真实后端、真实数据库、真实 Gateway、真实 OpenCode runtime 启动。
 
-- 当前工作版本保持 **v0.6.32**。
-- 小改不递增版本号，用 Git 提交追踪。
-- 只有信息架构、核心模型、MVP 范围、原型或技术路线出现里程碑级变化时才调整版本号。
+---
+
+## 后续日常更新约定
+
+本次是一次性文档正本化，适合整体替换 `docs/`。本次之后恢复日常小步更新：
+
+```text
+- 只更新当前任务实际改变的文档。
+- 不再每轮都全量打包 docs。
+- 不新增 docs/README.md 或子目录 README.md。
+- 不新增 revised / final / copy / round-N 文件。
+- 小修改用 Git commit 追踪，不随意升版本号。
+```
+
+---
+
+## 版本策略
+
+```text
+v0.6.32 = 产品、系统、原型、运行时、路由状态设计的多轮收敛基线。
+v0.6.33 = 文档正本化 + P0a 工程施工图 + 智能体协作方式说明。
+```
+
+只有信息架构、核心模型、P0a 范围、原型或技术路线出现里程碑级变化时才升版本。
