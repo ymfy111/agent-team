@@ -1,17 +1,13 @@
 # 决策记录（ADR）
 
-本目录用于记录项目中的重要架构决策、产品边界决策和技术路线决策。
+> 版本：v0.6.33
 
-## 当前 ADR
+本目录只保留当前仍生效的架构决策。历史评审过程和已废弃讨论不放入本目录。
+
+当前 ADR：
 
 | ADR | 主题 | 状态 |
 |---|---|---|
-| `ADR-0001-agent-web-kit采用非侵入式仅对话框集成.md` | 小云对话框集成方式 | Proposed |
-| `ADR-0002-agent-team采用monorepo分层架构.md` | 当前项目工程结构 | Proposed |
-
-## 使用规则
-
-- 记录“为什么这样选”，不只记录“选了什么”。
-- 一个 ADR 只描述一个重要决策。
-- 普通版本变更说明不要放在本目录，应放入 `docs/changes/`。
-- 已接受的 ADR 原则上不直接改结论，如需改变，新增后续 ADR 覆盖。
+| ADR-0001 | agent-web-kit 非侵入式集成 | Accepted |
+| ADR-0002 | agent-team 采用 monorepo 分层架构 | Accepted |
+| ADR-0003 | agent-team 作为业务状态真源 | Accepted |

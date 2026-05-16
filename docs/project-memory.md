@@ -1,148 +1,184 @@
-# project-memory
+# 智能软件工厂项目记忆
 
-> 本文件记录 `agent-team` / 智能软件工厂项目的长期项目事实、当前文档基线、关键设计决策和协作约定。新会话应先读 `docs/文档导航.md`，再读本文。
+> 版本：v0.6.33  
+> 日期：2026-05-17  
+> 状态：当前项目记忆 / 新会话与 OpenCode 接手入口
 
-## 1. 当前项目事实
+---
 
-- 项目名称：智能软件工厂 / agent-team。
-- 当前工作版本：v0.6.32。
-- 后续小改不自动升版本，用 Git 提交追踪。
-- 只有信息架构、核心模型、MVP 范围、原型或技术路线发生里程碑变化时才升版本。
-- 当前文档源：GitHub 仓库 `https://github.com/ymfy111/agent-team`。
-- 当前工作模式：我生成保持仓库目录结构的文件包，负责人手动同步到本地并提交。
+## 1. 项目定位
 
-## 2. 当前文档基线
+智能软件工厂是一个智能体协作系统。它把 AI 智能体组织为“数字员工团队”，围绕项目、文档、决策和活动流完成软件研发协作。
 
-- PRD：`docs/specs/2026-05-13-智能软件工厂产品需求规格-v0.6.32.md`
-- 系统设计：`docs/specs/2026-05-13-智能软件工厂系统设计方案-v0.6.32.md`
-- agent-web-kit 集成方案：`docs/specs/2026-05-14-智能软件工厂-agent-web-kit集成方案-v0.6.32.md`
-- 开发计划：`docs/plans/2026-05-14-智能软件工厂开发计划-v0.6.32.md`
-- 开发任务拆解：`docs/tasks/2026-05-14-智能软件工厂开发任务拆解-v0.6.32.md`
-- Mock 数据设计：`docs/specs/2026-05-15-智能软件工厂Mock数据设计-v0.6.32.md`
-- P0a 执行顺序清单：`docs/tasks/2026-05-15-P0a开发执行顺序清单-v0.6.32.md`
-- 原型：`docs/prototypes/Agent-Team-V2-注册中心-v0.6.32.html`
-- 界面走查报告：`docs/reports/2026-05-14-智能软件工厂界面走查报告-v0.6.32.md`
-- 技术落地补充评审报告：`docs/reports/2026-05-15-v0.6.32技术落地补充评审报告.md`
-- 变更说明：`docs/changes/智能软件工厂-v0.6.32-变更说明.md`
-- agent-web-kit 参考架构：`docs/references/agent-web-kit-架构设计-reference.md`
-
-## 3. 产品心智
-
-系统分为运行态和配置态：
+系统不是单个聊天框，也不是简单的 prompt 集合，而是：
 
 ```text
-运行态：总览 / 团队 / 项目 / 待决策
-配置态：岗位 / 员工 / 技能 / 设置
+岗位模板 → 技能资产 → 数字员工实例 → 团队 / 项目 → 文档发布 → 决策闭环 → 活动回写
 ```
 
-核心术语保持稳定：
+---
 
-| UI 名称 | 技术模型 | 含义 |
-|---|---|---|
-| 岗位 | AgentTemplate | 数字员工模板，定义职责和继承技能。 |
-| 员工 | Worker / AgentInstance | 数字员工实例，由模板创建，可分配到团队和项目。 |
-| 技能 | Skill | 以 SKILL.md 为核心的能力资产。 |
-| 岗位技能匹配 | TemplateSkillMapping | 模板与 Skill 的唯一多对多关系主数据。 |
-| 项目匹配 | ProjectAssignment | 员工实例与团队 / 项目的匹配关系。 |
+## 2. 当前版本与阶段
 
-## 4. 技术路线
+当前文档版本：**v0.6.33**
 
-阶段划分：
+v0.6.33 是一次文档收敛和施工图版本：
 
 ```text
-P0a：前端可演示 MVP
-P0b：本地可运行 MVP
-P1：服务化与真实集成增强
+- 合并 v0.6.32 多轮 PRD、系统设计、Mock、路由状态、运行时设计。
+- 删除/合并历史版本和多轮评审过程材料。
+- 为 OpenCode 后续开发提供完整施工图。
+- 暂不直接进入编码。
 ```
 
-P0a：
+---
 
-- 使用 mock seed、本地状态、MockChatAdapter。
-- 不接真实后端 / 数据库 / Gateway / OpenCode。
-- 唯一主线：`Skill → AgentTemplate → Worker → Team/Project → Doc 发布 → Decision 处理 → Activity 回写`。
+## 3. 冻结的核心决策
 
-P0b：
+### 3.1 岗位、员工、技能
 
-- 引入 Fastify + Prisma + SQLite。
-- 持久化核心业务对象、文档版本、技能版本、决策处理结果和 Activity。
-- 真实 agent-web-kit 文本对话可选，不阻塞 P0b。
+```text
+岗位 = AgentTemplate / 数字员工模板
+员工 = Worker / AgentInstance / 数字员工实例
+技能 = Skill / SkillVersion / SKILL.md 能力资产
+岗位技能匹配 = TemplateSkillMapping
+```
 
-P1：
+规则：
 
-- PostgreSQL + Prisma。
-- 权限、审计、多用户、服务化部署。
-- 完整接入 agent-web-kit + agent-gateway + OpenCode。
+```text
+- Skill 是能力资产。
+- SkillVersion 是技能内容真源。
+- TemplateSkillMapping 是岗位技能匹配真源。
+- Worker 从 AgentTemplate 创建。
+- Worker.skills 是派生视图，不是主数据。
+```
 
-## 5. agent-web-kit 集成原则
+### 3.2 数字员工运行时
 
-- 当前项目采用非侵入式、松耦合、仅对话框模式。
-- 智能软件工厂保留自己的入口、target 选择、HostContext 构造和业务事件回写。
-- agent-web-kit 负责对话 UI、消息流、问题卡、决策卡、SSE、Gateway。
-- `chat-integration` 只做适配和转译，不做业务决策。
-- `agent-web-kit` 只产生对话事件，不成为 `Decision`、`DocVersion`、`Activity` 的业务真源。
-- 普通 Worker 不直接对话，必须通过所属团队 Leader。
+一个 Worker 对应一个具体 Agent Runtime。当前实现心智是：
 
-## 6. 文档目录约定
+```text
+Worker = 一个数字员工实例
+      = 一个具体 Agent Runtime
+      = 某个 RuntimeHost 上的 OpenCode workspaceDir
+```
 
-- `docs/specs/`：正式需求、系统设计、专项集成方案。
-- `docs/plans/`：阶段计划 / Roadmap。
-- `docs/tasks/`：开发任务拆解 / issue 级任务。
-- `docs/decisions/`：ADR / 架构决策 / 产品关键决策。
-- `docs/changes/`：版本变更说明。
-- `docs/reports/`：评审报告、走查报告、测试报告。
-- `docs/prototypes/`：HTML 原型与资源。
-- `docs/references/`：外部项目参考资料。
-- `docs/guides/`：协作方法和文档规范。
+但不能假设所有 Worker 都在一台机器上。必须通过 RuntimeHost / WorkerRuntimeBinding 表达分布式部署可能性。
 
-## 7. 当前遗留事项
+### 3.3 agent-team 与 Gateway 边界
 
-这些事项不阻塞当前 v0.6.32 技术落地补充合入：
+正式业务系统中：
 
-1. P0b 前补 Prisma schema 草案。
-2. P0a 开工前补 mock seed 详细数据样例。
-3. 后续单独清理 PRD 章节编号和历史修订摘要。
-4. ADR 当前保持 `Proposed`，待负责人确认并合入后可改为 `Accepted`。
+```text
+RuntimeHost / OpenCode supervisor
+→ agent-team runtime-service
+→ agent-team 数据库保存 Worker / RuntimeHost / AgentRoute / AgentPresence
+→ agent-gateway 通过 Provider 查询路由和脱敏状态
+```
 
+Gateway 可以承载轻量 heartbeat，但智能软件工厂正式集成时，Worker / RuntimeHost / AgentRoute / AgentPresence 的业务真源在 agent-team。
 
-## 2026-05-15 更新：P0a 原型闭环增强
+### 3.4 前端 agentId-only
 
-- 当前 P0a 闭环演示原型：`docs/prototypes/Agent-Team-V2-注册中心-v0.6.32.html`。
-- 原型增强目标不是视觉大改，而是验证 P0a 最小业务闭环：`Skill → AgentTemplate → Worker → Team/Project → Doc 发布 → Decision 处理 → Activity 回写`。
-- 原型已覆盖普通员工通过 Leader 联系、Skill 保存草稿 / 发布生效、岗位技能关联 / 移除、基于岗位创建数字员工、文档发布生成 Activity / Decision、决策处理回写 Activity、P0a 演示主线面板。
-- 该原型仍为 mock 原型，不接真实后端、数据库、agent-web-kit、Gateway 或 OpenCode。
+前端和 widget 只传：
 
+```text
+agentId
+conversationId
+hostContext
+```
 
-## 文档命名约定
+不得传：
 
-- 当前工作版本保持 v0.6.32。
-- 同一版本内不使用 `-revised`、`-p0a-flow`、`-ui-review-task-breakdown` 等后缀表达先后顺序。
-- 同类当前正本只保留一个文件名，版本内小改通过 Git commit 追踪。
+```text
+endpointRef
+workspaceDir
+runtimeHost internal URL
+OpenCode port
+token
+```
 
+### 3.5 routeStatus 唯一字段
 
-## 8. 数字员工运行时与工作目录设计
+AgentRoute 使用：
 
-- 一个数字员工实例 `Worker` 对应一个具体 Agent Runtime。
-- 当前 Agent Runtime 实现形态是某个 `RuntimeHost` 上的 OpenCode 工作目录。
-- OpenCode Runtime 可以部署在单台服务器，也可以部署在多台服务器；设计不假设所有 Worker 工作目录在同一台机器。
-- `RuntimeHost` 表示运行节点；`WorkerRuntimeBinding` 表示 Worker 到 `runtimeHostId + workspaceDir + skillDir` 的绑定。
-- Worker 工作目录中的 Skill 文件来自 `SkillVersion + TemplateSkillMapping` 初始化，是运行时快照，不是技能资产真源。
-- P0a 只在 mock seed 中表达 runtimeHosts 和 workerRuntimeBindings，不真实写文件；P0b 可先支持单 RuntimeHost；P1 支持多 RuntimeHost 调度和跨节点技能同步。
+```ts
+type RouteStatus = 'active' | 'disabled' | 'unavailable' | 'error'
+```
 
+不得再使用 `AgentRoute.status`。
 
-## 8. 路由与状态设计补充
+---
 
-- 正式智能软件工厂中，`Worker / RuntimeHost / AgentRoute / AgentPresence` 的业务真源在 agent-team。
-- `agent-web-kit` Gateway 只负责 `agentId` 解析、会话路由、命令转发、SSE 订阅和轻量状态摘要。
-- P0a 使用 mock `agentRoutes[]` 和 `agentPresences[]`，不连接真实 Gateway。
-- P0b 需要提供 `AgentRouteProvider`：`GET /internal/agent-routes/:agentId` 与 `POST /internal/agent-routes/resolve-batch`。
-- RuntimeHost / Agent 心跳正式上报到 `agent-team runtime-service`；Gateway heartbeat 仅用于 Mock、调试、静态配置和轻量模式。
-- `disabled` 是业务停用状态，不能被 heartbeat 自动恢复为 active。
+## 4. P0a 范围
 
-## 2026-05-15 路由状态命名与会话绑定收敛
+P0a 是前端可演示 MVP。
 
-- AgentRoute 可用性字段统一为 `routeStatus`。
-- AgentPresence 运行态字段使用 `presenceStatus`。
-- `routeRevision` 只在影响运行时绑定或会话能力边界的变更中递增。
-- conversation 创建时保存 `ConversationRouteBinding` route snapshot。
-- 正式集成中心跳和忙闲状态上报 agent-team runtime-service，Gateway 通过 Provider 查询。
-- Gateway heartbeat 只用于 Mock、调试、Static / Hybrid 轻量模式。
+P0a 做：
+
+```text
+- monorepo 工程骨架
+- contracts / domain / mock-seed / data-client / state
+- Skill 工作台
+- AgentTemplate 管理
+- Worker 创建与启用/停用模拟
+- RuntimeBinding 展示
+- Team / Project 视图
+- Doc 草稿 / 发布模拟
+- Decision 处理
+- Activity 回写
+- 小云 MockChatAdapter
+```
+
+P0a 不做：
+
+```text
+- 真实登录 / 权限 / 多用户
+- 真实后端 API
+- 真实数据库
+- 真实 agent-web-kit Gateway
+- 真实 OpenCode runtime 启动
+- 生产级审计
+- 完整脚本/资源文件管理
+```
+
+---
+
+## 5. 给 OpenCode 的默认工作方式
+
+OpenCode 必须先读：
+
+```text
+docs/README.md
+docs/文档导航.md
+docs/project-memory.md
+docs/specs/2026-05-17-智能软件工厂P0a工程施工图-v0.6.33.md
+docs/tasks/2026-05-17-OpenCode执行清单-v0.6.33.md
+docs/guides/OpenCode协作指南-v0.6.33.md
+```
+
+执行顺序必须是：
+
+```text
+contracts → domain → mock-seed → data-client → state → pages/features → polish
+```
+
+禁止直接从页面视觉开工。
+
+---
+
+## 6. 常见坑
+
+```text
+1. 不要把 Gateway 设计成业务状态真源。
+2. 不要让前端传 workspaceDir / endpointRef / runtimeHost / token。
+3. 不要混用 status 和 routeStatus。
+4. 不要让 heartbeat 自动恢复 disabled。
+5. 不要把会话级 busy 自动等同员工级 busy。
+6. 不要让 P0a 膨胀到真实后端、Gateway、OpenCode。
+7. 不要把 workspaceDir 中的技能快照当成技能主数据。
+8. 不要让普通 Worker 直接对话。
+9. 不要把 agent-web-kit 独立架构设计混入 agent-team 正本。
+10. 不要再为每轮评审新增大量 revised/final/copy 文档。
+```
