@@ -1,9 +1,34 @@
 <!DOCTYPE html>
-<!-- v0.6.32-reference changelog (小云全局助手视觉收敛)
-- 按当前 docs/prototypes 策略，仅恢复一个 reference HTML，作为视觉/交互参考，不作为 P0a 施工主入口。
-- 只替换小云全局助手相关头像：欢迎态、消息气泡、右下浮动入口。
-- 组长/成员仍保持人形数字员工头像，不把小云误放到组长或团队成员卡中。
-- 小云图片资源统一放入 docs/prototypes/pic/xiaoyun/。
+<!-- v0.6.32 changelog (界面走查与任务拆解优化)
+- 配置区导航顺序调整为：岗位 / 员工 / 技能 / 设置，强化“岗位模板创建数字员工实例”的主链路
+- 左侧分组文案从“运行/配置”升级为“运行态/工厂配置”，进一步区分运行观察与配置资产
+- 修正设置页提示、技能页标题等残留文案；继续保留原型图片引用路径不变
+- 本版本同步输出界面走查报告与开发任务拆解表，便于进入 P0a 开发
+-->
+<!-- v0.6.31 changelog (运行态 / 配置态导航分区)
+- 左侧菜单分为「运行态」与「软件工厂配置」两组：运行态包含总览/团队/项目/待决策，配置态包含员工/岗位/技能/设置
+- 菜单恢复使用「岗位」短名，但页面标题明确为「数字员工模板（岗位）」；代码模型继续使用 AgentTemplate
+- 员工页下移到配置区，表达为数字员工实例管理；团队详情和总览仍承载运行态观察
+- 技能页文案从「岗位技能匹配」调整为「岗位技能匹配」，避免菜单和页面心智割裂
+- 优化侧边栏分组视觉、配置区提示和 Skill 工作台说明，便于后续截图评审
+-->
+<!-- v0.6.28 changelog (岗位与技能管理收敛)
+- 左侧新增「岗位」「技能」一级菜单；设置页恢复为只读运行信息
+- 技能管理从设置页拆出，新增岗位页用于数字员工模板/职责/实例统计/技能摘要
+- 清理员工筛选中的 @librarian 有效选项，修复技能统计脚本错误
+- TemplateSkillMapping 作为岗位技能匹配唯一主数据，Skill 只保存资产正文和范围
+-->
+<!-- v0.6.30 changelog (数字员工模板命名收敛)
+- 左侧菜单「岗位」改为「模板」，页面标题使用「数字员工模板」
+- 产品术语收敛：数字员工模板 = AgentTemplate；数字员工实例 = Worker / AgentInstance
+- 技能匹配文案从「岗位技能匹配」改为「岗位技能匹配」
+- 创建链路强调：模板 → 创建数字员工 → 继承技能 → 匹配团队/项目
+-->
+<!-- v0.6.29 changelog (数字员工模板与 Skill 编辑器)
+- 岗位正式定义为「数字员工模板 / Role Template」：可基于岗位创建数字员工实例
+- 数字员工实例继承数字员工模板的技能集，可再分配到不同团队/项目
+- 技能页升级为 Skill 配置工作台：左侧项目文件树，中间 SKILL.md 编辑器，顶部元信息与 YAML 预览
+- 技能内容从简单 textarea 升级为 Markdown 正文，保存草稿与发布生效分离
 -->
 <!-- v0.6.26-persona2 changelog (数字员工人物感修订)
 - 基于 persona 试验版继续新建，不覆盖 v0.6.26-persona 与 v0.6.25 基线
@@ -127,7 +152,7 @@ v0.6.7 changelog (智能体详情工作台)
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能软件工厂 v0.6.32-reference · 小云全局助手视觉</title>
+    <title>智能软件工厂 v0.6.32 · P0a 闭环增强原型</title>
   <style>
     /* =========================================
        Design System & Variables
@@ -397,6 +422,29 @@ v0.6.7 changelog (智能体详情工作台)
 
     .sidebar-nav-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
     .sidebar-bottom { flex-shrink: 0; display: flex; flex-direction: column; margin-top: auto; }
+    .sidebar-section-label {
+      margin: 8px 6px 4px;
+      padding: 4px 0;
+      border-top: 1px solid rgba(226,232,240,0.92);
+      color: #94a3b8;
+      font-size: 10px;
+      line-height: 1.15;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      writing-mode: horizontal-tb;
+    }
+    .sidebar-nav-scroll .sidebar-section-label:first-child { margin-top: 0; border-top: 0; }
+    .sidebar-bottom {
+      border-top: 1px solid rgba(226,232,240,0.92);
+      padding-top: 4px;
+      background: linear-gradient(180deg, rgba(248,250,252,0.72), #fff 44%);
+    }
+    .sidebar-bottom .sidebar-section-label { margin-top: 0; border-top: 0; color: #64748b; }
+    .nav-item.config-nav { color: #475569; }
+    .nav-item.config-nav.active { background: #f5f3ff; color: #7c3aed; border-left-color: #7c3aed; }
+    .nav-item.config-nav.active svg { color: #7c3aed; }
+
     
     .nav-group-title { padding: 12px 20px 4px; font-size: 12px; color: #6b7280; font-weight: 600; letter-spacing: 0.02em; }
     .nav-item { padding: 10px 4px; font-size: 12px; color: var(--text-secondary); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-left: 3px solid transparent; transition: var(--transition); position: relative; text-align: center; line-height: 1.2; overflow: hidden; }
@@ -2488,7 +2536,7 @@ v0.6.7 changelog (智能体详情工作台)
     .docs-layout.docs-tree-collapsed.docs-detail-collapsed { grid-template-columns:38px minmax(320px, 1fr) 42px; }
 
   
-/* === v0.6.27-skill: 技能管理样式 === */
+/* === v0.6.32-ui-review: 运行态 / 工厂配置导航 + 数字员工模板与 Skill 编辑器样式 === */
 .worker-card-skills-summary { font-size: 12px; color: #5b7a9d; cursor: pointer; margin-top: 4px; }
 .worker-card-skills-summary:hover { color: #1a73e8; }
 .worker-stats-bar { display: flex; gap: 24px; padding: 12px 16px; background: #f0f6ff; border-radius: 8px; margin-bottom: 12px; font-size: 13px; color: #555; }
@@ -2517,35 +2565,34 @@ v0.6.7 changelog (智能体详情工作台)
 .skill-drawer-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; border-top: 1px solid #eee; }
 
 
-    /* v0.6.32-reference: 小云全局助手头像，仅用于小云入口/欢迎态/消息气泡；不用于组长或团队成员 */
-    .xiaoyun-bot-avatar {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-      object-position: center;
-      border-radius: inherit;
-      background: #fff;
-    }
-    .chat-welcome .xiaoyun-welcome-avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 18px;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
-      border: 1px solid rgba(191, 219, 254, 0.72);
-      object-fit: cover;
-    }
-    .chat-avatar .xiaoyun-bot-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid rgba(219, 234, 254, 0.86);
-    }
-    .fab-bot .xiaoyun-bot-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-    }
+/* === v0.6.29: Skill 配置工作台 === */
+.skill-workbench { display:grid; grid-template-columns: 230px minmax(0, 1fr); gap:12px; min-height: calc(100vh - 188px); }
+.skill-file-sidebar { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+.skill-file-section { padding:10px 12px; border-bottom:1px solid var(--border); }
+.skill-file-title { font-size:12px; color:#64748b; font-weight:800; display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.skill-file-tree { display:flex; flex-direction:column; gap:2px; }
+.skill-file-item { display:flex; align-items:center; gap:7px; padding:6px 8px; border-radius:6px; font-size:12px; color:#334155; cursor:pointer; }
+.skill-file-item:hover { background:#f8fafc; }
+.skill-file-item.active { background:#fff1f2; color:#be123c; font-weight:700; }
+.skill-reference-empty { padding:18px 10px; text-align:center; color:#94a3b8; font-size:12px; line-height:1.5; }
+.skill-editor-main { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.skill-meta-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+.skill-meta-row { display:grid; grid-template-columns: 86px minmax(0, 1fr); gap:10px; align-items:center; margin-bottom:8px; }
+.skill-meta-row:last-child { margin-bottom:0; }
+.skill-meta-row label { font-size:12px; color:#475569; font-weight:700; }
+.skill-meta-input { width:100%; height:30px; border:1px solid #cbd5e1; border-radius:6px; padding:0 10px; font-size:13px; color:#0f172a; background:#fffef3; }
+.skill-meta-input.desc { background:#fff; }
+.skill-yaml-preview { background:#2b2f30; color:#d1fae5; border-radius:0; padding:12px 16px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; line-height:1.65; white-space:pre-wrap; border-top:18px solid #8b124c; }
+.skill-editor-hint { display:flex; align-items:center; gap:8px; padding:8px 12px; background:#f8fafc; border:1px solid var(--border); border-radius:8px; font-size:12px; color:#475569; }
+.skill-md-card { background:#1f2630; border:1px solid #111827; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; min-height:420px; }
+.skill-md-toolbar { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:#151b23; color:#94a3b8; font-size:12px; border-bottom:1px solid #2f3742; }
+.skill-md-body { display:grid; grid-template-columns:44px minmax(0, 1fr); flex:1; min-height:0; }
+.skill-line-nums { background:#1b222c; color:#64748b; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; line-height:22px; padding:10px 8px; text-align:right; user-select:none; white-space:pre; overflow:hidden; }
+.skill-md-textarea { width:100%; min-height:420px; resize:vertical; border:0; outline:0; background:#202732; color:#dbeafe; padding:10px 14px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; line-height:22px; }
+.skill-action-bar { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.skill-impact-chip { font-size:12px; color:#92400e; background:#fffbeb; border:1px solid #fde68a; border-radius:999px; padding:5px 10px; }
+.role-template-card { border-top:3px solid #1677ff; }
+.role-template-flow { background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; padding:9px 10px; color:#475569; font-size:12px; line-height:1.55; }
 
 </style>
 
@@ -2559,7 +2606,7 @@ v0.6.7 changelog (智能体详情工作台)
       </div>
       <div class="app-header-title">智能软件工厂</div>
     </div>
-    <span class="app-header-badge">v0.6.32-reference · 小云全局助手视觉</span>
+    <span class="app-header-badge">v0.6.32 · P0a 闭环增强</span>
     <span class="app-header-meta">你的数字员工团队</span>
     <div class="app-header-spacer"></div>
     <select class="app-header-mock" id="mockScenarioSelect" onchange="handleMockScenario(this.value)" title="模拟场景（演示用）">
@@ -2609,33 +2656,39 @@ v0.6.7 changelog (智能体详情工作台)
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-nav-scroll">
-        <div class="nav-item active" data-target="overview" onclick="switchNav('overview')">
+        <div class="sidebar-section-label" title="运行态功能">运行态</div>
+        <div class="nav-item active" data-target="overview" onclick="switchNav('overview')" title="总览">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <span class="nav-text">总览</span>
         </div>
-
-        <!-- REMOVED secondary lists for Sidebar Simplification -->
-        
-        <div class="nav-item" style="margin-top: 4px;" data-target="teams" onclick="switchNav('teams')">
+        <div class="nav-item" data-target="teams" onclick="switchNav('teams')" title="团队运行态">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 2H15a1 1 0 0 1 1 1v2H8V3a1 1 0 0 1 1-1z"></path><path d="M4 7h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7z"></path></svg>
           <span class="nav-text">团队</span>
         </div>
-        <div class="nav-item" data-target="projects" onclick="switchNav('projects')">
+        <div class="nav-item" data-target="projects" onclick="switchNav('projects')" title="项目运行态">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"></path></svg>
           <span class="nav-text">项目</span>
         </div>
-        <div class="nav-item" data-target="pool" onclick="switchNav('pool')">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          <span class="nav-text">员工</span>
-        </div>
-        <div class="nav-item" data-target="decisions" onclick="switchNav('decisions')">
+        <div class="nav-item" data-target="decisions" onclick="switchNav('decisions')" title="待决策">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
           <span class="nav-text">待决策</span> <span class="badge" id="menuDecisionCount" style="display:none">0</span>
         </div>
       </div>
-      
       <div class="sidebar-bottom">
-        <div class="nav-item" data-target="settings" onclick="switchNav('settings')">
+        <div class="sidebar-section-label" title="软件工厂配置">工厂配置</div>
+        <div class="nav-item config-nav" data-target="roles" onclick="switchNav('roles')" title="数字员工模板（岗位）">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+          <span class="nav-text">岗位</span>
+        </div>
+        <div class="nav-item config-nav" data-target="pool" onclick="switchNav('pool')" title="数字员工实例">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span class="nav-text">员工</span>
+        </div>
+        <div class="nav-item config-nav" data-target="skills" onclick="switchNav('skills')" title="技能资产 / SKILL.md">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v5"/><path d="M12 17v5"/><path d="M4.22 4.22l3.54 3.54"/><path d="M16.24 16.24l3.54 3.54"/><path d="M2 12h5"/><path d="M17 12h5"/><path d="M4.22 19.78l3.54-3.54"/><path d="M16.24 7.76l3.54-3.54"/><circle cx="12" cy="12" r="4"/></svg>
+          <span class="nav-text">技能</span>
+        </div>
+        <div class="nav-item config-nav" data-target="settings" onclick="switchNav('settings')" title="只读运行信息">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           <span class="nav-text">设置</span>
         </div>
@@ -2781,7 +2834,6 @@ v0.6.7 changelog (智能体详情工作台)
                 <option value="@explorer">@explorer</option>
                 <option value="@fixer">@fixer</option>
                 <option value="@oracle">@oracle</option>
-                <option value="@librarian">@librarian</option>
                 <option value="@designer">@designer</option>
               </select>
               <select class="filter-select" id="statusFilter" onchange="filterWorkers()">
@@ -2794,6 +2846,7 @@ v0.6.7 changelog (智能体详情工作台)
 
           
           <!-- v0.6.27-skill: 员工页统计条 -->
+          <div class="docs-status-strip" style="margin-bottom:10px;"><span class="docs-status-pill active">配置区 / 数字员工实例</span><span class="docs-status-pill">由岗位模板创建</span><span class="docs-status-pill">可匹配团队与项目</span></div>
           <div class="worker-stats-bar" id="workerStatsBar">
             <span>总数: <strong id="statTotal">0</strong></span>
             <span>在线: <strong id="statOnline">0</strong></span>
@@ -2876,32 +2929,116 @@ v0.6.7 changelog (智能体详情工作台)
             </div>
           </div>
         
-    <!-- v0.6.27-skill: 技能管理 -->
-    <div class="settings-section" style="margin-top:24px;">
-      <h3 style="margin-bottom:16px; font-size:16px; font-weight:700; color:#172033;">技能管理</h3>
-      <div class="skill-tabs" style="display:flex; gap:8px; margin-bottom:16px;">
-        <button class="skill-tab active" onclick="switchSkillTab('assets')">技能资产</button>
-        <button class="skill-tab" onclick="switchSkillTab('mapping')">岗位技能匹配</button>
-      </div>
-      <div id="skillAssetsPanel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <input type="text" placeholder="搜索技能名称..." style="padding:6px 12px; border:1px solid #ddd; border-radius:4px; width:240px;" oninput="filterSkills(this.value)">
-          <button class="btn-primary" onclick="openSkillDrawer()">+ 新建技能</button>
-        </div>
-        <table class="skill-table" id="skillTable"><thead><tr><th>技能名称</th><th>描述</th><th>适用岗位</th><th>引用实例</th><th>状态</th><th>操作</th></tr></thead><tbody id="skillTableBody"></tbody></table>
-      </div>
-      <div id="skillMappingPanel" style="display:none;">
-        <div style="margin-bottom:12px;"><label style="font-size:13px;">选择岗位：</label>
-          <select id="mappingRoleSelect" onchange="renderRoleMapping(this.value)" style="padding:4px 8px;border:1px solid #ddd;border-radius:4px;">
-            <option value="explorer">@explorer</option><option value="fixer">@fixer</option><option value="oracle">@oracle</option><option value="designer">@designer</option>
-          </select>
-        </div>
-        <div id="roleMappingList"></div>
-        <button class="btn-secondary" onclick="alert('关联已有技能（占位）')" style="margin-top:12px;">+ 关联已有技能</button>
-      </div>
+    <div class="settings-readonly-note" style="margin-top:16px; max-width:600px; padding:10px 12px; border:1px dashed var(--border); border-radius:8px; color:var(--text-secondary); font-size:12px; background:#fff;">
+      设置页仅展示运行信息；数字员工模板和技能配置已拆分到左侧「岗位」「技能」菜单。
     </div>
 
+
 </div>
+
+
+
+        <!-- Page: Agent Templates (v0.6.32 · 数字员工模板 / 岗位) -->
+        <div id="page-roles" class="page">
+          <div class="page-title">
+            <div class="page-title-text">数字员工模板（岗位） <span class="page-title-meta">菜单名“岗位”；AgentTemplate = 可实例化的数字员工能力模板</span></div>
+          </div>
+          <div class="card" style="margin-bottom:14px; padding:12px 16px; border-color:#bfdbfe; background:linear-gradient(135deg,#eff6ff,#fff);">
+            <div style="font-size:13px; color:#334155; line-height:1.6;">
+              <strong>主链路：</strong>岗位定义能力模板 → 基于岗位创建数字员工实例 → 实例继承岗位技能 → 匹配团队与项目运行。
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:14px; padding:14px 16px;">
+            <div class="docs-status-strip">
+              <span class="docs-status-pill active">有效岗位模板 4</span>
+              <span class="docs-status-pill">可基于岗位创建数字员工实例</span>
+              <span class="docs-status-pill warn">实例继承：通用技能 + 岗位技能</span>
+              <span class="docs-status-pill">实例可分配到不同团队 / 项目</span>
+            </div>
+          </div>
+          <div class="grid-cards" id="roleCardsContainer"><!-- Rendered via JS --></div>
+        </div>
+
+        <!-- Page: Skills (v0.6.32 · Skill 配置工作台) -->
+        <div id="page-skills" class="page">
+          <div class="page-title">
+            <div class="page-title-text">技能 <span class="page-title-meta">Skill 配置、SKILL.md、岗位技能匹配与发布生效</span></div>
+          </div>
+          <div class="card" style="margin-bottom:12px; padding:12px 16px; border-color:#e9d5ff; background:linear-gradient(135deg,#faf5ff,#fff);">
+            <div style="font-size:13px; color:#334155; line-height:1.6;">
+              <strong>Skill 工作台：</strong>左侧保持项目文件树，右侧编辑 SKILL.md；保存草稿不影响运行，发布生效后才更新岗位模板和数字员工实例的生效技能版本。
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="skill-tabs" style="display:flex; gap:8px; margin-bottom:12px;">
+              <button class="skill-tab active" data-skill-tab="studio" onclick="switchSkillTab('studio')">Skill 配置</button>
+              <button class="skill-tab" data-skill-tab="assets" onclick="switchSkillTab('assets')">技能资产</button>
+              <button class="skill-tab" data-skill-tab="mapping" onclick="switchSkillTab('mapping')">岗位技能匹配</button>
+            </div>
+
+            <div id="skillStudioPanel">
+              <div class="skill-workbench">
+                <aside class="skill-file-sidebar">
+                  <div class="skill-file-section">
+                    <div class="skill-file-title"><span>项目文件</span><span style="font-size:11px;color:#94a3b8;">+ ⟳</span></div>
+                    <div class="skill-file-tree">
+                      <div class="skill-file-item active">▣ SKILL.md</div>
+                      <div class="skill-file-item">▸ scripts</div>
+                      <div class="skill-file-item">▸ resources</div>
+                    </div>
+                  </div>
+                  <div class="skill-file-section" style="border-bottom:0; flex:1;">
+                    <div class="skill-file-title"><span>能力引用</span><span style="color:#1677ff;">+ 添加</span></div>
+                    <div class="skill-reference-empty">暂时没有数据哦~<br>可在后续引用工具、脚本、资源包或其他 Skill。</div>
+                  </div>
+                </aside>
+
+                <section class="skill-editor-main">
+                  <div class="skill-meta-card">
+                    <div class="skill-meta-row"><label>* Skill 名称</label><input id="skillStudioName" class="skill-meta-input" value="sct-to-customer-table" oninput="syncSkillStudioYaml()"></div>
+                    <div class="skill-meta-row"><label>Skill 描述</label><input id="skillStudioDesc" class="skill-meta-input desc" value="将 SCT/BOM 明细转换为客户化报价配置表。" oninput="syncSkillStudioYaml()"></div>
+                  </div>
+                  <pre id="skillStudioYaml" class="skill-yaml-preview"></pre>
+                  <div class="skill-editor-hint">ℹ️ 使用 <strong>Cmd + Alt + /</strong>、<strong>Ctrl + Alt + /</strong> 可插入命令。保存草稿不影响 Agent，发布后才刷新数字员工模板和数字员工实例的生效技能版本。</div>
+                  <div class="skill-md-card">
+                    <div class="skill-md-toolbar"><span>SKILL.md</span><span id="skillStudioVersion">draft · v0.1.0</span></div>
+                    <div class="skill-md-body">
+                      <div id="skillLineNums" class="skill-line-nums">1</div>
+                      <textarea id="skillStudioMd" class="skill-md-textarea" spellcheck="false" oninput="syncSkillLineNums()"></textarea>
+                    </div>
+                  </div>
+                  <div class="skill-action-bar">
+                    <span class="skill-impact-chip" id="skillStudioImpact">影响 0 个数字员工模板、0 个数字员工实例</span>
+                    <div style="display:flex; gap:8px;">
+                      <button class="btn btn-secondary" onclick="alert('校验 SKILL.md 结构（占位）')">校验</button>
+                      <button class="btn btn-secondary" onclick="alert('已保存草稿（原型占位）')">保存草稿</button>
+                      <button class="btn btn-primary" onclick="alert('已发布生效（原型占位）：数字员工模板与数字员工实例将在下一次技能刷新时读取此版本')">发布生效</button>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div id="skillAssetsPanel" style="display:none;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:12px;">
+                <input type="text" placeholder="搜索技能名称或描述..." style="padding:6px 12px; border:1px solid #ddd; border-radius:4px; width:260px;" oninput="filterSkills(this.value)">
+                <button class="btn-primary" onclick="selectSkill(null); switchSkillTab('studio')">+ 新建技能</button>
+              </div>
+              <table class="skill-table" id="skillTable"><thead><tr><th>技能名称</th><th>描述</th><th>作用范围</th><th>引用实例</th><th>版本/状态</th><th>操作</th></tr></thead><tbody id="skillTableBody"></tbody></table>
+            </div>
+
+            <div id="skillMappingPanel" style="display:none;">
+              <div style="margin-bottom:12px; display:flex; align-items:center; gap:8px;"><label style="font-size:13px;">选择数字员工模板：</label>
+                <select id="mappingRoleSelect" onchange="renderRoleMapping(this.value)" style="padding:4px 8px;border:1px solid #ddd;border-radius:4px;">
+                  <option value="explorer">@explorer · 测试工程师</option><option value="fixer">@fixer · 定制开发/建模</option><option value="oracle">@oracle · 架构师</option><option value="designer">@designer · 设计师</option>
+                </select>
+                <span style="font-size:12px;color:var(--text-muted);">最终生效技能 = 通用技能 + 岗位匹配技能；数字员工实例自动继承。</span>
+              </div>
+              <div id="roleMappingList"></div>
+              <button class="btn-secondary" onclick="alert('关联已有技能（占位）：后续选择一个技能并写入 TemplateSkillMapping')" style="margin-top:12px;">+ 关联已有技能</button>
+            </div>
+          </div>
+        </div>
 
         <!-- Page Template: Team Detail -->
         <div id="page-team-detail-template" class="page">
@@ -3216,7 +3353,7 @@ v0.6.7 changelog (智能体详情工作台)
     </div>
     <div class="chat-messages chat-scrollable empty" id="chatMessages">
       <div class="chat-welcome">
-        <img class="xiaoyun-bot-avatar xiaoyun-welcome-avatar" src="./pic/xiaoyun/xiaoyun-global-assistant.png" onerror="this.onerror=null;this.src='/docs/prototypes/pic/xiaoyun/xiaoyun-global-assistant.png'" width="72" height="72" alt="小云全局助手"/>
+        <img src="data:image/png;base64,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" width="64" height="64" style="border-radius:50%;" alt="AI助手"/>
         <div>你好，有什么我能帮到你的吗？</div>
       </div>
     </div>
@@ -3357,17 +3494,6 @@ v0.6.7 changelog (智能体详情工作台)
       // Bridge servePrototype 把 /prototypes/ 映射到 docs/prototypes/，所以 /docs/prototypes/ 对 IDE 和 Bridge 都有效
       return '/docs/prototypes/persona-avatar-' + key + '.png';
     }
-
-
-    function getXiaoyunAvatarSrc() {
-      // v0.6.32-reference: 小云全局助手专用素材。仅用于小云，不用于组长/成员。
-      var rel = './pic/xiaoyun/xiaoyun-global-assistant.png';
-      var abs = '/docs/prototypes/pic/xiaoyun/xiaoyun-global-assistant.png';
-      var isFileProtocol = window.location.protocol === 'file:';
-      var inPrototypesDir = window.location.pathname.indexOf('/prototypes/') >= 0;
-      return (isFileProtocol || inPrototypesDir) ? rel : abs;
-    }
-
     function getAvatarKey(status) {
       if (status === 'offline') return 'offline';
       if (status === 'busy' || status === 'online') return 'busy';
@@ -3923,8 +4049,10 @@ v0.6.7 changelog (智能体详情工作台)
         renderTeamCards();
         renderProjects();
         renderWorkerPool();
-  renderSkillTable();
-  updateWorkerStats();
+        renderRolesPage();
+        renderSkillTable();
+        renderSkillStudio();
+        updateWorkerStats();
         renderDecisions();
         populateTeamFilters();
         
@@ -4277,24 +4405,206 @@ v0.6.7 changelog (智能体详情工作台)
     }
 
     
-// === 技能资产 (v0.6.27-skill) ===
+
+// === 数字员工模板与 Skill 配置 (v0.6.30) ===
+let selectedSkillId = 'sct-to-customer-table';
+const defaultSkillMarkdown = `# SCT 明细转换为客户化报价表
+
+## 目标
+把一个 SCT 或 BOM 明细区域，整理成客户化报价配置表。
+
+## 输出要求
+
+最终只输出 Markdown 表格，不要解释。表头固定为：
+
+| 序号 | 部件编码 | 型号 | 产品描述 | 配置参数 | 数量 | 单位 | 单价 | 总价 | 页码 | 备注 |
+|---|---|---|---|---|---:|---|---:|---:|---|---|
+
+## 解析规则
+
+1. 自动识别明细表头，例如：序号、部件编码、型号、描述、总数。
+2. 产品描述保留关键规格、容量、接口、数量、服务等信息。
+3. 配置参数默认留空，除非输入中明确给出客户化参数。
+4. 数量必须来自明细行本身，不得平均分摊，也不得把多个硬盘型号合并。
+5. 遇到项目总价、projectTotalPrice 或 </table> 视为明细结束。
+
+## 质量检查
+
+- 不编造不存在的物料。
+- 不把图片、空行、HTML 噪声作为物料行。
+- 同一物料多次出现时，保留原始行顺序。
+`;
 const skills = [
-  { id: 's1', name: '代码文件读取', description: '读取项目中的源码文件和配置文件', content: '能够通过 Read/Glob 工具读取指定路径的文件内容，支持 offset/limit 精准定位。', enabled: true, applicableRoles: ['*'], createdAt: '2026-05-01' },
-  { id: 's2', name: '代码搜索定位', description: '通过正则或关键词搜索代码内容', content: '使用 Grep 工具按正则搜索文件内容，支持 include 过滤文件类型。', enabled: true, applicableRoles: ['*'], createdAt: '2026-05-01' },
-  { id: 's3', name: '命令执行', description: '在终端执行 bash 命令', content: '通过 Bash 工具执行命令，支持 workdir、timeout 参数。', enabled: true, applicableRoles: ['*'], createdAt: '2026-05-01' },
-  { id: 's4', name: '状态汇报', description: '向用户汇报当前任务进展', content: '在完成阶段性任务后，主动输出结论+关键依据+下一步。', enabled: true, applicableRoles: ['*'], createdAt: '2026-05-01' },
-  { id: 's5', name: '代码修改', description: '精准编辑源码文件', content: '使用 Edit 工具进行精确字符串替换，支持 replaceAll。', enabled: true, applicableRoles: ['explorer', 'fixer'], createdAt: '2026-05-02' },
-  { id: 's6', name: '测试运行', description: '执行测试套件并分析结果', content: '运行项目测试命令，分析输出中的 pass/fail/error，定位失败用例。', enabled: true, applicableRoles: ['fixer'], createdAt: '2026-05-02' },
-  { id: 's7', name: '架构分析', description: '分析代码架构和依赖关系', content: '通过目录结构、导入关系、模块边界分析项目架构，输出依赖图和建议。', enabled: true, applicableRoles: ['oracle'], createdAt: '2026-05-02' },
-  { id: 's8', name: '决策权衡', description: '多方案对比分析并给出推荐', content: '对比 2-3 种方案的收益、风险、成本，给出推荐方案和理由。', enabled: true, applicableRoles: ['oracle'], createdAt: '2026-05-02' },
-  { id: 's9', name: '视觉评审', description: '评审 UI 设计和原型', content: '对截图/原型进行视觉走查，指出间距、对齐、色彩、字号等问题。', enabled: true, applicableRoles: ['designer'], createdAt: '2026-05-03' },
-  { id: 's10', name: '原型输出', description: '输出 HTML/CSS 原型文件', content: '基于设计规范产出可浏览的 HTML 原型，保持版本化。', enabled: true, applicableRoles: ['designer'], createdAt: '2026-05-03' },
+  { id: 'sct-to-customer-table', name: 'sct-to-customer-table', version: '0.1.0', description: '将 SCT/BOM 明细转换为客户化报价配置表。', content: defaultSkillMarkdown, mdContent: defaultSkillMarkdown, enabled: true, scope: 'role', createdAt: '2026-05-14', updatedAt: '2026-05-14' },
+  { id: 'code-read', name: '代码文件读取', version: '1.0.0', description: '读取项目中的源码文件和配置文件。', content: '能够通过 Read/Glob 工具读取指定路径的文件内容，支持 offset/limit 精准定位。', mdContent: '# 代码文件读取\n\n使用 Read/Glob 工具读取指定路径的文件内容。', enabled: true, scope: 'global', createdAt: '2026-05-01', updatedAt: '2026-05-01' },
+  { id: 'code-search', name: '代码搜索定位', version: '1.0.0', description: '通过正则或关键词搜索代码内容。', content: '使用 Grep 工具按正则搜索文件内容，支持 include 过滤文件类型。', mdContent: '# 代码搜索定位\n\n使用 Grep 工具按正则搜索文件内容。', enabled: true, scope: 'global', createdAt: '2026-05-01', updatedAt: '2026-05-01' },
+  { id: 'bash-run', name: '命令执行', version: '1.0.0', description: '在终端执行 bash 命令。', content: '通过 Bash 工具执行命令，支持 workdir、timeout 参数。', mdContent: '# 命令执行\n\n通过 Bash 工具执行命令。', enabled: true, scope: 'global', createdAt: '2026-05-01', updatedAt: '2026-05-01' },
+  { id: 'status-report', name: '状态汇报', version: '1.0.0', description: '向用户汇报当前任务进展。', content: '在完成阶段性任务后，主动输出结论、关键依据和下一步。', mdContent: '# 状态汇报\n\n主动输出结论、关键依据和下一步。', enabled: true, scope: 'global', createdAt: '2026-05-01', updatedAt: '2026-05-01' },
+  { id: 'code-edit', name: '代码修改', version: '1.0.0', description: '精准编辑源码文件。', content: '使用 Edit 工具进行精确字符串替换，支持 replaceAll。', mdContent: '# 代码修改\n\n使用 Edit 工具进行精确字符串替换。', enabled: true, scope: 'role', createdAt: '2026-05-02', updatedAt: '2026-05-02' },
+  { id: 'test-run', name: '测试运行', version: '1.0.0', description: '执行测试套件并分析结果。', content: '运行项目测试命令，分析 pass/fail/error，定位失败用例。', mdContent: '# 测试运行\n\n运行项目测试命令并分析结果。', enabled: true, scope: 'role', createdAt: '2026-05-02', updatedAt: '2026-05-02' },
+  { id: 'architecture-review', name: '架构分析', version: '1.0.0', description: '分析代码架构和依赖关系。', content: '通过目录结构、导入关系、模块边界分析项目架构。', mdContent: '# 架构分析\n\n分析目录结构、导入关系和模块边界。', enabled: true, scope: 'role', createdAt: '2026-05-02', updatedAt: '2026-05-02' },
+  { id: 'decision-tradeoff', name: '决策权衡', version: '1.0.0', description: '多方案对比分析并给出推荐。', content: '对比 2-3 种方案的收益、风险、成本，给出推荐。', mdContent: '# 决策权衡\n\n对比多种方案并给出推荐。', enabled: true, scope: 'role', createdAt: '2026-05-02', updatedAt: '2026-05-02' },
+  { id: 'visual-review', name: '视觉评审', version: '1.0.0', description: '评审 UI 设计和原型。', content: '对截图/原型进行视觉走查，指出间距、对齐、色彩、字号等问题。', mdContent: '# 视觉评审\n\n对截图或原型进行视觉走查。', enabled: true, scope: 'role', createdAt: '2026-05-03', updatedAt: '2026-05-03' },
+  { id: 'prototype-output', name: '原型输出', version: '1.0.0', description: '输出 HTML/CSS 原型文件。', content: '基于设计规范产出可浏览的 HTML 原型，保持版本化。', mdContent: '# 原型输出\n\n产出可浏览的 HTML 原型。', enabled: true, scope: 'role', createdAt: '2026-05-03', updatedAt: '2026-05-03' }
 ];
-function getSkillsForRole(role) {
-  var r = role.replace('@','');
-  return skills.filter(s => s.enabled && (s.applicableRoles.includes('*') || s.applicableRoles.includes(r)));
+const roleSkillMappings = [
+  { roleId: 'explorer', skillId: 'sct-to-customer-table', source: 'role', enabled: true },
+  { roleId: 'fixer', skillId: 'sct-to-customer-table', source: 'role', enabled: true },
+  { roleId: 'explorer', skillId: 'code-edit', source: 'role', enabled: true },
+  { roleId: 'fixer', skillId: 'code-edit', source: 'role', enabled: true },
+  { roleId: 'fixer', skillId: 'test-run', source: 'role', enabled: true },
+  { roleId: 'oracle', skillId: 'architecture-review', source: 'role', enabled: true },
+  { roleId: 'oracle', skillId: 'decision-tradeoff', source: 'role', enabled: true },
+  { roleId: 'designer', skillId: 'visual-review', source: 'role', enabled: true },
+  { roleId: 'designer', skillId: 'prototype-output', source: 'role', enabled: true }
+];
+const roles = [
+  { id: 'explorer', displayName: '测试工程师', templateName: '测试工程师数字员工模板', description: '负责需求澄清、用例设计、测试验证与缺陷反馈。', responsibilities: ['需求澄清', '测试用例', '验收验证', '质量反馈'], createPolicy: '可创建多个测试数字员工，按项目分配。' },
+  { id: 'fixer', displayName: '定制开发 / 建模', templateName: '定制开发数字员工模板', description: '负责代码修改、低代码模型配置、构建修复与测试执行。', responsibilities: ['代码修改', '模型配置', '测试运行', '构建修复'], createPolicy: '可创建多个开发/建模数字员工，分别匹配不同项目。' },
+  { id: 'oracle', displayName: '架构师', templateName: '架构师数字员工模板', description: '负责架构分析、方案权衡、风险判断和关键决策建议。', responsibilities: ['架构分析', '方案评审', '风险识别', '决策建议'], createPolicy: '通常少量实例，按项目提供架构治理。' },
+  { id: 'designer', displayName: '设计师', templateName: '设计师数字员工模板', description: '负责界面设计、原型输出、视觉评审和交互优化。', responsibilities: ['界面设计', '原型输出', '视觉评审', '交互优化'], createPolicy: '可按项目创建设计实例或共享设计评审能力。' }
+];
+
+function getAllWorkers() {
+  if (typeof currentState === 'undefined' || !currentState.workers) return [];
+  var allW = [...currentState.workers];
+  currentState.teams.forEach(function(t){ t.members.forEach(function(m){ allW.push(m); }); });
+  return allW;
+}
+function updateWorkerStats() {
+  var allW = getAllWorkers();
+  const statTotal = document.getElementById('statTotal');
+  const statOnline = document.getElementById('statOnline');
+  const statBusy = document.getElementById('statBusy');
+  const statSkills = document.getElementById('statSkills');
+  if (statTotal) statTotal.textContent = allW.length;
+  if (statOnline) statOnline.textContent = allW.filter(function(w){return w.status==='idle'||w.status==='busy';}).length;
+  if (statBusy) statBusy.textContent = allW.filter(function(w){return w.status==='busy';}).length;
+  if (statSkills) statSkills.textContent = skills.filter(function(s){return s.enabled;}).length;
 }
 
+function normalizeRole(role) { return String(role || '').replace('@',''); }
+function getWorkersByRole(role) {
+  const r = normalizeRole(role);
+  return getAllWorkers().filter(function(w){ return normalizeRole(w.role) === r; });
+}
+function getSkillRoleIds(skillId) {
+  return roleSkillMappings.filter(function(m){ return m.enabled && m.skillId === skillId; }).map(function(m){ return m.roleId; });
+}
+function getSkillsForRole(role) {
+  const r = normalizeRole(role);
+  const mappedIds = roleSkillMappings.filter(function(m){ return m.enabled && m.roleId === r; }).map(function(m){ return m.skillId; });
+  return skills.filter(function(s){ return s.enabled && (s.scope === 'global' || mappedIds.includes(s.id)); });
+}
+function getImpactForSkill(skill) {
+  const allW = getAllWorkers();
+  if (!skill) return { roles: 0, instances: 0 };
+  if (skill.scope === 'global') return { roles: roles.length, instances: allW.length };
+  const roleIds = getSkillRoleIds(skill.id);
+  return { roles: roleIds.length, instances: allW.filter(function(w){ return roleIds.includes(normalizeRole(w.role)); }).length };
+}
+function renderRolesPage() {
+  const c = document.getElementById('roleCardsContainer');
+  if (!c) return;
+  c.innerHTML = roles.map(function(r){
+    const workers = getWorkersByRole(r.id);
+    const skillCount = getSkillsForRole(r.id).length;
+    const online = workers.filter(function(w){ return w.status === 'idle' || w.status === 'busy'; }).length;
+    return `<div class="card role-template-card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">@${r.id} · ${r.templateName}</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-top:6px;line-height:1.5;">${r.description}</div>
+        </div>
+        <span class="status-badge healthy"><span class="status-dot healthy"></span>启用</span>
+      </div>
+      <div class="card-body">
+        <div class="data-row"><span class="data-label">数字员工实例</span><span class="data-value">${workers.length} 个 / 在线 ${online}</span></div>
+        <div class="data-row"><span class="data-label">继承技能</span><span class="data-value">${skillCount} 项</span></div>
+        <div class="role-template-flow">基于此岗位模板创建数字员工 → 自动继承岗位技能 → 分配到团队/项目 → 启动独立运行会话。</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">${r.responsibilities.map(x=>`<span class="docs-status-pill">${x}</span>`).join('')}</div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" onclick="alert('基于 ${r.displayName} 模板创建数字员工实例（占位）：后续进入创建向导，选择名称、团队、项目和运行参数。')">+ 创建数字员工</button>
+        <button class="btn btn-secondary" onclick="switchNav('skills'); setTimeout(()=>{ switchSkillTab('mapping'); const el=document.getElementById('mappingRoleSelect'); if(el){el.value='${r.id}'; renderRoleMapping('${r.id}');}}, 0);">查看技能</button>
+        <button class="btn" onclick="alert('编辑岗位模板（占位）：职责、创建策略、默认运行参数。')">编辑岗位</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function switchSkillTab(tab) {
+  document.querySelectorAll('.skill-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.skillTab === tab); });
+  const ids = { studio: 'skillStudioPanel', assets: 'skillAssetsPanel', mapping: 'skillMappingPanel' };
+  Object.keys(ids).forEach(function(k){ const el = document.getElementById(ids[k]); if (el) el.style.display = tab === k ? 'block' : 'none'; });
+  if (tab === 'studio') renderSkillStudio();
+  if (tab === 'assets') renderSkillTable();
+  if (tab === 'mapping') renderRoleMapping(document.getElementById('mappingRoleSelect').value);
+}
+function selectSkill(skillId) {
+  selectedSkillId = skillId || null;
+  renderSkillStudio();
+}
+function renderSkillStudio() {
+  const skill = skills.find(function(x){ return x.id === selectedSkillId; }) || skills[0];
+  selectedSkillId = skill ? skill.id : null;
+  const nameEl = document.getElementById('skillStudioName');
+  const descEl = document.getElementById('skillStudioDesc');
+  const mdEl = document.getElementById('skillStudioMd');
+  const versionEl = document.getElementById('skillStudioVersion');
+  if (!nameEl || !descEl || !mdEl) return;
+  nameEl.value = skill ? skill.name : '';
+  descEl.value = skill ? skill.description : '';
+  mdEl.value = skill ? (skill.mdContent || skill.content || '') : '';
+  if (versionEl) versionEl.textContent = (skill ? 'draft · v' + (skill.version || '0.1.0') : 'draft · new');
+  syncSkillStudioYaml();
+  syncSkillLineNums();
+}
+function syncSkillStudioYaml() {
+  const skill = skills.find(function(x){ return x.id === selectedSkillId; });
+  const name = document.getElementById('skillStudioName')?.value || '';
+  const desc = document.getElementById('skillStudioDesc')?.value || '';
+  const roleIds = skill ? getSkillRoleIds(skill.id) : [];
+  const scope = skill ? skill.scope : 'role';
+  const yaml = `---\nname: ${name}\nversion: ${skill ? skill.version || '0.1.0' : '0.1.0'}\nsummary: ${desc}\nscope: ${scope}\nroles: ${scope === 'global' ? '["*"]' : '[' + roleIds.map(r=>'"@'+r+'"').join(', ') + ']'}\ntrigger: 用户需要把 SCT/BOM 明细转换为客户化报价配置表时使用。\n---`;
+  const yamlEl = document.getElementById('skillStudioYaml');
+  if (yamlEl) yamlEl.textContent = yaml;
+  const impact = getImpactForSkill(skill);
+  const impactEl = document.getElementById('skillStudioImpact');
+  if (impactEl) impactEl.textContent = `影响 ${impact.roles} 个数字员工模板、${impact.instances} 个数字员工实例`;
+}
+function syncSkillLineNums() {
+  const md = document.getElementById('skillStudioMd');
+  const nums = document.getElementById('skillLineNums');
+  if (!md || !nums) return;
+  const n = Math.max(1, md.value.split('\n').length);
+  nums.textContent = Array.from({length:n}, (_,i)=>String(i+1)).join('\n');
+}
+function renderSkillTable(filter) {
+  const tbody = document.getElementById('skillTableBody');
+  if (!tbody) return;
+  const q = (filter || '').trim();
+  const filtered = q ? skills.filter(s => s.name.includes(q) || s.description.includes(q)) : skills;
+  tbody.innerHTML = filtered.map(function(s){
+    const roleIds = getSkillRoleIds(s.id);
+    const scopeText = s.scope === 'global' ? '通用技能（全部模板）' : '岗位技能：' + roleIds.map(r => '@' + r).join(', ');
+    const impact = getImpactForSkill(s);
+    return '<tr><td><strong>' + escapeHTML(s.name) + '</strong></td><td>' + escapeHTML(s.description) + '</td><td>' + escapeHTML(scopeText) + '</td><td>' + impact.instances + '</td><td>v' + escapeHTML(s.version || '-') + ' · ' + (s.enabled ? '<span style="color:#34a853">启用</span>' : '<span style="color:#999">停用</span>') + '</td><td><span class="skill-action" onclick="selectSkill(\'' + s.id + '\'); switchSkillTab(\'studio\')">编辑</span><span class="skill-action danger" onclick="alert(\'停用技能（占位）：发布停用版本后才会影响实例\')">停用</span></td></tr>';
+  }).join('');
+}
+function filterSkills(val) { renderSkillTable(val); }
+function renderRoleMapping(role) {
+  const list = document.getElementById('roleMappingList');
+  if (!list) return;
+  const roleInfo = roles.find(function(r){ return r.id === role; });
+  const matched = getSkillsForRole(role);
+  list.innerHTML = '<div style="font-size:13px;color:#555;margin-bottom:8px;">' + (roleInfo ? roleInfo.templateName : '@' + role) + ' 最终生效 <strong>' + matched.length + '</strong> 项技能：</div>' + matched.map(function(s){
+    const isGlobal = s.scope === 'global';
+    return '<div style="padding:8px 12px;border:1px solid #eee;border-radius:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span><strong>' + escapeHTML(s.name) + '</strong> — ' + escapeHTML(s.description) + (isGlobal ? ' <em style="color:#888">(通用)</em>' : ' <em style="color:#888">(岗位匹配)</em>') + '</span><span class="skill-action" onclick="selectSkill(\'' + s.id + '\'); switchSkillTab(\'studio\')">编辑 SKILL.md</span></div>';
+  }).join('');
+}
+function openSkillDrawer(skillId) { selectSkill(skillId || skills[0]?.id); switchSkillTab('studio'); }
+function closeSkillDrawer() { const el = document.getElementById('skillDrawerOverlay'); if (el) el.style.display = 'none'; }
+function saveSkill() { alert('技能已保存草稿（原型占位）'); closeSkillDrawer(); }
 function renderWorkerPool() {
       const container = document.getElementById('workerPoolContainer');
       const keyword = document.getElementById('searchWorkerInput').value.toLowerCase();
@@ -4595,7 +4905,7 @@ function renderWorkerPool() {
       const activeNav = document.querySelector(`.nav-item[data-target="${target}"]`);
       if(activeNav) activeNav.classList.add('active');
       
-      if (['overview', 'teams', 'projects', 'pool', 'decisions', 'settings'].includes(target)) {
+      if (['overview', 'teams', 'projects', 'pool', 'decisions', 'roles', 'skills', 'settings'].includes(target)) {
         switchTab(target);
       }
     }
@@ -4611,6 +4921,8 @@ function renderWorkerPool() {
           'projects': '项目',
           'pool': '员工',
           'decisions': '待决策',
+          'roles': '岗位',
+          'skills': '技能',
           'settings': '设置'
         };
         let title = TAB_TITLES[target] || target;
@@ -4655,6 +4967,8 @@ function renderWorkerPool() {
       } else {
         const standardPage = document.getElementById(`page-${target}`);
         if(standardPage) standardPage.classList.add('active');
+        if (target === 'roles') renderRolesPage();
+        if (target === 'skills') { renderSkillTable(); renderRoleMapping(document.getElementById('mappingRoleSelect')?.value || 'explorer'); }
       }
       
       // Sync nav highlight
@@ -6458,7 +6772,7 @@ function renderWorkerPool() {
       discoverOpenCodeSessions();
     }
 
-    const BOT_AVATAR_SVG = `<img class="xiaoyun-bot-avatar" src="${getXiaoyunAvatarSrc()}" width="28" height="28" alt="小云"/>`;
+    const BOT_AVATAR_SVG = `<img src="data:image/png;base64,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" width="28" height="28" style="border-radius:50%;" alt="AI"/>`;
 
     function appendChatMsg(role, text, attachments = [], persist = true) {
       const messages = document.getElementById('chatMessages');
@@ -7774,7 +8088,7 @@ function renderWorkerPool() {
           if (e.key === 'p3:xiaoyun:popup-open' && e.newValue === '0') setEmbeddedPopupState(false);
         });
       }
-      // 注入 fab-bot 头像（小云全局助手专用素材；组长/成员头像逻辑不变）
+      // 注入 fab-bot 头像（复用 BOT_AVATAR_SVG 的 base64 PNG 卡通机器人）
       const fabBot = document.getElementById('fabBot');
       if (fabBot && typeof BOT_AVATAR_SVG === 'string') {
         // BOT_AVATAR_SVG 自带 width=28，覆盖为 fab 内部尺寸
@@ -8259,76 +8573,9 @@ function renderWorkerPool() {
     });
 
   
-// === v0.6.27-skill: 技能管理交互 ===
-function getAllWorkers() {
-  if (typeof currentState === 'undefined' || !currentState.workers) return [];
-  var allW = [...currentState.workers];
-  currentState.teams.forEach(function(t){ t.members.forEach(function(m){ allW.push(m); }); });
-  return allW;
-}
-function switchSkillTab(tab) {
-  document.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('skillAssetsPanel').style.display = tab === 'assets' ? 'block' : 'none';
-  document.getElementById('skillMappingPanel').style.display = tab === 'mapping' ? 'block' : 'none';
-  if (tab === 'mapping') renderRoleMapping(document.getElementById('mappingRoleSelect').value);
-}
-function renderSkillTable(filter) {
-  const tbody = document.getElementById('skillTableBody');
-  if (!tbody) return;
-  const filtered = filter ? skills.filter(s => s.name.includes(filter) || s.description.includes(filter)) : skills;
-  tbody.innerHTML = filtered.map(s => {
-    const roles = s.applicableRoles.includes('*') ? '全部岗位' : s.applicableRoles.map(r => '@' + r).join(', ');
-    var allW = getAllWorkers(); const instances = s.applicableRoles.includes('*') ? allW.length : allW.filter(w => s.applicableRoles.some(r => w.role === r || w.role === '@'+r)).length;
-    return '<tr><td><strong>' + s.name + '</strong></td><td>' + s.description + '</td><td>' + roles + '</td><td>' + instances + '</td><td>' + (s.enabled ? '<span style="color:#34a853">启用</span>' : '<span style="color:#999">停用</span>') + '</td><td><span class="skill-action" onclick="openSkillDrawer(\'' + s.id + '\')">编辑</span><span class="skill-action danger" onclick="alert(\'停用技能（占位）\')">停用</span></td></tr>';
-  }).join('');
-}
-function filterSkills(val) { renderSkillTable(val); }
-function renderRoleMapping(role) {
-  const list = document.getElementById('roleMappingList');
-  if (!list) return;
-  const matched = getSkillsForRole(role);
-  list.innerHTML = '<div style="font-size:13px;color:#555;margin-bottom:8px;">当前岗位已匹配 <strong>' + matched.length + '</strong> 项技能：</div>' + matched.map(s => '<div style="padding:8px 12px;border:1px solid #eee;border-radius:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span><strong>' + s.name + '</strong> — ' + s.description + (s.applicableRoles.includes('*') ? ' <em style="color:#888">(通用)</em>' : '') + '</span><span class="skill-action" onclick="openSkillDrawer(\'' + s.id + '\')">编辑</span></div>').join('');
-}
-function openSkillDrawer(skillId) {
-  var overlay = document.getElementById('skillDrawerOverlay');
-  overlay.style.display = 'flex';
-  if (skillId) {
-    var s = skills.find(function(x) { return x.id === skillId; });
-    document.getElementById('skillDrawerTitle').textContent = '编辑技能';
-    document.getElementById('skillNameInput').value = s.name;
-    document.getElementById('skillDescInput').value = s.description;
-    document.getElementById('skillContentInput').value = s.content;
-    document.getElementById('skillStatusInput').value = String(s.enabled);
-    var hint = document.getElementById('skillImpactHint');
-    var impactRoles = s.applicableRoles.includes('*') ? 4 : s.applicableRoles.length;
-    var allW2 = getAllWorkers(); var impactInst = s.applicableRoles.includes('*') ? allW2.length : allW2.filter(function(w) { return s.applicableRoles.includes(w.role); }).length;
-    document.getElementById('impactRoles').textContent = impactRoles;
-    document.getElementById('impactInstances').textContent = impactInst;
-    hint.style.display = 'block';
-  } else {
-    document.getElementById('skillDrawerTitle').textContent = '新建技能';
-    document.getElementById('skillNameInput').value = '';
-    document.getElementById('skillDescInput').value = '';
-    document.getElementById('skillContentInput').value = '';
-    document.getElementById('skillStatusInput').value = 'true';
-    document.getElementById('skillImpactHint').style.display = 'none';
-  }
-}
-function closeSkillDrawer() { document.getElementById('skillDrawerOverlay').style.display = 'none'; }
-function saveSkill() { alert('技能已保存（原型占位）'); closeSkillDrawer(); }
-function updateWorkerStats() {
-  var allW = [...currentState.workers];
-  currentState.teams.forEach(function(t){ t.members.forEach(function(m){ allW.push(m); }); });
-  document.getElementById('statTotal').textContent = allW.length;
-  document.getElementById('statOnline').textContent = allW.filter(function(w){return w.status==='idle'||w.status==='busy';}).length;
-  document.getElementById('statBusy').textContent = allW.filter(function(w){return w.status==='busy';}).length;
-  document.getElementById('statSkills').textContent = skills.filter(function(s){return s.enabled;}).length;
-}
-
 </script>
 
-<!-- === v0.6.27-skill: 右滑抽屉 === -->
+<!-- === Legacy skill drawer fallback: v0.6.30 主编辑入口已迁移到 Skill 配置工作台，默认不展示 === -->
 <div class="skill-drawer-overlay" id="skillDrawerOverlay" style="display:none;" onclick="closeSkillDrawer()">
   <div class="skill-drawer" onclick="event.stopPropagation()">
     <div class="skill-drawer-header">
@@ -8338,9 +8585,9 @@ function updateWorkerStats() {
     <div class="skill-drawer-body">
       <div class="form-group"><label>技能名称</label><input type="text" id="skillNameInput" placeholder="输入技能名称"></div>
       <div class="form-group"><label>描述</label><input type="text" id="skillDescInput" placeholder="简短描述"></div>
-      <div class="form-group"><label>适用岗位</label>
+      <div class="form-group"><label>适用模板</label>
         <div class="checkbox-group">
-          <label><input type="checkbox" value="*" id="skillRoleAll"> 全部岗位（通用技能）</label>
+          <label><input type="checkbox" value="*" id="skillRoleAll"> 全部模板（通用技能）</label>
           <label><input type="checkbox" value="explorer"> @explorer</label>
           <label><input type="checkbox" value="fixer"> @fixer</label>
           <label><input type="checkbox" value="oracle"> @oracle</label>
@@ -8349,7 +8596,7 @@ function updateWorkerStats() {
       </div>
       <div class="form-group"><label>技能内容（指令正文）</label><textarea id="skillContentInput" rows="8" placeholder="描述该技能的具体能力和使用方式..."></textarea></div>
       <div class="form-group"><label>状态</label><select id="skillStatusInput"><option value="true">启用</option><option value="false">停用</option></select></div>
-      <div class="skill-impact-hint" id="skillImpactHint" style="display:none;">⚠️ 修改将影响 <strong id="impactRoles">0</strong> 个岗位、<strong id="impactInstances">0</strong> 个智能体实例</div>
+      <div class="skill-impact-hint" id="skillImpactHint" style="display:none;">⚠️ 修改将影响 <strong id="impactRoles">0</strong> 个数字员工模板、<strong id="impactInstances">0</strong> 个数字员工实例</div>
     </div>
     <div class="skill-drawer-footer">
       <button class="btn-secondary" onclick="closeSkillDrawer()">取消</button>
@@ -8357,6 +8604,473 @@ function updateWorkerStats() {
     </div>
   </div>
 </div>
+
+
+
+<!-- === v0.6.32：P0a 最小闭环增强（仅原型 mock，不接真实后端 / Gateway / OpenCode） === -->
+<style>
+  .p0a-flow-trigger {
+    position: fixed; right: 18px; top: 54px; z-index: 10020;
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 12px; border-radius: 999px;
+    border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 8px 22px rgba(37, 99, 235, .14);
+  }
+  .p0a-flow-trigger:hover { background:#dbeafe; transform: translateY(-1px); }
+  .p0a-flow-panel {
+    position: fixed; right: 16px; top: 94px; width: 360px; max-height: calc(100vh - 128px);
+    z-index: 10021; display: none; flex-direction: column; overflow: hidden;
+    border: 1px solid #dbeafe; border-radius: 16px; background: #fff;
+    box-shadow: 0 20px 48px rgba(15, 23, 42, .18);
+  }
+  .p0a-flow-panel.open { display: flex; }
+  .p0a-flow-header { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; background: linear-gradient(135deg,#eff6ff,#fff); display:flex; justify-content:space-between; gap:10px; }
+  .p0a-flow-title { font-size: 14px; font-weight: 800; color: #0f172a; }
+  .p0a-flow-sub { margin-top: 3px; font-size: 11px; color: #64748b; line-height: 1.45; }
+  .p0a-flow-close { border:0; background:transparent; font-size:18px; color:#64748b; cursor:pointer; }
+  .p0a-flow-body { padding: 12px 14px; overflow-y:auto; }
+  .p0a-flow-step { display:flex; gap:10px; padding:9px 8px; border-radius:10px; align-items:flex-start; }
+  .p0a-flow-step + .p0a-flow-step { border-top:1px dashed #e2e8f0; }
+  .p0a-flow-check { width:20px; height:20px; flex:0 0 20px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; background:#f1f5f9; color:#94a3b8; }
+  .p0a-flow-step.done .p0a-flow-check { background:#dcfce7; color:#16a34a; font-weight:800; }
+  .p0a-flow-step-main { flex:1; min-width:0; }
+  .p0a-flow-step-title { font-size:12px; font-weight:700; color:#334155; }
+  .p0a-flow-step-desc { margin-top:2px; font-size:11px; color:#64748b; line-height:1.45; }
+  .p0a-flow-footer { padding: 10px 14px; border-top:1px solid #e2e8f0; background:#f8fafc; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .p0a-flow-progress { font-size:12px; color:#475569; font-weight:700; }
+  .p0a-modal-overlay {
+    position: fixed; inset: 0; z-index: 10030; display:none; align-items:center; justify-content:center;
+    background: rgba(15, 23, 42, .36); backdrop-filter: blur(2px);
+  }
+  .p0a-modal-overlay.open { display:flex; }
+  .p0a-modal { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 80px); overflow:hidden; display:flex; flex-direction:column; border-radius:16px; background:#fff; box-shadow:0 24px 60px rgba(15,23,42,.22); }
+  .p0a-modal-header { padding:16px 18px; border-bottom:1px solid #e2e8f0; background:linear-gradient(135deg,#f8fafc,#fff); display:flex; align-items:center; justify-content:space-between; }
+  .p0a-modal-title { font-size:16px; font-weight:800; color:#0f172a; }
+  .p0a-modal-close { border:0; background:transparent; cursor:pointer; font-size:20px; color:#64748b; }
+  .p0a-modal-body { padding:16px 18px; overflow-y:auto; }
+  .p0a-modal-footer { padding:14px 18px; border-top:1px solid #e2e8f0; background:#f8fafc; display:flex; justify-content:flex-end; gap:10px; }
+  .p0a-form-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+  .p0a-form-group { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+  .p0a-form-group.full { grid-column: 1 / -1; }
+  .p0a-form-group label { font-size:12px; color:#64748b; font-weight:700; }
+  .p0a-form-group input, .p0a-form-group select, .p0a-form-group textarea { border:1px solid #cbd5e1; border-radius:8px; padding:8px 10px; font:inherit; font-size:13px; outline:none; background:#fff; }
+  .p0a-form-group input:focus, .p0a-form-group select:focus, .p0a-form-group textarea:focus { border-color:#60a5fa; box-shadow:0 0 0 3px rgba(96,165,250,.15); }
+  .p0a-toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(16px); z-index:10050; padding:10px 14px; border-radius:999px; background:#0f172a; color:#fff; font-size:13px; box-shadow:0 14px 32px rgba(15,23,42,.28); opacity:0; transition: all .18s ease; pointer-events:none; }
+  .p0a-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .p0a-state-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; background:#ecfdf5; color:#059669; font-size:11px; font-weight:700; }
+  .skill-action.p0a-remove { color:#ef4444; margin-left:12px; }
+  .p0a-inline-hint { font-size:11px; color:#64748b; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:10px; padding:8px 10px; margin-top:8px; line-height:1.5; }
+</style>
+
+<button class="p0a-flow-trigger" id="p0aFlowTrigger" type="button" onclick="p0aToggleFlowPanel()">✅ P0a 演示</button>
+<div class="p0a-flow-panel" id="p0aFlowPanel" aria-label="P0a 演示主线">
+  <div class="p0a-flow-header">
+    <div><div class="p0a-flow-title">P0a 最小闭环验收</div><div class="p0a-flow-sub">仅用于原型评审：验证 Skill → 模板 → 员工 → 团队/项目 → 文档 → 决策 → 动态。</div></div>
+    <button class="p0a-flow-close" type="button" onclick="p0aToggleFlowPanel(false)">×</button>
+  </div>
+  <div class="p0a-flow-body" id="p0aFlowBody"></div>
+  <div class="p0a-flow-footer"><span class="p0a-flow-progress" id="p0aFlowProgress">0/8 完成</span><button class="btn btn-sm" type="button" onclick="p0aResetFlowState()">重置演示状态</button></div>
+</div>
+<div class="p0a-modal-overlay" id="p0aModalOverlay" onclick="if(event.target.id==='p0aModalOverlay') p0aCloseModal()">
+  <div class="p0a-modal" onclick="event.stopPropagation()">
+    <div class="p0a-modal-header"><div class="p0a-modal-title" id="p0aModalTitle">P0a 操作</div><button class="p0a-modal-close" type="button" onclick="p0aCloseModal()">×</button></div>
+    <div class="p0a-modal-body" id="p0aModalBody"></div>
+    <div class="p0a-modal-footer" id="p0aModalFooter"></div>
+  </div>
+</div>
+<div class="p0a-toast" id="p0aToast"></div>
+
+<script>
+(function(){
+  if (window.__p0aFlowPatchApplied) return;
+  window.__p0aFlowPatchApplied = true;
+
+  const P0A_STEPS = [
+    { id:'skill-published', title:'发布 Skill', desc:'保存草稿不影响运行，发布生效后才刷新模板和员工实例。' },
+    { id:'skill-attached', title:'挂载 Skill 到岗位', desc:'通过 TemplateSkillMapping 建立模板与技能关系。' },
+    { id:'worker-created', title:'基于岗位创建员工', desc:'Worker 记录 templateId，并从模板派生技能。' },
+    { id:'worker-assigned', title:'员工匹配团队 / 项目', desc:'实例进入团队后在运行态页面可见。' },
+    { id:'doc-published', title:'发布项目文档', desc:'文档版本变更并作为 Agent 上下文的 mock 输入。' },
+    { id:'decision-created', title:'生成模拟决策', desc:'文档发布后 Leader 生成一条待决策项。' },
+    { id:'decision-resolved', title:'处理决策', desc:'Decision resolved 后回写团队动态。' },
+    { id:'activity-written', title:'查看 Activity 回写', desc:'关键动作均进入团队动态，验证运行态可观察。' }
+  ];
+
+  window.p0aFlowState = window.p0aFlowState || {};
+  P0A_STEPS.forEach(s => { if (typeof window.p0aFlowState[s.id] === 'undefined') window.p0aFlowState[s.id] = false; });
+
+  function p0aEsc(v) { return (typeof escapeHTML === 'function') ? escapeHTML(String(v ?? '')) : String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function p0aNow() { return Date.now(); }
+  function p0aRoleId(role) { return String(role || '').replace('@',''); }
+  function p0aRoleInfo(roleId) { return (roles || []).find(r => r.id === p0aRoleId(roleId)); }
+  function p0aRoleLabel(roleId) { const r = p0aRoleInfo(roleId); return r ? r.displayName : p0aRoleId(roleId); }
+  function p0aFactoryTeam() { return (currentState.teams || [])[0] || null; }
+  function p0aUniqueWorkerId() {
+    const all = (typeof getAllWorkers === 'function') ? getAllWorkers() : [];
+    let n = 1;
+    while (all.some(w => w.id === 'AGT-P0A-' + String(n).padStart(2, '0'))) n++;
+    return 'AGT-P0A-' + String(n).padStart(2, '0');
+  }
+  function p0aBumpVersion(v) {
+    const parts = String(v || '0.1.0').split('.').map(x => parseInt(x, 10));
+    while (parts.length < 3) parts.push(0);
+    parts[2] = (Number.isFinite(parts[2]) ? parts[2] : 0) + 1;
+    return parts.map(x => Number.isFinite(x) ? x : 0).join('.');
+  }
+  function p0aBumpDocVersion(v) {
+    const s = String(v || '0.1');
+    if (s === '-' || s === 'final') return '1.0';
+    const m = s.match(/^(\d+)(?:\.(\d+))?/);
+    if (!m) return '1.0';
+    const major = parseInt(m[1], 10) || 0;
+    const minor = parseInt(m[2] || '0', 10) || 0;
+    return major + '.' + (minor + 1);
+  }
+
+  window.p0aToast = function(message) {
+    const el = document.getElementById('p0aToast');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(window.__p0aToastTimer);
+    window.__p0aToastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+  };
+
+  window.p0aMarkStep = function(stepId, done = true) {
+    if (!stepId) return;
+    window.p0aFlowState[stepId] = !!done;
+    renderP0aFlowPanel();
+  };
+
+  window.p0aResetFlowState = function() {
+    P0A_STEPS.forEach(s => window.p0aFlowState[s.id] = false);
+    renderP0aFlowPanel();
+    p0aToast('P0a 演示状态已重置');
+  };
+
+  window.p0aToggleFlowPanel = function(force) {
+    const panel = document.getElementById('p0aFlowPanel');
+    if (!panel) return;
+    const open = (typeof force === 'boolean') ? force : !panel.classList.contains('open');
+    panel.classList.toggle('open', open);
+    if (open) renderP0aFlowPanel();
+  };
+
+  function renderP0aFlowPanel() {
+    const body = document.getElementById('p0aFlowBody');
+    const progress = document.getElementById('p0aFlowProgress');
+    if (!body) return;
+    const doneCount = P0A_STEPS.filter(s => window.p0aFlowState[s.id]).length;
+    body.innerHTML = P0A_STEPS.map((s, i) => {
+      const done = !!window.p0aFlowState[s.id];
+      return `<div class="p0a-flow-step ${done ? 'done' : ''}"><span class="p0a-flow-check">${done ? '✓' : (i+1)}</span><div class="p0a-flow-step-main"><div class="p0a-flow-step-title">${p0aEsc(s.title)}</div><div class="p0a-flow-step-desc">${p0aEsc(s.desc)}</div></div></div>`;
+    }).join('');
+    if (progress) progress.textContent = `${doneCount}/${P0A_STEPS.length} 完成`;
+  }
+
+  function p0aOpenModal(title, bodyHtml, footerHtml) {
+    const overlay = document.getElementById('p0aModalOverlay');
+    const titleEl = document.getElementById('p0aModalTitle');
+    const body = document.getElementById('p0aModalBody');
+    const footer = document.getElementById('p0aModalFooter');
+    if (!overlay || !titleEl || !body || !footer) return;
+    titleEl.textContent = title;
+    body.innerHTML = bodyHtml;
+    footer.innerHTML = footerHtml;
+    overlay.classList.add('open');
+  }
+  window.p0aCloseModal = function() { document.getElementById('p0aModalOverlay')?.classList.remove('open'); };
+
+  function p0aAppendActivity(teamId, desc) {
+    const team = (currentState.teams || []).find(t => t.id === teamId) || p0aFactoryTeam();
+    if (!team) return;
+    if (!Array.isArray(team.activities)) team.activities = [];
+    team.activities.unshift({ time: p0aNow(), desc });
+    p0aMarkStep('activity-written');
+  }
+  window.p0aAppendActivity = p0aAppendActivity;
+
+  function p0aRefreshAll() {
+    if (typeof refreshAllViews === 'function') refreshAllViews();
+    renderP0aFlowPanel();
+  }
+
+  function p0aFindWorker(workerIdOrName) {
+    for (const t of currentState.teams || []) {
+      const w = (t.members || []).find(m => m.id === workerIdOrName || m.name === workerIdOrName);
+      if (w) return { worker: w, team: t, inTeam: true };
+    }
+    const w = (currentState.workers || []).find(m => m.id === workerIdOrName || m.name === workerIdOrName);
+    return w ? { worker: w, team: null, inTeam: false } : null;
+  }
+
+  function p0aWithCurrentSkillFromStudio() {
+    const skill = (skills || []).find(s => s.id === selectedSkillId) || skills?.[0];
+    if (!skill) return null;
+    skill.name = document.getElementById('skillStudioName')?.value || skill.name;
+    skill.description = document.getElementById('skillStudioDesc')?.value || skill.description;
+    skill.draftContent = document.getElementById('skillStudioMd')?.value || skill.draftContent || skill.mdContent || skill.content || '';
+    skill.hasDraftChanges = true;
+    skill.updatedAt = new Date().toISOString().slice(0, 10);
+    return skill;
+  }
+
+  window.p0aSaveSkillDraft = function() {
+    const skill = p0aWithCurrentSkillFromStudio();
+    if (!skill) return;
+    // 原型中保留编辑器内容，但不 bump version，不改变 publishedContent 语义。
+    skill.mdContent = skill.draftContent;
+    p0aToast('技能草稿已保存：未影响模板和员工实例');
+    if (typeof renderSkillStudio === 'function') renderSkillStudio();
+  };
+
+  window.p0aPublishSkill = function() {
+    const skill = p0aWithCurrentSkillFromStudio();
+    if (!skill) return;
+    skill.version = p0aBumpVersion(skill.version);
+    skill.content = skill.draftContent;
+    skill.mdContent = skill.draftContent;
+    skill.publishedContent = skill.draftContent;
+    skill.hasDraftChanges = false;
+    skill.enabled = true;
+    p0aMarkStep('skill-published');
+    p0aAppendActivity(null, `技能 ${skill.name} 发布生效为 v${skill.version}，岗位模板和数字员工实例将在派生视图中读取新版本`);
+    p0aToast(`已发布技能 ${skill.name} v${skill.version}`);
+    p0aRefreshAll();
+  };
+
+  const __p0aOrigRenderSkillStudio = window.renderSkillStudio;
+  if (typeof __p0aOrigRenderSkillStudio === 'function') {
+    window.renderSkillStudio = function() {
+      __p0aOrigRenderSkillStudio.apply(this, arguments);
+      const skill = (skills || []).find(s => s.id === selectedSkillId) || skills?.[0];
+      const versionEl = document.getElementById('skillStudioVersion');
+      if (versionEl && skill) versionEl.textContent = `${skill.hasDraftChanges ? 'draft · 未发布更改 · ' : 'published · '}v${skill.version || '0.1.0'}`;
+      const bar = document.querySelector('#skillStudioPanel .skill-action-bar');
+      if (bar) {
+        const buttons = Array.from(bar.querySelectorAll('button'));
+        const saveBtn = buttons.find(b => b.textContent.includes('保存草稿'));
+        const publishBtn = buttons.find(b => b.textContent.includes('发布生效'));
+        const validateBtn = buttons.find(b => b.textContent.includes('校验'));
+        if (validateBtn) validateBtn.onclick = () => p0aToast('SKILL.md 结构校验通过（mock）');
+        if (saveBtn) saveBtn.onclick = window.p0aSaveSkillDraft;
+        if (publishBtn) publishBtn.onclick = window.p0aPublishSkill;
+      }
+    };
+  }
+  window.saveSkill = function() { p0aSaveSkillDraft(); p0aCloseModal(); };
+
+  window.p0aOpenCreateWorkerModal = function(roleId) {
+    const r = p0aRoleInfo(roleId) || roles[0];
+    const roleOptions = (roles || []).map(x => `<option value="${p0aEsc(x.id)}" ${x.id === r.id ? 'selected' : ''}>@${p0aEsc(x.id)} · ${p0aEsc(x.displayName)}</option>`).join('');
+    const teamOptions = ['<option value="unassigned">暂不加入团队（员工池）</option>'].concat((currentState.teams || []).map(t => `<option value="${p0aEsc(t.id)}">${p0aEsc(t.name)} · ${p0aEsc(t.currentProject?.name || '无项目')}</option>`)).join('');
+    const body = `<div class="p0a-form-grid">
+      <div class="p0a-form-group"><label>岗位模板</label><select id="p0aCreateWorkerRole">${roleOptions}</select></div>
+      <div class="p0a-form-group"><label>员工名称</label><input id="p0aCreateWorkerName" value="${p0aEsc(r.displayName)}-P0a" /></div>
+      <div class="p0a-form-group"><label>加入团队</label><select id="p0aCreateWorkerTeam">${teamOptions}</select></div>
+      <div class="p0a-form-group"><label>项目职责</label><select id="p0aCreateWorkerProjectRole"><option>测试工程师</option><option>定制开发</option><option>建模师</option><option>架构师</option><option>设计师</option></select></div>
+      <div class="p0a-form-group full"><label>当前关注点</label><input id="p0aCreateWorkerTask" value="基于 ${p0aEsc(r.displayName)} 模板创建，等待项目任务分配" /></div>
+      <div class="p0a-form-group full"><div class="p0a-inline-hint">创建后 Worker 会记录 <strong>templateId</strong>，技能从 Skill + TemplateSkillMapping 派生，不在 Worker 上维护独立技能主数据。</div></div>
+    </div>`;
+    const footer = `<button class="btn" type="button" onclick="p0aCloseModal()">取消</button><button class="btn btn-primary" type="button" onclick="p0aCreateWorkerFromModal()">确认创建</button>`;
+    p0aOpenModal('基于岗位模板创建数字员工', body, footer);
+  };
+
+  window.p0aCreateWorkerFromModal = function() {
+    const roleId = document.getElementById('p0aCreateWorkerRole')?.value || 'fixer';
+    const roleInfo = p0aRoleInfo(roleId);
+    const teamId = document.getElementById('p0aCreateWorkerTeam')?.value || 'unassigned';
+    const name = (document.getElementById('p0aCreateWorkerName')?.value || `${p0aRoleLabel(roleId)}-P0a`).trim();
+    const projectRole = document.getElementById('p0aCreateWorkerProjectRole')?.value || roleInfo?.displayName || '数字员工';
+    const task = document.getElementById('p0aCreateWorkerTask')?.value || '等待项目任务分配';
+    const worker = {
+      id: p0aUniqueWorkerId(), name, role: '@' + roleId, templateId: roleId,
+      projectRole, status: teamId === 'unassigned' ? 'unclaimed' : 'idle', currentTaskSummary: task,
+      heartbeatTs: p0aNow(), createdFromTemplate: true
+    };
+    if (teamId === 'unassigned') {
+      currentState.workers.unshift(worker);
+    } else {
+      const team = (currentState.teams || []).find(t => t.id === teamId);
+      if (team) {
+        team.members.push({ ...worker, teamId: team.id, teamName: team.name });
+        p0aAppendActivity(team.id, `基于 ${roleInfo?.templateName || roleId} 创建数字员工 ${name}，并加入 ${team.name} / ${team.currentProject?.name || '当前项目'}`);
+        p0aMarkStep('worker-assigned');
+      }
+    }
+    p0aMarkStep('worker-created');
+    p0aCloseModal();
+    p0aToast(`已创建数字员工 ${name}`);
+    p0aRefreshAll();
+  };
+
+  const __p0aOrigRenderRolesPage = window.renderRolesPage;
+  if (typeof __p0aOrigRenderRolesPage === 'function') {
+    window.renderRolesPage = function() {
+      __p0aOrigRenderRolesPage.apply(this, arguments);
+      document.querySelectorAll('#roleCardsContainer .role-template-card').forEach((card, idx) => {
+        const role = roles[idx];
+        const primary = card.querySelector('.card-footer .btn-primary');
+        if (primary && role) {
+          primary.textContent = '+ 创建数字员工';
+          primary.onclick = () => p0aOpenCreateWorkerModal(role.id);
+        }
+      });
+    };
+  }
+
+  window.p0aOpenAttachSkillModal = function(roleId) {
+    const r = p0aRoleInfo(roleId) || roles[0];
+    const mapped = (roleSkillMappings || []).filter(m => m.enabled && m.roleId === r.id).map(m => m.skillId);
+    const candidates = (skills || []).filter(s => s.enabled && s.scope !== 'global' && !mapped.includes(s.id));
+    const skillOptions = candidates.map(s => `<option value="${p0aEsc(s.id)}">${p0aEsc(s.name)} · ${p0aEsc(s.description)}</option>`).join('');
+    const body = candidates.length
+      ? `<div class="p0a-form-group"><label>数字员工模板</label><input value="@${p0aEsc(r.id)} · ${p0aEsc(r.displayName)}" disabled /></div><div class="p0a-form-group"><label>选择技能</label><select id="p0aAttachSkillId">${skillOptions}</select></div><div class="p0a-inline-hint">确认后写入 TemplateSkillMapping；该模板下 Worker.skills 派生视图将立即刷新。</div>`
+      : `<div class="p0a-inline-hint">当前没有可关联的岗位技能。通用技能已自动对全部模板生效。</div>`;
+    const footer = candidates.length
+      ? `<button class="btn" type="button" onclick="p0aCloseModal()">取消</button><button class="btn btn-primary" type="button" onclick="p0aAttachSkillToRole('${p0aEsc(r.id)}')">确认关联</button>`
+      : `<button class="btn btn-primary" type="button" onclick="p0aCloseModal()">知道了</button>`;
+    p0aOpenModal('关联已有技能', body, footer);
+  };
+
+  window.p0aAttachSkillToRole = function(roleId) {
+    const skillId = document.getElementById('p0aAttachSkillId')?.value;
+    if (!skillId) return;
+    const exists = roleSkillMappings.find(m => m.roleId === roleId && m.skillId === skillId);
+    if (exists) exists.enabled = true;
+    else roleSkillMappings.push({ roleId, skillId, source:'role', enabled:true });
+    const skill = skills.find(s => s.id === skillId);
+    p0aMarkStep('skill-attached');
+    p0aAppendActivity(null, `技能 ${skill?.name || skillId} 已挂载到 @${roleId} 模板，相关数字员工技能派生视图已刷新`);
+    p0aCloseModal();
+    p0aToast('技能已关联到岗位模板');
+    p0aRefreshAll();
+    switchSkillTab('mapping');
+    const sel = document.getElementById('mappingRoleSelect');
+    if (sel) sel.value = roleId;
+    renderRoleMapping(roleId);
+  };
+
+  window.p0aDetachSkillFromRole = function(roleId, skillId) {
+    const m = roleSkillMappings.find(x => x.roleId === roleId && x.skillId === skillId && x.enabled);
+    if (m) m.enabled = false;
+    const skill = skills.find(s => s.id === skillId);
+    p0aAppendActivity(null, `技能 ${skill?.name || skillId} 已从 @${roleId} 模板移除，Worker.skills 派生视图已刷新`);
+    p0aToast('技能匹配已移除');
+    p0aRefreshAll();
+    switchSkillTab('mapping');
+    const sel = document.getElementById('mappingRoleSelect');
+    if (sel) sel.value = roleId;
+    renderRoleMapping(roleId);
+  };
+
+  window.renderRoleMapping = function(role) {
+    const list = document.getElementById('roleMappingList');
+    if (!list) return;
+    const roleInfo = roles.find(function(r){ return r.id === role; });
+    const matched = getSkillsForRole(role);
+    list.innerHTML = '<div style="font-size:13px;color:#555;margin-bottom:8px;">' + (roleInfo ? roleInfo.templateName : '@' + role) + ' 最终生效 <strong>' + matched.length + '</strong> 项技能：</div>' + matched.map(function(s){
+      const isGlobal = s.scope === 'global';
+      return '<div style="padding:8px 12px;border:1px solid #eee;border-radius:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:12px;"><span><strong>' + p0aEsc(s.name) + '</strong> — ' + p0aEsc(s.description) + (isGlobal ? ' <em style="color:#888">(通用)</em>' : ' <em style="color:#888">(岗位匹配)</em>') + '</span><span style="white-space:nowrap;"><span class="skill-action" onclick="selectSkill(\'' + s.id + '\'); switchSkillTab(\'studio\')">编辑 SKILL.md</span>' + (!isGlobal ? '<span class="skill-action p0a-remove" onclick="p0aDetachSkillFromRole(\'' + role + '\',\'' + s.id + '\')">移除</span>' : '') + '</span></div>';
+    }).join('') + '<button class="btn btn-secondary" onclick="p0aOpenAttachSkillModal(\'' + role + '\')" style="margin-top:12px;">+ 关联已有技能</button>';
+    const placeholderBtn = document.querySelector('#skillMappingPanel > button.btn-secondary');
+    if (placeholderBtn) placeholderBtn.style.display = 'none';
+  };
+
+  window.openWorkerChat = function(id) {
+    const found = p0aFindWorker(id);
+    if (!found) { p0aToast('未找到该数字员工'); return; }
+    if (!found.inTeam || !found.team) {
+      p0aToast('该员工尚未加入团队，需先分配团队后才能通过 Leader 联系');
+      return;
+    }
+    const worker = found.worker;
+    const team = found.team;
+    openChatWith(team.masterId || team.id);
+    p0aMarkStep('chat-leader');
+    p0aToast(`已通过 ${team.masterCodename || 'Leader'} 联系 ${worker.name}`);
+    const hostContextLine = `通过 Leader 联系：${worker.name}\n上下文：workerId=${worker.id}，teamId=${team.id}，projectId=${team.currentProject?.id || '-'}，entry=worker-card`;
+    if (typeof appendChatMsg === 'function') appendChatMsg('system', hostContextLine, [], false);
+  };
+
+  window.publishDoc = function() {
+    const pane = document.querySelector('[data-team-tab-pane="docs"].active');
+    const page = pane?.closest('.page');
+    const teamId = (page?.id || '').replace('page-team-', '');
+    if (!teamId || !page) return;
+    const team = (currentState.teams || []).find(t => t.id === teamId);
+    const ui = getDocsUi(teamId);
+    const doc = team?.currentProject?.docs?.find(d => d.id === ui.selectedDocId);
+    const btn = page.querySelector('[data-docs-publish]');
+    if (!team || !doc || !btn) return;
+    doc.version = p0aBumpDocVersion(doc.version);
+    doc.status = doc.status === 'draft' ? 'in_execution' : doc.status;
+    doc.updatedTs = p0aNow();
+    doc.publishedAt = p0aNow();
+    btn.classList.add('published');
+    btn.innerHTML = `已发布 · v${p0aEsc(doc.version)} · 5s 内可撤销 <span class="undo-link" onclick="event.stopPropagation(); undoPublish('${teamId}')">撤销</span>`;
+    if (ui.publishTimer) clearTimeout(ui.publishTimer);
+    ui.publishTimer = setTimeout(() => { btn.classList.remove('published'); btn.innerHTML = '📢 发布给 Agent'; ui.publishTimer = null; }, 5000);
+    p0aMarkStep('doc-published');
+    p0aAppendActivity(team.id, `发布文档《${doc.title}》v${doc.version} 给 Agent，作为 ${team.name} 当前项目上下文`);
+    const decisionId = 'p0a-doc-decision-' + team.id + '-' + doc.id;
+    if (!(currentState.decisions || []).some(d => d.id === decisionId && d.status === 'pending')) {
+      currentState.decisions.unshift({
+        id: decisionId, teamId: team.id, projectId: team.currentProject?.id, requesterId: team.masterId,
+        type: '文档发布确认', title: `确认《${doc.title}》发布后的执行策略`, urgent: false,
+        timeTs: p0aNow(), expiresAt: p0aNow() + 30 * 60 * 1000, status: 'pending', sourceType:'doc_publish_mock', sourceDocId: doc.id,
+        context: `文档《${doc.title}》已发布为 v${doc.version}。\n\n请选择团队 Leader 后续执行策略。`,
+        options: [{ label:'按新版本继续推进', kind:'primary' }, { label:'暂停执行并补充评审', kind:'normal' }]
+      });
+      currentSelectedDecisionId = decisionId;
+      p0aMarkStep('decision-created');
+    }
+    p0aToast('文档已发布，并生成一条模拟决策');
+    p0aRefreshAll();
+  };
+
+  document.addEventListener('click', function(event) {
+    const btn = event.target.closest('.decision-option-btn');
+    if (!btn || btn.disabled) return;
+    const list = btn.closest('.decision-options-list');
+    if (!list || !currentSelectedDecisionId) return;
+    const d = (currentState.decisions || []).find(x => x.id === currentSelectedDecisionId);
+    if (!d || d.status !== 'pending') return;
+    const options = Array.from(list.querySelectorAll('.decision-option-btn'));
+    const idx = options.indexOf(btn);
+    const selected = d.options?.[idx]?.label || btn.textContent.trim();
+    d.status = 'resolved';
+    d.resolution = selected;
+    d.handledBy = '当前用户（mock）';
+    d.handledAt = p0aNow();
+    p0aMarkStep('decision-resolved');
+    p0aAppendActivity(d.teamId, `决策《${d.title}》已处理：${selected}`);
+    p0aToast('决策已处理并回写团队动态');
+    if (typeof renderDecisions === 'function') renderDecisions();
+    renderP0aFlowPanel();
+  });
+
+  const __p0aOrigRenderWorkerPool = window.renderWorkerPool;
+  if (typeof __p0aOrigRenderWorkerPool === 'function') {
+    window.renderWorkerPool = function() {
+      __p0aOrigRenderWorkerPool.apply(this, arguments);
+      document.querySelectorAll('[onclick^="openWorkerChat"]').forEach(btn => {
+        if ((btn.getAttribute('title') || '').includes('对话')) btn.setAttribute('title', '通过 Leader 联系');
+      });
+    };
+  }
+
+  const __p0aOrigOnload = window.onload;
+  window.onload = function() {
+    if (typeof __p0aOrigOnload === 'function') __p0aOrigOnload.apply(this, arguments);
+    (skills || []).forEach(s => { if (typeof s.publishedContent === 'undefined') s.publishedContent = s.content || s.mdContent || ''; if (typeof s.draftContent === 'undefined') s.draftContent = s.mdContent || s.content || ''; });
+    renderP0aFlowPanel();
+    if (typeof renderRolesPage === 'function') renderRolesPage();
+    if (typeof renderSkillStudio === 'function') renderSkillStudio();
+  };
+})();
+</script>
 
 </body>
 </html>
