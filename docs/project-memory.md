@@ -1,197 +1,130 @@
 # 智能软件工厂项目记忆
 
-> 版本：v0.6.33  
-> 日期：2026-05-17  
-> 状态：当前项目记忆 / 新会话与外部智能体接手入口
+> 当前版本：v0.6.32  
+> 状态：长期项目记忆 / 下一步工作锚点
 
 ---
 
-## 1. 项目定位
+## 1. 当前项目定位
 
-智能软件工厂是一个智能体协作系统。它把 AI 智能体组织为“数字员工团队”，围绕项目、文档、决策和活动流完成软件研发协作。
+`agent-team` 是智能软件工厂的项目仓库，也是智能软件工厂自身研发过程的半手工 POC。
 
-系统不是单个聊天框，也不是简单 prompt 集合，而是：
-
-```text
-岗位模板 → 技能资产 → 数字员工实例 → 团队 / 项目 → 文档发布 → 决策闭环 → 活动回写
-```
-
----
-
-## 2. 当前版本与阶段
-
-当前文档版本：**v0.6.33**
-
-v0.6.33 是一次文档正本化和施工图版本：
+当前智能软件工厂系统尚未实现，因此还不能自动完成岗位确认、任务分派、进度跟踪、阻塞协调、决策上报和验收门禁。当前阶段由项目负责人手动调度外部智能体协作：
 
 ```text
-- 合并 v0.6.32 多轮 PRD、系统设计、Mock、路由状态、运行时设计。
-- 删除/合并历史版本和多轮评审过程材料。
-- 为编程智能体（OpenCode / Codex）后续开发提供完整施工图。
-- 暂不直接进入编码。
-```
-
----
-
-## 3. 冻结的核心决策
-
-### 3.1 岗位、员工、技能
-
-```text
-岗位 = AgentTemplate / 数字员工模板
-员工 = Worker / AgentInstance / 数字员工实例
-技能 = Skill / SkillVersion / SKILL.md 能力资产
-岗位技能匹配 = TemplateSkillMapping
-```
-
-规则：
-
-```text
-- Skill 是能力资产。
-- SkillVersion 是技能内容真源。
-- TemplateSkillMapping 是岗位技能匹配真源。
-- Worker 从 AgentTemplate 创建。
-- Worker.skills 是派生视图，不是主数据。
-```
-
-### 3.2 数字员工运行时
-
-一个 Worker 对应一个具体 Agent Runtime。当前实现心智是：
-
-```text
-Worker = 一个数字员工实例
-      = 一个具体 Agent Runtime
-      = 某个 RuntimeHost 上的 OpenCode workspaceDir
-```
-
-但不能假设所有 Worker 都在一台机器上。必须通过 RuntimeHost / WorkerRuntimeBinding 表达分布式部署可能性。
-
-### 3.3 agent-team 与 Gateway 边界
-
-正式业务系统中：
-
-```text
-RuntimeHost / OpenCode supervisor
-→ agent-team runtime-service
-→ agent-team 数据库保存 Worker / RuntimeHost / AgentRoute / AgentPresence
-→ agent-gateway 通过 Provider 查询路由和脱敏状态
-```
-
-Gateway 可以承载轻量 heartbeat，但智能软件工厂正式集成时，Worker / RuntimeHost / AgentRoute / AgentPresence 的业务真源在 agent-team。
-
-### 3.4 前端 agentId-only
-
-前端和 widget 只传：
-
-```text
-agentId
-conversationId
-hostContext
-```
-
-不得传：
-
-```text
-endpointRef
-workspaceDir
-runtimeHost internal URL
-OpenCode port
-token
-```
-
-### 3.5 routeStatus 唯一字段
-
-AgentRoute 使用：
-
-```ts
-type RouteStatus = 'active' | 'disabled' | 'unavailable' | 'error'
-```
-
-不得再使用 `AgentRoute.status`。
-
----
-
-## 4. P0a 范围
-
-P0a 是前端可演示 MVP。
-
-P0a 做：
-
-```text
-- monorepo 工程骨架
-- contracts / domain / mock-seed / data-client / state
-- Skill 工作台
-- AgentTemplate 管理
-- Worker 创建与启用/停用模拟
-- RuntimeBinding 展示
-- Team / Project 视图
-- Doc 草稿 / 发布模拟
-- Decision 处理
-- Activity 回写
-- 小云 MockChatAdapter
-```
-
-P0a 不做：
-
-```text
-- 真实登录 / 权限 / 多用户
-- 真实后端 API
-- 真实数据库
-- 真实 agent-web-kit Gateway
-- 真实 OpenCode runtime 启动
-- 生产级审计
-- 完整脚本/资源文件管理
-```
-
----
-
-## 5. 当前过渡期智能体协作方式
-
-当前智能软件工厂系统还没有实现，无法自动给智能体分配岗位、项目、任务和上下文。当前协作靠项目负责人手动调度：
-
-```text
-项目负责人 ↔ 设计智能体（ChatGPT）
-  输出需求、设计、施工图、评审意见和文档包。
+项目负责人 ↔ 设计智能体
+  形成需求、设计、施工图、评审意见、任务单。
 
 项目负责人 ↔ 编程智能体（OpenCode / Codex）
-  根据设计文档创建目录、写代码、跑测试、修复问题。
+  按任务单创建工程、写代码、跑测试、修复问题。
 
-项目负责人 ↔ 评审智能体
-  对方案或实现进行独立复审。
+项目负责人 ↔ 评审 / 交付审查智能体
+  独立检查设计、计划、代码或交付结果是否满足标准。
 ```
 
-所有外部智能体必须通过项目仓库中的共同文档接手上下文：
+智能软件工厂的产品目标，就是把这种依赖人工搬运上下文的协作方式系统化。
+
+---
+
+## 2. 当前 AI 原生岗位模型
+
+v0.6.32 冻结三个核心 AI 原生岗位：
+
+```text
+协同规划岗
+  默认担任团队 Leader / 组长。
+  负责用户沟通、需求沉淀、系统设计、阶段计划、任务单、进度跟踪、阻塞协调、分歧初判和对人反馈。
+
+实现验证岗
+  负责编码、TDD、自测、局部集成、修复、执行回执。
+  可以多个实例并行。
+
+交付审查岗
+  负责独立验收、质量门禁、整改建议、初验收报工。
+  不参与实现验证岗的日常 TDD 循环。
+```
+
+`Leader / 组长` 是团队角色，不是第四个岗位。默认规则是：团队 Leader 由协同规划岗数字员工担任。
+
+---
+
+## 3. 当前工作闭环
+
+```text
+岗位确认
+→ 工作指南
+→ 项目上下文
+→ 阶段计划
+→ WorkOrder / 任务单
+→ 执行回执
+→ 进度 / 阻塞 / 分歧
+→ Decision / ChangeRequest
+→ AcceptanceRecord / ReworkOrder
+→ Activity 回写
+```
+
+这条链路是当前半手工 POC 的工作方式，也是未来智能软件工厂产品化的核心链路。
+
+---
+
+## 4. 当前文档状态
+
+当前正本文档入口：
 
 ```text
 README.md
 docs/文档导航.md
 docs/project-memory.md
-docs/collab/智能体协作分工-v0.6.33.md
-docs/specs/2026-05-17-智能软件工厂P0a工程施工图-v0.6.33.md
-docs/tasks/2026-05-17-编程智能体执行清单-v0.6.33.md
 ```
 
-编程智能体执行顺序必须是：
+核心设计文档：
 
 ```text
-contracts → domain → mock-seed → data-client → state → pages/features → polish
+docs/specs/2026-05-17-智能软件工厂产品需求规格-v0.6.32.md
+docs/specs/2026-05-17-智能软件工厂系统设计方案-v0.6.32.md
+docs/specs/2026-05-17-智能软件工厂Mock数据设计-v0.6.32.md
+docs/specs/2026-05-17-智能软件工厂P0a工程施工图-v0.6.32.md
 ```
 
-禁止直接从页面视觉开工。
+当前参考原型：
+
+```text
+docs/prototypes/Agent-Team-V2-注册中心-v0.6.32-ai-native-roles.html
+```
 
 ---
 
-## 6. 常见坑
+## 5. 后续优先级
+
+### 5.1 先完成设计可视化对齐
 
 ```text
-1. 不要把 Gateway 设计成业务状态真源。
-2. 不要让前端传 workspaceDir / endpointRef / runtimeHost / token。
-3. 不要混用 status 和 routeStatus。
-4. 不要让 heartbeat 自动恢复 disabled。
-5. 不要把会话级 busy 自动等同员工级 busy。
-6. 不要让 P0a 膨胀到真实后端、Gateway、OpenCode。
-7. 不要把 workspaceDir 中的技能快照当成技能主数据。
-8. 不要让普通 Worker 直接对话。
-9. 不要把 agent-web-kit 独立架构设计混入 agent-team 正本。
-10. 不要再为每轮评审新增大量 revised/final/copy 文档。
+1. 文档中固定 AI 原生岗位模型。
+2. Mock 数据中移除传统架构/开发/测试/设计/建模模板，改为协同规划/实现验证/交付审查模板。
+3. 原型中直观看到 Leader、任务单、进度、阻塞、待决策和验收门禁。
+```
+
+### 5.2 再进入 OpenCode 开发
+
+第一轮建议只做：
+
+```text
+P0a 第一轮：工程骨架 + contracts + domain
+```
+
+不要直接做完整页面、真实后端、真实 Gateway 或真实 OpenCode Runtime。
+
+---
+
+## 6. 长期设计约束
+
+```text
+1. P0a 只做 Mock 前端闭环。
+2. agent-team 是业务状态真源。
+3. Gateway 不作为业务状态真源。
+4. 前端只传 agentId / conversationId / hostContext。
+5. Worker 绑定具体 RuntimeHost / workspace / OpenCode 主智能体。
+6. OpenCode 内部子智能体是运行时内部能力，不等同于软件工厂正式 Worker。
+7. 关键验收要支持独立 Worker / 独立会话 / 不同模型。
+8. 交付审查采用批量门禁，不做碎片化即时往返。
 ```
