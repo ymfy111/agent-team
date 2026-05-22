@@ -1,0 +1,31 @@
+﻿{
+  "version": "v0.6.33",
+  "generatedAt": "2026-05-20",
+  "naming": "ASCII filenames with Chinese document titles",
+  "files": [
+    {
+      "path": "docs/specs/PRD-v0.6.33.md",
+      "title": "智能软件工厂产品需求规格 v0.6.33",
+      "abbr": "PRD",
+      "description": "Product Requirements Document"
+    },
+    {
+      "path": "docs/specs/SDD-v0.6.33.md",
+      "title": "智能软件工厂系统设计方案 v0.6.33",
+      "abbr": "SDD",
+      "description": "System Design Document"
+    },
+    {
+      "path": "docs/plans/IMPL-PLN-v0.6.33.md",
+      "title": "智能软件工厂阶段实施计划 v0.6.33",
+      "abbr": "IMPL-PLN",
+      "description": "Implementation Plan"
+    },
+    {
+      "path": "docs/tasks/WBS-v0.6.33.md",
+      "title": "智能软件工厂开发任务拆解 v0.6.33",
+      "abbr": "WBS",
+      "description": "Work Breakdown Structure"
+    }
+  ]
+}

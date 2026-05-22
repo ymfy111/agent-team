@@ -1,0 +1,158 @@
+# 智能软件工厂变更说明
+
+> 版本：v0.6.33  
+> 文档更新批次：2026-05-21 / 架构演进决策回写  
+> 最新原型安全基线：v0.6.33.29
+
+---
+
+## 1. 本次文档变更
+
+本次变更将近期讨论形成的 Agent Team 编排架构决策写入正式文档体系。
+
+新增：
+
+```text
+docs/decisions/ADR-0009-Agent-Team-Orchestration-v0.6.33.md
+docs/templates/STRUCTURED-TASK-MD-TEMPLATE.md
+docs/templates/STRUCTURED-PLAN-MD-TEMPLATE.md
+docs/templates/STRUCTURED-DECISION-MD-TEMPLATE.md
+docs/templates/STRUCTURED-REVIEW-MD-TEMPLATE.md
+docs/guides/STABLE-DELIVERY-v0.3.md
+docs/reports/DOC-QA-Report-v0.6.33.md
+```
+
+更新：
+
+```text
+docs/specs/PRD-v0.6.33.md
+docs/specs/SDD-v0.6.33.md
+docs/plans/IMPL-PLN-v0.6.33.md
+docs/tasks/WBS-v0.6.33.md
+docs/changes/CHANGELOG-v0.6.33.md
+docs/文档导航.md
+```
+
+---
+
+## 2. 核心变化
+
+```text
+1. 明确当前阶段采用“主智能体任务清单驱动”的 POC 模式。
+2. 避免一开始实现完整复杂状态机，防止过度设计。
+3. 定义四阶段演进：Agent-led Task List → Guarded Task Flow → State-machine Orchestration → Factory Runtime Orchestration。
+4. 明确主子智能体可以通讯，但必须回写为 TaskEvent / ExecutionResult / ReviewRecord / DecisionItem。
+5. 明确任务、计划、审查和决策文档采用结构化 Markdown。
+6. 将结构化 Markdown 定义为“YAML Front Matter + Markdown 正文 + 标记区块 + 可选 JSONL Events”。
+```
+
+---
+
+## 3. 对原型的影响
+
+不需要推倒现有原型。
+
+```text
+首页协作全景：保持封板，解释为任务状态和团队运行态聚合视图。
+项目健康总表：保持，解释为项目任务账本 / 进度账本视图。
+团队任务单闭环：保持，后续轻量强化“组长维护任务清单”口径。
+待决策工作台：保持，作为人类介入点。
+员工 Runtime 绑定：保持，作为后续 Runtime 编排预留。
+```
+
+---
+
+## 4. 对后续实现的影响
+
+后续 POC 实现优先级调整为：
+
+```text
+1. 结构化 Markdown 任务模板。
+2. Front Matter 解析与安全局部更新。
+3. 主智能体生成计划与任务清单。
+4. 子智能体执行反馈回写。
+5. 轻量状态约束。
+6. 待决策与审查记录回写。
+7. 程序状态机编排。
+8. Runtime 工厂化调度。
+```
+
+---
+
+## 5. 风险与注意事项
+
+```text
+不要把主子智能体自由聊天作为事实来源。
+不要一开始做完整状态机。
+不要让程序重写整篇 Markdown，优先更新结构化字段和标记区块。
+不要过早依赖具体某个 Agent Runtime 的实验能力作为核心架构。
+```
+---
+
+## 6. 高质量文档评审修正
+
+本轮高质量评审后，进一步修正：
+
+```text
+1. ADR 编号与仓库既有 ADR-0001～ADR-0008 命名保持连续，新增 ADR-0009。
+2. CHANGELOG 归入 docs/changes/，与既有文档导航目录规则一致。
+3. 文档导航从“本轮包清单”升级为“仓库文档入口”，保留 v0.6.32 历史文档入口并补充 v0.6.33 新文档入口。
+4. 结构化 Markdown 模板从任务单扩展到计划、待决策和审查记录。
+5. 补充 stable-delivery / 稳交付 v0.3 指南，记录“任务执行 / 任务执行 高质量”的执行口径。
+6. 补充文档高质量评审报告，用于说明本轮评审发现、处理决定和关闭状态。
+```
+
+## 7. v0.6.33.30 原型与文档轻量适配
+
+- 原型从“解释底层机制”调整为“呈现用户可见推进路径”。
+- 项目健康总表补强岗位产出：计划拆解、执行反馈、审查意见。
+- 团队详情页补充岗位产出闭环说明。
+- 保持底层机制演进兼容：当前可由主智能体任务清单驱动，后续可演进到状态机与 Runtime 编排，但用户界面不随底层机制大幅变化。
+- Mock 数据调整为更接近真实项目推进：每个项目有下一步动作、岗位产出、审查/决策来源和风险说明。
+
+## 8. task / taskflow 技能经验回写
+
+本轮将 `task` / `taskflow` 两个技能的实践经验回写到设计相关文档，作为智能工厂运行机制参考。
+
+新增 / 更新要点：
+
+```text
+1. SDD 增加 task/taskflow 与智能工厂设计对象的映射。
+2. IMPL-PLN 增加 task/taskflow 从协作实践到产品化能力的分阶段路径。
+3. WBS 增加任务流清单、managed task、暂停门禁、流程进度视图、评审追踪等任务。
+4. ADR-0009 增加 task/taskflow 技能实践补充，说明其作为架构决策参考，不作为普通用户必须理解的功能。
+5. docs/文档导航.md 增加 task/taskflow 经验入口。
+```
+
+设计口径：
+
+```text
+taskflow 是任务流编排经验，对应协同规划岗维护任务流。
+task 是单任务质量闭环，对应一个 TaskTicket 的执行、验证、评审、修复和交付。
+managed task 说明长程任务中可以连续执行子任务，但必须保留暂停门禁。
+```
+
+## v0.6.33-taskflow-v0.2 文档补充
+
+- 补充 `taskflow` 暂停/恢复机制与智能工厂待决策机制的对应关系。
+- 明确 `taskflow` 是单智能体串行长程执行参考，智能工厂是多智能体并行协同系统。
+- 更新 SDD、IMPL-PLN、WBS、ADR-0009、TASK-TASKFLOW 指南和文档导航。
+- 记录后续产品化时需要新增并行调度、资源占用、冲突检测、跨团队依赖和 Runtime 状态同步能力。
+
+
+## 9. task v0.5.1 / taskflow v0.4.1 文档同步
+
+- 新增 `docs/guides/TASK-TASKFLOW-v0.4.1.md`。
+- 补充 `任务执行` 与 `任务流执行` 的触发边界：单任务不得显示任务流进度图。
+- 补充 taskflow SOW 选择、节点颗粒度、逐节点进度、真实计时、暂停/恢复/退出规则。
+- 将上述经验同步到 SDD、实施计划、WBS 和 ADR。
+- 明确该机制是智能工厂多智能体编排的轻量参考，不等同于完整多智能体并行系统。
+
+
+## v0.6.33.33
+
+- 原型：修复团队页旧“技术专家 / 系统架构师 / 待介入”口径残留；
+- 原型：清理异常重复占位文本；
+- 原型：团队页补充计划、执行、审查三类岗位产出摘要；
+- 文档：同步 taskflow v0.6 的 SOW 选择、工作包颗粒度、逐节点进度、临时计时和暂停/恢复/退出规则；
+- 设计：明确 taskflow 是单智能体串行参考模型，智能工厂是多智能体并行协同系统。
