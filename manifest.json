@@ -1,31 +1,44 @@
-﻿{
-  "version": "v0.6.33",
-  "generatedAt": "2026-05-20",
-  "naming": "ASCII filenames with Chinese document titles",
+{
+  "name": "agent-team-docs-TF-P0B-04-v0.6.33.45",
+  "generatedAt": "2026-05-23T15:11:21+00:00",
+  "purpose": "Docs update package for TF-P0B-04 frontend engineering migration and QA state.",
+  "appsPackage": "agent-team-apps-TF-P0B-04-v0.6.33.45.zip",
+  "currentAppsBaseline": "TF-P0B-04-N05",
+  "docsEntry": "docs/文档导航.md",
+  "fileCount": 33,
   "files": [
-    {
-      "path": "docs/specs/PRD-v0.6.33.md",
-      "title": "智能软件工厂产品需求规格 v0.6.33",
-      "abbr": "PRD",
-      "description": "Product Requirements Document"
-    },
-    {
-      "path": "docs/specs/SDD-v0.6.33.md",
-      "title": "智能软件工厂系统设计方案 v0.6.33",
-      "abbr": "SDD",
-      "description": "System Design Document"
-    },
-    {
-      "path": "docs/plans/IMPL-PLN-v0.6.33.md",
-      "title": "智能软件工厂阶段实施计划 v0.6.33",
-      "abbr": "IMPL-PLN",
-      "description": "Implementation Plan"
-    },
-    {
-      "path": "docs/tasks/WBS-v0.6.33.md",
-      "title": "智能软件工厂开发任务拆解 v0.6.33",
-      "abbr": "WBS",
-      "description": "Work Breakdown Structure"
-    }
+    "README.md",
+    "docs/changes/CHANGELOG-v0.6.33.md",
+    "docs/decisions/ADR-0009-Agent-Team-Orchestration-v0.6.33.md",
+    "docs/guides/STABLE-DELIVERY-v0.3.md",
+    "docs/guides/TASK-TASKFLOW-v0.1.md",
+    "docs/guides/TASK-TASKFLOW-v0.2.md",
+    "docs/guides/TASK-TASKFLOW-v0.3.md",
+    "docs/guides/TASK-TASKFLOW-v0.4.1.md",
+    "docs/guides/TASK-TASKFLOW-v0.6.md",
+    "docs/plans/IMPL-PLN-v0.6.33.md",
+    "docs/reports/DEV-READY-Review-v0.6.33.33.md",
+    "docs/reports/DOC-QA-Report-v0.6.33-taskflow-v0.2.md",
+    "docs/reports/DOC-QA-Report-v0.6.33-taskflow.md",
+    "docs/reports/DOC-QA-Report-v0.6.33.32.md",
+    "docs/reports/DOC-QA-Report-v0.6.33.md",
+    "docs/reports/PROTO-QA-Report-v0.6.33.30.md",
+    "docs/reports/PROTO-QA-Report-v0.6.33.33.md",
+    "docs/reports/TF-P0B-04-FRONTEND-SUMMARY-v0.6.33.45.md",
+    "docs/reports/TF-P0B-04-N04-QA.md",
+    "docs/reports/TF-P0B-04-N05-REVIEW.md",
+    "docs/reports/TF-P0B-04-QA-Report-v0.6.33.45.md",
+    "docs/reports/TF-P0B-04-fix-report.md",
+    "docs/reports/TF-P0B-04-visible-summary.md",
+    "docs/specs/PRD-v0.6.33.md",
+    "docs/specs/SDD-v0.6.33.md",
+    "docs/tasks/DEV-TASKFLOW-v0.6.33.md",
+    "docs/tasks/WBS-v0.6.33.md",
+    "docs/templates/STRUCTURED-DECISION-MD-TEMPLATE.md",
+    "docs/templates/STRUCTURED-PLAN-MD-TEMPLATE.md",
+    "docs/templates/STRUCTURED-REVIEW-MD-TEMPLATE.md",
+    "docs/templates/STRUCTURED-TASK-MD-TEMPLATE.md",
+    "docs/文档导航.md",
+    "manifest.json"
   ]
 }

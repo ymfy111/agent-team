@@ -1,0 +1,11 @@
+{
+  "name": "agent-team-web-tf-p0b-04",
+  "version": "0.6.33.45-tf-p0b-04",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/dev-server.mjs",
+    "qa:sandbox": "python tools/sandbox_verify.py",
+    "qa": "python tools/sandbox_verify.py"
+  }
+}

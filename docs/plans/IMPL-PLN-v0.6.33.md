@@ -401,3 +401,40 @@ FLOW-REPORT.md  阶段汇总
 5. 在原型与文档收口后，再梳理真实开发 P0/P1 任务。
 
 taskflow v0.6 的经验用于指导长程任务组织，但不直接等同于智能工厂的多智能体调度实现。
+
+
+---
+
+## 9. P0b 前端工程收口最新状态（TF-P0B-04）
+
+### 9.1 当前状态
+
+截至 TF-P0B-04，前端工程已经从单 HTML 原型迁移为无构建 ESM 前端工程，并完成以下收口：
+
+```text
+1. 数据入口：mock-state / dataProvider。
+2. API 门面：factoryApi / mockFactoryApi / httpFactoryApi。
+3. 状态入口：prototypeStore。
+4. 网站框架：AppShell / Router / MenuConfig / PageRegistry。
+5. 动作入口：EventBus / ActionDispatcher。
+6. 页面模块：Legacy Page Module 初步拆分。
+7. 模板化试点：top banner / networkErrorBanner。
+```
+
+### 9.2 继续推进原则
+
+```text
+1. 继续保持无构建 ESM，暂不引入 Vite / TypeScript / pnpm。
+2. index.html 仍为入口，后续只做低风险、可验证的 DOM 模板化。
+3. prototype-runtime.js 不做一次性重写。
+4. 每个前端 taskflow 节点必须截图验证；失败先进入节点内部修复循环。
+```
+
+### 9.3 下一步建议
+
+优先级建议：
+
+```text
+P0b 后续：继续低风险 DOM 模板化试点，或先做 prototype-runtime.js 拆分边界评估。
+P0c 后续：Taskflow 执行模型 UI 对齐应在稳定源码基线上继续，不回头修改原始高仿原型。
+```

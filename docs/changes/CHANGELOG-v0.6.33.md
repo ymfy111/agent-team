@@ -156,3 +156,13 @@ managed task 说明长程任务中可以连续执行子任务，但必须保留�
 - 原型：团队页补充计划、执行、审查三类岗位产出摘要；
 - 文档：同步 taskflow v0.6 的 SOW 选择、工作包颗粒度、逐节点进度、临时计时和暂停/恢复/退出规则；
 - 设计：明确 taskflow 是单智能体串行参考模型，智能工厂是多智能体并行协同系统。
+
+
+## 2026-05-23 / TF-P0B-04 前端工程同步
+
+- 前端：完成 `TF-P0B-04` 第二个低风险 DOM 模板化试点。
+- 前端：新增 `apps/web/src/templates/top-banner-template.js`，将 `networkErrorBanner` 挂载收口到模板模块。
+- 前端：`index.html` 中 `top-banners-container` 改为空容器，保持原 `networkErrorBanner` 的 id/class/text 语义不变。
+- 验证：`npm run qa:sandbox` 通过，`teamCards=5`、`masters=5`、`workers=17`、`brokenImages=0`、`pageErrors=0`、`httpErrors=0`。
+- 流程：taskflow 已升级到 v0.9.9，新增节点内部修复循环规则；验证失败先定位和最小修复，不立即中断找用户。
+- 文档：新增 `TF-P0B-04-FRONTEND-SUMMARY-v0.6.33.45.md` 与 `TF-P0B-04-QA-Report-v0.6.33.45.md`。

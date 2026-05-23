@@ -1,0 +1,367 @@
+{
+  "ok": true,
+  "metrics": {
+    "appShell": "p0b.6",
+    "routerDataset": "p0b.6",
+    "currentPageDataset": "overview",
+    "appEnv": {
+      "version": "v0.6.33.45",
+      "mode": "no-build-esm-structured-shell",
+      "runtime": "legacy-prototype-runtime",
+      "mountedAt": "2026-05-23T15:09:59.204Z",
+      "dataProvider": {
+        "version": "p0b.1",
+        "kind": "classic-script-data-provider",
+        "entityCounts": {
+          "teams": 5,
+          "workers": 4,
+          "decisions": 6,
+          "teamMembers": 21
+        }
+      },
+      "adapters": {
+        "storage": "memoryStorage",
+        "sessionStorage": "memoryStorage",
+        "assetBase": "pic/",
+        "sampleAssetPath": "pic/avatars/avatar-default.png"
+      },
+      "factoryApi": {
+        "kind": "mock",
+        "teams": 5,
+        "workers": 30,
+        "projects": 5,
+        "decisions": 6,
+        "activities": 5,
+        "workOrders": 0,
+        "status": "ready"
+      }
+    },
+    "appShellState": {
+      "version": "p0b.6",
+      "kind": "legacy-compatible-app-shell",
+      "bridgeInstalled": true,
+      "menuGroups": 2,
+      "menuItems": 8,
+      "router": {
+        "version": "p0b.6",
+        "kind": "legacy-compatible-router",
+        "currentPage": "overview",
+        "pages": [
+          {
+            "id": "overview",
+            "pageElementId": "page-overview",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "teams",
+            "pageElementId": "page-teams",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "projects",
+            "pageElementId": "page-projects",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "decisions",
+            "pageElementId": "page-decisions",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "roles",
+            "pageElementId": "page-roles",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "pool",
+            "pageElementId": "page-pool",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "skills",
+            "pageElementId": "page-skills",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "settings",
+            "pageElementId": "page-settings",
+            "exists": true,
+            "hidden": false
+          },
+          {
+            "id": "team-detail-template",
+            "pageElementId": "page-team-detail-template",
+            "exists": true,
+            "hidden": true
+          }
+        ]
+      },
+      "eventBus": {
+        "version": "p0b.5"
+      },
+      "actionDispatcher": {
+        "version": "p0b.5"
+      },
+      "pageRegistry": [
+        {
+          "id": "overview",
+          "pageElementId": "page-overview",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "teams",
+          "pageElementId": "page-teams",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "projects",
+          "pageElementId": "page-projects",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "decisions",
+          "pageElementId": "page-decisions",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "roles",
+          "pageElementId": "page-roles",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "pool",
+          "pageElementId": "page-pool",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "skills",
+          "pageElementId": "page-skills",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "settings",
+          "pageElementId": "page-settings",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "team-detail-template",
+          "pageElementId": "page-team-detail-template",
+          "exists": true,
+          "hidden": true
+        }
+      ]
+    },
+    "routerStatus": {
+      "version": "p0b.6",
+      "kind": "legacy-compatible-router",
+      "currentPage": "overview",
+      "pages": [
+        {
+          "id": "overview",
+          "pageElementId": "page-overview",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "teams",
+          "pageElementId": "page-teams",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "projects",
+          "pageElementId": "page-projects",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "decisions",
+          "pageElementId": "page-decisions",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "roles",
+          "pageElementId": "page-roles",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "pool",
+          "pageElementId": "page-pool",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "skills",
+          "pageElementId": "page-skills",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "settings",
+          "pageElementId": "page-settings",
+          "exists": true,
+          "hidden": false
+        },
+        {
+          "id": "team-detail-template",
+          "pageElementId": "page-team-detail-template",
+          "exists": true,
+          "hidden": true
+        }
+      ]
+    },
+    "prototypeStore": {
+      "version": "p0b.3",
+      "kind": "classic-script-prototype-store",
+      "hasState": true
+    },
+    "factoryApi": {
+      "kind": "mock",
+      "teams": 5,
+      "workers": 30,
+      "projects": 5,
+      "decisions": 6,
+      "activities": 5,
+      "workOrders": 0,
+      "status": "ready"
+    },
+    "title": "智能软件工厂 v0.6.33.45 · AI 原生岗位协作原型",
+    "topology": true,
+    "teamCards": 5,
+    "masters": 5,
+    "workers": 17,
+    "pages": [
+      "loadingPage",
+      "page-overview",
+      "page-teams",
+      "page-projects",
+      "page-pool",
+      "page-decisions",
+      "page-settings",
+      "page-roles",
+      "page-skills",
+      "page-team-detail-template"
+    ],
+    "brokenImages": [],
+    "textHasUndefined": false,
+    "duplicateBusyText": false,
+    "topBannerMounted": "p0b.4",
+    "networkErrorBannerExists": true
+  },
+  "navResults": [
+    {
+      "requested": "teams",
+      "currentPage": "teams",
+      "activeNav": "teams",
+      "activePage": [
+        "page-teams"
+      ]
+    },
+    {
+      "requested": "pool",
+      "currentPage": "pool",
+      "activeNav": "pool",
+      "activePage": [
+        "page-pool"
+      ]
+    },
+    {
+      "requested": "decisions",
+      "currentPage": "decisions",
+      "activeNav": "decisions",
+      "activePage": [
+        "page-decisions"
+      ]
+    },
+    {
+      "requested": "projects",
+      "currentPage": "projects",
+      "activeNav": "projects",
+      "activePage": [
+        "page-projects"
+      ]
+    },
+    {
+      "requested": "roles",
+      "currentPage": "roles",
+      "activeNav": "roles",
+      "activePage": [
+        "page-roles"
+      ]
+    },
+    {
+      "requested": "skills",
+      "currentPage": "skills",
+      "activeNav": "skills",
+      "activePage": [
+        "page-skills"
+      ]
+    },
+    {
+      "requested": "settings",
+      "currentPage": "settings",
+      "activeNav": "settings",
+      "activePage": [
+        "page-settings"
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/global-adapters.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/data/mock-state.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/prototype-store.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/legacy/prototype-runtime.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/main.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/global-adapters.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/data/mock-state.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/prototype-store.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/legacy/prototype-runtime.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    }
+  ],
+  "httpErrors": [],
+  "mode": "python-playwright-route-virtual-origin"
+}

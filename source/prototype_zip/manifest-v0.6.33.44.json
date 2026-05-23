@@ -1,0 +1,12 @@
+{
+  "version": "v0.6.33.44",
+  "baseline": "v0.6.33.43",
+  "scope": "avatar-index-mapping-only",
+  "prototype": "prototypes/agent-team-v0.6.33.44-prototype.html",
+  "qa": [
+    "qa/AVATAR-MAPPING-v0.6.33.44.md",
+    "qa/QA-Report-v0.6.33.44.md",
+    "qa/avatar-map-check-v0.6.33.44.json",
+    "qa/v0.6.33.44-after-overview.png"
+  ]
+}

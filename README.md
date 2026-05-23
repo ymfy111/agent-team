@@ -1,35 +1,32 @@
-﻿# 智能软件工厂 v0.6.33 文档更新包
+# agent-team TF-P0B-04 文档同步包
 
-生成日期：2026-05-20
+本包为 `v0.6.33.45 / TF-P0B-04` 文档同步包，重点记录当前前端工程迁移状态、QA 结果和后续任务流建议。
 
-## 命名规则
-
-为避免 Windows / Linux / ZIP 中文文件名兼容问题，本包保留文档目录结构，但文件名统一使用英文缩写；文档正文标题仍使用中文。
-
-## 包内容
+## 入口
 
 ```text
-docs/specs/PRD-v0.6.33.md
-docs/specs/SDD-v0.6.33.md
+docs/文档导航.md
+docs/reports/TF-P0B-04-FRONTEND-SUMMARY-v0.6.33.45.md
+docs/reports/TF-P0B-04-QA-Report-v0.6.33.45.md
+docs/tasks/DEV-TASKFLOW-v0.6.33.md
 docs/plans/IMPL-PLN-v0.6.33.md
 docs/tasks/WBS-v0.6.33.md
+docs/changes/CHANGELOG-v0.6.33.md
 ```
 
-## 缩写说明
+## 当前源码包对应状态
 
-| 文件名 | 中文文档 | 说明 |
-|---|---|---|
-| PRD-v0.6.33.md | 产品需求规格 | Product Requirements Document |
-| SDD-v0.6.33.md | 系统设计方案 | System Design Document |
-| IMPL-PLN-v0.6.33.md | 阶段实施计划 | Implementation Plan |
-| WBS-v0.6.33.md | 开发任务拆解 | Work Breakdown Structure |
+```text
+apps/web 当前同步基线：TF-P0B-04-N05
+前端运行模式：无构建 ESM + legacy runtime 过渡架构
+验证命令：cd apps/web && npm run qa:sandbox
+```
 
-## 资料口径
+## 说明
 
-- `source_docs/` 中的 v0.6.32 文档是上一阶段沉淀后的基线正本文档，不是最原始文档。
-- v0.6.33.12 的最新实现事实以 `prototypes/agent-team-v0.6.33.12-prototype.html`、`handoff/`、`TODO` 和 `qa/` 为准。
-- 本包用于把 v0.6.33.12 阶段目标、设计和实施计划沉淀为后续备份/开发参考文档。
+本 docs 包与 apps 包分开交付。同步本地时，建议同时解压：
 
-## 后续约定
-
-后续同类文档更新继续使用英文缩写文件名：`PRD`、`SDD`、`IMPL-PLN`、`WBS`、`CHANGELOG`、`HANDOFF`、`TODO`、`QA-Report`。
+```text
+agent-team-apps-TF-P0B-04-v0.6.33.45.zip
+agent-team-docs-TF-P0B-04-v0.6.33.45.zip
+```
