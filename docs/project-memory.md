@@ -1,6 +1,7 @@
 # 智能软件工厂项目记忆
 
 > 当前版本：v0.6.33（原型 v0.6.33.45）  
+> 当前前端迁移基线：TF-P0B-05  
 > 状态：长期项目记忆 / 下一步工作锚点
 
 ---
@@ -12,8 +13,8 @@
 当前智能软件工厂系统尚未实现，因此还不能自动完成岗位确认、任务分派、进度跟踪、阻塞协调、决策上报和验收门禁。当前阶段由项目负责人手动调度外部智能体协作：
 
 ```text
-项目负责人 ↔ 设计智能体
-  形成需求、设计、施工图、评审意见、任务单。
+项目负责人 ↔ 设计智能体（ChatGPT 主导）
+  形成需求、设计、施工图、评审意见、任务单、原型迁移。
 
 项目负责人 ↔ 编程智能体（OpenCode / Codex）
   按任务单创建工程、写代码、跑测试、修复问题。
@@ -28,7 +29,7 @@
 
 ## 2. 当前 AI 原生岗位模型
 
-v0.6.32 冻结三个核心 AI 原生岗位：
+三个核心 AI 原生岗位：
 
 ```text
 协同规划岗
@@ -55,76 +56,145 @@ v0.6.32 冻结三个核心 AI 原生岗位：
 → 工作指南
 → 项目上下文
 → 阶段计划
-→ WorkOrder / 任务单
-→ 执行回执
+→ TaskTicket / 任务单
+→ 执行回执（TaskEvent / ExecutionResult）
 → 进度 / 阻塞 / 分歧
-→ Decision / ChangeRequest
+→ ReviewRecord / DecisionItem / ChangeRequest
 → AcceptanceRecord / ReworkOrder
 → Activity 回写
 ```
 
-这条链路是当前半手工 POC 的工作方式，也是未来智能软件工厂产品化的核心链路。
-
 ---
 
-## 4. 当前文档状态
+## 4. 当前文档与工程状态
 
-当前正本文档入口：
+### 4.1 核心文档入口
 
 ```text
 README.md
 docs/文档导航.md
-docs/project-memory.md
+docs/project-memory.md（本文件）
 ```
 
-核心设计文档：
+### 4.2 核心设计文档（v0.6.33 基线）
 
 ```text
-docs/specs/2026-05-17-智能软件工厂产品需求规格-v0.6.32.md
-docs/specs/2026-05-17-智能软件工厂系统设计方案-v0.6.32.md
-docs/specs/2026-05-17-智能软件工厂Mock数据设计-v0.6.32.md
-docs/specs/2026-05-17-智能软件工厂P0a工程施工图-v0.6.32.md
+docs/specs/PRD-v0.6.33.md
+docs/specs/SDD-v0.6.33.md
+docs/plans/IMPL-PLN-v0.6.33.md
+docs/tasks/WBS-v0.6.33.md
+docs/tasks/DEV-TASKFLOW-v0.6.33.md
+docs/decisions/ADR-0009-Agent-Team-Orchestration-v0.6.33.md
+docs/changes/CHANGELOG-v0.6.33.md
 ```
 
-当前参考原型：
+### 4.3 原型参考
 
 ```text
-docs/prototypes/Agent-Team-V2-注册中心-v0.6.32-ai-native-roles.html
+docs/prototypes/agent-team-v0.6.33.45-prototype.html（slim 归档，已移除 base64 头像）
+docs/prototypes/pic/（头像与视觉素材）
+```
+
+### 4.4 前端工程（apps/web）
+
+```text
+当前形态：无构建 ESM（不引入 TS/Vite/pnpm/第三方包）
+入口：index.html + src/main.js
+CSS：src/styles/prototype.css
+Legacy 渲染：src/legacy/prototype-runtime.js（约 720KB，已 slim）
+结构：bootstrap / adapters / services / app / pages / templates / tools / qa
+资源：pic/ 与 index.html 同级，部署时必须携带 pic/avatars/
+头像策略：统一 pic/avatars/*.png，avatar-default.png 兜底，无 base64 fallback
+```
+
+### 4.5 QA 验证基准
+
+```text
+brokenImages=0, pageErrors=0, httpErrors=0
+teamCards=5, masters=5, workers=17
+验证命令：cd apps/web && python tools/sandbox_verify.py
 ```
 
 ---
 
-## 5. 后续优先级
+## 5. 已完成的任务流（P0B/P0C）
 
-### 5.1 先完成设计可视化对齐
+### TF-P0B-01：结构化前端工程收口
+- Data Provider 抽离、Factory API 抽象、Prototype Store 收口
+- AppShell / Router / MenuConfig 收口
+- EventBus / Action Dispatcher 收口
+- Legacy Page Module 初步拆分
 
-```text
-1. 文档中固定 AI 原生岗位模型。
-2. Mock 数据中移除传统架构/开发/测试/设计/建模模板，改为协同规划/实现验证/交付审查模板。
-3. 原型中直观看到 Leader、任务单、进度、阻塞、待决策和验收门禁。
-```
+### TF-P0B-02：前端源码基线校准
+- README / QA / manifest / package.json 对齐
+- index.html 与 prototype-runtime.js 瘦身边界清单
+- entry-map.js、page-meta.js
 
-### 5.2 再进入 OpenCode 开发
+### TF-P0B-03：第一个 DOM 模板化试点
+- loadingPage 作为最低风险试点
+- page-template-host.js、loading-page-template.js
 
-第一轮建议只做：
+### TF-P0B-04：第二个 DOM 模板化试点
+- top-banners-container / networkErrorBanner 模板化
+- top-banner-template.js
 
-```text
-P0a 第一轮：工程骨架 + contracts + domain
-```
+### TF-P0B-05：Avatar Base64 Fallback 移除
+- 原型与 apps/web 头像统一走静态路径
+- prototype-runtime.js 从 ~4MB 降到 ~720KB
+- 图片验证通过
 
-不要直接做完整页面、真实后端、真实 Gateway 或真实 OpenCode Runtime。
+### TF-P0C-01/02（试做）：Taskflow UI 对齐
+- 总览页任务流摘要、项目页节点证据面板
+- Decision / Blocker / Node Evidence 语义
+- 团队/员工页当前节点状态
 
 ---
 
-## 6. 长期设计约束
+## 6. 架构演进路线
 
 ```text
-1. P0a 只做 Mock 前端闭环。
-2. agent-team 是业务状态真源。
-3. Gateway 不作为业务状态真源。
-4. 前端只传 agentId / conversationId / hostContext。
-5. Worker 绑定具体 RuntimeHost / workspace / OpenCode 主智能体。
-6. OpenCode 内部子智能体是运行时内部能力，不等同于软件工厂正式 Worker。
-7. 关键验收要支持独立 Worker / 独立会话 / 不同模型。
-8. 交付审查采用批量门禁，不做碎片化即时往返。
+阶段 A: Agent-led Task List（当前，主智能体任务清单驱动）
+阶段 B: Guarded Task Flow（轻量状态约束）
+阶段 C: State-machine Orchestration（程序状态机）
+阶段 D: Factory Runtime Orchestration（多 Runtime 工厂化编排）
+```
+
+当前处于阶段 A，不要直接实现完整状态机。
+
+---
+
+## 7. 下一步方向
+
+```text
+方案 A：继续前端瘦身（清理残留 data-uri 兼容逻辑）
+方案 B：继续 DOM 模板化试点（第三个低风险模块）
+方案 C：基线复核（GitHub 拉取 → QA → 确认基线 → 再选任务流）
+```
+
+推荐新会话先做基线复核（方案 C），再选 A 或 B。
+
+---
+
+## 8. 长期设计约束
+
+```text
+1. P0 阶段保持无构建 ESM，不引入 Vite/TS/pnpm。
+2. agent-team 是业务状态真源（Gateway 不是）。
+3. 前端只传 agentId / conversationId / hostContext。
+4. Worker 绑定 RuntimeHost / workspace / OpenCode 主智能体。
+5. OpenCode 内部子智能体 ≠ 软件工厂正式 Worker。
+6. 关键验收支持独立 Worker / 独立会话 / 不同模型。
+7. 交付审查采用批量门禁，不做碎片化即时往返。
+8. 结构化 Markdown = YAML Front Matter + 正文 + 标记区块 + 可选 JSONL 事件。
+9. 不把主子智能体自由聊天当事实来源；关键信息必须回写结构化记录。
+```
+
+---
+
+## 9. Git 远程
+
+```text
+码云（origin）：git@gitee.com:ai-craft/agent-team.git
+GitHub：git@github.com:ymfy111/agent-team.git
+分支：main
 ```
