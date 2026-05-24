@@ -1,464 +1,263 @@
-# TaskFlow / TaskTicket 模型子设计（v0.6.33）
+# TaskFlow / TaskTicket 层级模型与 P0 文档化落地约定
 
-> 文档定位：本文是 `SDD-v0.6.33.md` 的子设计 / 补充设计，用于收敛智能软件工厂中“阶段计划、任务流、任务单、证据”的核心领域模型。  
-> 当前阶段：P0 / Agent-led Task List。  
-> 设计原则：先用轻量文档与命名规范跑通，不急于实现复杂数据库、完整状态机或 Runtime 自动调度。
-
-**与 SDD 正文关系：** 本文是 SDD §3.2 现有 TaskTicket 定义的补充与扩展，不替代原定义。P0 阶段的 TaskFlow Node 是 TaskTicket 的文档化视图与轻量实现形式，字段语义与 SDD 保持一致，并新增 P0 专用扩展字段（详见 §4 字段映射表）。
-
----
-
-## 1. 背景与问题
-
-当前 `agent-team` 项目已经形成多轮任务流实践，例如：
-
-```text
-TF-P0B-01：结构化前端工程收口
-TF-P0B-02：前端源码基线校准
-TF-P0B-03：第一个 DOM 模板化试点
-TF-P0B-04：第二个 DOM 模板化试点
-TF-P0B-05：头像 Base64 Fallback 移除与资源路径回归
-```
-
-这些实践证明：软件工厂不应先围绕“多智能体自由聊天”建模，而应先把所有协作收敛到可执行、可验证、可交接的任务结构中。
-
-需要明确：
-
-```text
-TaskFlow 是什么？
-TaskTicket 是什么？
-Project / Stage / Plan 如何承载多个 TaskFlow？
-Artifact / Evidence 应挂到哪里？
-P0 阶段如何轻量落地？
-```
+> 文件：`docs/specs/SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`  
+> 版本口径：v0.6.33 / v0.6.33.45 文档补充  
+> 状态：P0 子设计，作为 `SDD-v0.6.33.md` 的细化补充，不替代主 SDD。  
+> 适用范围：TaskFlow / TaskTicket 层级模型、字段映射、Artifact / Evidence 口径、P0 文档化落地约定。
 
 ---
 
-## 2. 核心收敛结论
+## 0. 设计定位
 
-推荐模型：
+本子设计用于补齐 `TaskFlow / TaskTicket` 在 P0 阶段的产品化口径。它承接主 SDD 中“Agent-led Task List → Guarded Task Flow → State-machine Orchestration → Runtime 工厂化调度”的分阶段架构，不提前引入复杂数据库、完整状态机、Runtime 自动调度或任务锁。
+
+主文档引用建议：
+
+> TaskFlow / TaskTicket 层级模型、字段映射和 P0 文档化落地约定详见 `docs/specs/SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`。
+
+---
+
+## 1. 层级模型
+
+推荐层级保持为：
 
 ```text
 Project
   └── Stage / Plan
-        └── TaskFlow
-              └── TaskTicket / Node
-                    └── Artifact / Evidence
+        └── WorkPackage / TaskFlowGroup
+              └── TaskFlow
+                    └── TaskTicket / Node
+                          └── Artifact / Evidence
 ```
 
-一句话定义：
+P0 阶段的约定：
 
 ```text
-Project 管长期目标和事实源；
-Stage / Plan 管阶段目标、范围和验收边界；
-TaskFlow 管一组任务单的编排；
-TaskTicket / Node 是最小可执行、可验证工作单元；
-Artifact / Evidence 是任务交付与验收依据。
+TaskFlow Node = TaskTicket 的文档化视图与轻量实现形式
 ```
 
-P0 阶段原则：
+也就是说，当前结构化 Markdown 中的节点不是新的平行对象，而是 TaskTicket 在 TaskFlow 文档里的轻量表达。后续如果进入数据库或服务端持久化阶段，可以把 Node 拆解为正式 TaskTicket 记录，TaskFlow 文档仍保留为人和智能体友好的视图。
+
+### 1.1 WorkPackage / TaskFlowGroup
+
+`WorkPackage / TaskFlowGroup` 是 `Stage / Plan` 与 `TaskFlow` 之间的组织层，用于承接一个计划目标下的一组有序任务流。
 
 ```text
-TaskFlow Node = TaskTicket 的最小实现
+Plan / Roadmap
+  └── WorkPackage / TaskFlowGroup
+        ├── TaskFlow-01
+        ├── TaskFlow-02
+        └── TaskFlow-03
 ```
 
-即当前不需要单独实现复杂 TaskTicket 系统，可先把任务流节点直接视为任务单。
+P0 阶段的约定：
+
+- 一个 WorkPackage 可以包含多个有顺序、有状态、有依赖关系的 TaskFlow；
+- WorkPackage 维护任务流组状态清单、当前焦点、阻塞项、运行记录链接和评审报告链接；已完成任务若结论已沉淀，原始运行记录/评审报告可清理，仅保留摘要；
+- WorkPackage 不承载每次执行的详细日志，详细过程按需放入 `docs/tasks/runs/` 和 `docs/reports/`，沉淀后可清理；
+- P0 文档化阶段，`docs/tasks/*.md` 的主文档可作为 WorkPackage / TaskFlowGroup 的轻量表现；
+- 不提前引入数据库任务锁、复杂排期算法、Runtime 自动调度或完整工作流引擎。
+
 
 ---
 
-## 3. 层级定义
+## 2. P0 最小字段建议
 
-### 3.1 Project
+### 2.1 TaskFlow
 
-Project 表示一个长期项目，例如：
+P0 阶段 TaskFlow 用于表达一组可执行、可追踪、可恢复的任务节点。
 
-```text
-agent-team / 智能软件工厂
+建议字段：
+
+```yaml
+flowId: TF-EXAMPLE-001
+title: 示例任务流
+projectId: agent-team
+stage: P0
+mode: batch-auto-summary
+status: running | done | needs_review | blocked
+currentNode: TF-EXAMPLE-001-N01
+progress: 1/4
+ownerRole: 协同规划岗
+createdAt: 2026-05-24T00:00:00Z
+updatedAt: 2026-05-24T00:10:00Z
 ```
 
-职责：
 
-```text
-- 长期产品目标
-- 当前版本基线
-- 项目事实源（ProjectRepository）
-- 文档导航与项目记忆
-- 阶段计划集合
+### 2.1.1 WorkPackage / TaskFlowGroup
+
+P0 阶段 WorkPackage 用于管理一组有序 TaskFlow，避免 `docs/tasks/` 中出现大量散乱的单任务流文档。
+
+建议字段：
+
+```yaml
+workPackageId: TF-GF-IMPL
+title: Guarded Flow 最小实现工作包
+parentPlan: docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md
+status: running | done | accepted | blocked | deferred
+currentTaskFlow: TF-GF-IMPL-04
+taskFlows:
+  - flowId: TF-GF-IMPL-01
+    status: done
+    goal: 依赖检查最小实现
+    runRef: 已清理，结论沉淀于工作包摘要
+    reportRef: 已清理，结论沉淀于工作包摘要
+  - flowId: TF-GF-IMPL-04
+    status: ready
+    goal: 恢复记录最小实现
 ```
 
-### 3.2 Stage / Plan
+设计要点：
 
-Stage / Plan 表示项目中的阶段或计划。
+1. `plans/` 指向 WorkPackage，不直接管理所有 01/02/03 子任务流。
+2. WorkPackage 只维护状态摘要和必要链接，详细执行过程按需进入 `runs/` 与 `reports/`；任务完成并沉淀后可清理原始过程文件。
+3. WorkPackage 是组织层，不是新的执行层；真正执行的仍是 TaskFlow 与 TaskTicket / Node。
 
-示例：
+### 2.2 TaskTicket / Node
 
-```text
-P0B 前端工程化
-P0C Taskflow UI 对齐
-P1 Runtime 绑定
+P0 阶段 TaskTicket / Node 至少具备以下字段：
+
+```yaml
+nodeId: TF-EXAMPLE-001-N01
+title: 输入复核
+goal: 复核输入资料、冻结项和验收口径
+ownerRole: 协同规划岗
+status: todo | running | done | accepted | needs_review | blocked
+priority: P0 | P1 | P2
+dependencies:
+  - TF-EXAMPLE-001-N00
+inputArtifacts:
+  - docs/specs/SDD-v0.6.33.md
+outputArtifacts:
+  - docs/reports/example-review.md
+artifactRefs:
+  - docs/reports/example-review.md
+evidenceRefs:
+  - EVD-001
+decisionItems: []
+blockers: []
+doneCriteria:
+  - 输入资料路径明确
+  - 冻结项已确认
+  - 任务范围与不做范围已记录
+actualStartedAt: 2026-05-24T00:00:00Z
+actualCompletedAt: 2026-05-24T00:02:00Z
+actualDuration: 2m
+nextAction: 进入下一节点
 ```
 
-职责：
+`doneCriteria` 是 P0 建议字段。它用于表达节点完成判定标准，P0 不要求结构化系统字段，可先使用 Markdown bullet 表达。
 
-```text
-- 阶段目标
-- 范围边界
-- 不做范围
-- 验收口径
-- 包含哪些 TaskFlow
-```
+---
 
-Stage / Plan 解决的问题是：Project 太大，TaskFlow 太细，需要一层承载阶段目标与边界。
+## 3. Artifact / Evidence 口径
 
-**与 SDD `ProjectPlan` 的关系：** Stage / Plan 对应或扩展 SDD 中的 `ProjectPlan` 概念。一个 Project 可包含多个 Stage / Plan；一个 Stage / Plan 可包含多个 TaskFlow。
+### 3.1 Artifact / Change Reference
 
-### 3.3 TaskFlow
+Artifact / Change Reference 指向“产物或变更对象”，用于回答“改了什么、产出了什么、在哪里”。
 
-TaskFlow 表示一条可执行任务流，负责组织多个 TaskTicket / Node。
+典型项：
 
-示例：
-
-```text
-TF-P0B-05：Avatar Base64 Fallback 移除与资源路径回归
-```
-
-职责：
-
-```text
-- 任务流目标
-- 节点顺序
-- 节点依赖
-- 整体进度
-- 任务流级交接包
-- 任务流级风险与待决策
-```
-
-### 3.4 TaskTicket / Node
-
-TaskTicket 是最小可执行、可验证任务单。P0 阶段可以直接使用 TaskFlow Node 作为 TaskTicket。
-
-示例：
-
-```text
-TF-P0B-05-N04：运行图片完整性验证
-```
-
-职责：
-
-```text
-- 明确目标
-- 指定负责人 / 岗位
-- 记录输入产物
-- 记录输出产物
-- 记录验证证据
-- 记录审查结论
-- 记录待决策项
-- 指向下一步
-```
-
-### 3.5 Artifact / Evidence
-
-Artifact 是任务产物，Evidence 是证明任务完成或质量达标的证据。
-
-示例：
-
-```text
-Artifact:
-- 文档
-- 代码
-- 原型 HTML
-- 图片资源
-- QA 报告
-
-Evidence:
 - commit hash
+- 文档路径
+- 代码路径
+- 原型 HTML
+- QA 报告路径
+- 运行记录路径
+- 交接包路径
+
+### 3.2 Evidence
+
+Evidence 指向“验证或审查证据”，用于回答“为什么可以认为它完成、通过、可信”。
+
+典型项：
+
 - 测试输出
 - 截图
-- brokenImages=0 / pageErrors=0 / httpErrors=0
+- `brokenImages=0 / pageErrors=0 / httpErrors=0`
 - 交付审查结论
-```
+- 独立评审报告中的 PASS / WARN / FAIL 结论
+- `validate-*` 命令输出
 
-建议区分：
+### 3.3 口径修正
 
-```text
-交付物 ≠ 验证证据
-```
-
-不要只说“已修改代码”，还要说明“用什么证据证明修改有效”。
-
-**判定规则：**
-
-```text
-Artifact = 产出物本身或其引用（文档、代码文件、原型 HTML、图片资源、QA 报告路径）。
-Evidence = 证明产出物满足质量标准的记录（测试输出、截图、审查结论、指标数值）。
-
-commit hash → 更适合作为 artifact 引用或变更引用，记录「改了什么」。
-测试输出 / 截图 / 审查结论 → 才是 evidence，记录「改得有没有效 / 对不对」。
-```
-
-即：同一 commit hash 可同时出现在 outputArtifacts（作为引用）和 verificationEvidence（作为变更追踪），但两者语义不同，不应混淆。
+commit hash 更适合作为 Artifact / Change Reference，不应单独作为 Evidence 示例。commit 可以证明“变更进入事实源”，但不能单独证明“已验证 / 已验收”。
 
 ---
 
-## 4. P0 最小字段集
+## 4. 对现有对象的挂载关系
 
-P0 阶段的 TaskTicket / Node 至少包含：
-
-```text
-taskId / nodeId
-title
-goal
-ownerRole
-ownerWorker（可选）
-status
-inputArtifacts[]
-outputArtifacts[]
-verificationEvidence[]
-decisionItems[]
-nextAction
-```
-
-建议可选字段：
-
-```text
-stageId
-taskFlowId
-dependsOn[]
-startedAt
-completedAt
-artifactConfidence: Committed / Verified / Accepted
-```
-
-P0 不要求一次性实现所有字段的系统化存储，可以先通过结构化 Markdown、任务流文档、QA 报告和交接文档表达。
-
-### 4.1 字段映射表：SDD 字段 vs 本文字段
-
-| SDD 字段（§3.2） | 本文字段 | 说明 |
+| 对象 | 关系 | P0 落地方式 |
 |---|---|---|
-| taskId | taskId / nodeId | nodeId 为层级别名，可与 taskId 并存 |
-| projectId | projectId（可由项目上下文隐含） | P0 文档可不逐条填写；进入持久化后应显式保存 |
-| title | title | 相同 |
-| description | goal | 本文用 goal 更聚焦执行目标 |
-| ownerRole | ownerRole | 相同 |
-| ownerAgentId | ownerWorker | 本文可选，指向具体 agent/worker |
-| status | status | 复用 SDD 主线状态枚举 |
-| priority | —（可选扩展字段） | P0 暂不强制 |
-| nextStep | nextAction | 本文用 nextAction，语义一致 |
-| artifactRefs | inputArtifacts[] / outputArtifacts[] | 本文拆分输入/输出，为扩展字段 |
-| updatedAt | completedAt / startedAt | 本文拆分为可选扩展字段 |
-| — | stageId / taskFlowId | P0 扩展字段，用于表达阶段与任务流归属 |
-| — | verificationEvidence[] | P0 扩展字段，用于承载验证证据 |
-| — | decisionItems[] | P0 扩展字段，用于承载待决策项 |
+| ProjectPlan / Stage / Plan | WorkPackage / TaskFlowGroup 所属计划或阶段 | Front Matter 或文档正文引用 |
+| WorkPackage / TaskFlowGroup | 一个计划目标下的一组有序 TaskFlow | `docs/tasks/*.md` 工作包主文档 |
+| TaskFlow | 一组 TaskTicket / Node 的编排视图 | 结构化 Markdown |
+| TaskTicket / Node | 最小可执行、可验证任务单元 | Markdown 表格 + 标记区块 |
+| TaskEvent | 状态变化、执行反馈、恢复记录 | JSONL 追加记录 |
+| ReviewRecord | 审查结论、返工建议、质量门禁 | 评审报告或 Review 区块 |
+| DecisionItem | 需要用户 / 协同规划岗裁决的问题 | Decision 区块或独立文档 |
+| HandoffPackage | 任务流或任务集合的交接材料 | Markdown 交接文档 |
+| Artifact / Evidence | 产物引用与验证证据 | 分开记录，避免混用 |
 
-> 标注"扩展字段"表示 P0 新增，不在 SDD §3.2 原始定义中；标注"派生字段"表示从层级 ID 可推导，无需单独存储。
+### 4.1 DesignImplementationSync 的挂载关系
+
+DesignImplementationSync 不是独立执行层，而是围绕 TaskFlow / TaskTicket 发生的设计-实施同步流程。
+
+```text
+设计侧输出 / 更新设计
+→ 进入 ProjectRepository / Artifact
+→ 触发或更新 TaskFlow / TaskTicket
+→ 实施侧执行并回写 TaskEvent / Evidence
+→ 审查或决策形成 ReviewRecord / DecisionItem
+→ 阶段性结果沉淀为 HandoffPackage
+```
+
+同步结果应回写为：
+
+- TaskEvent：同步动作、状态变化、执行反馈；
+- ReviewRecord：实施偏差、质量审查、返工建议；
+- DecisionItem：需要裁决的范围、方案或优先级取舍；
+- HandoffPackage：阶段性交接包和接手说明。
 
 ---
 
-## 5. ID 命名规范建议
+## 5. project-memory.md 多方写入暂不纳入本设计
 
-推荐采用可读、可追溯的层级 ID：
-
-```text
-<TaskFlowId>-N<序号>
-```
-
-示例：
-
-```text
-TF-P0B-05
-TF-P0B-05-N01
-TF-P0B-05-N02
-TF-P0B-05-N03
-TF-P0B-05-N04
-TF-P0B-05-N05
-```
-
-其中：
-
-```text
-TF = TaskFlow
-P0B = Stage / Plan
-05 = TaskFlow 编号
-N04 = Node / TaskTicket 编号
-```
-
-这个命名方式能在不引入复杂数据库的情况下，表达 Project → Stage → TaskFlow → TaskTicket 的层级关系。
-
-**与 SDD taskId 的关系：**
-
-```text
-TASK-001        → SDD 系统/全局 ID 示例，适用于持久化与跨系统引用。
-TF-P0B-05-N04   → 人可读层级别名（nodeId），用于文档与会话中定位节点。
-```
-
-两者可并存：
-
-```text
-- P0 文档化阶段：可只使用层级 ID（nodeId）。
-- Runtime / 持久化阶段：建议同时保留全局 taskId 和层级 nodeId，nodeId 作为别名挂在 taskId 下。
-```
-
-**边界规则：**
-
-```text
-- Stage ID 格式：<项目代号><阶段代号>，例如 P0B、P0C、P1。
-- TaskFlow 编号按 Stage 内递增：TF-P0B-01、TF-P0B-02 …；不同 Stage 可复用序号（TF-P0C-01 与 TF-P0B-01 不冲突）。
-- Node 编号在 TaskFlow 内递增，插入节点优先追加新序号，不重排已有编号。
-- 必要时可使用 N03a 作为插入节点后缀，但不推荐；长期应迁移为追加编号。
-```
+`project-memory.md` 被多方写入时是否需要分区、合并策略或审查门禁，属于 Workspace / 事实源 / 记忆分层设计问题。本子设计只记录边界，不把它并入 TaskFlow / TaskTicket 子设计。
 
 ---
 
-## 6. 状态与检查点
+## 6. P0 不做范围
 
-TaskTicket / Node 状态复用 SDD 主线状态：
+当前子设计不引入以下能力：
 
-```text
-TODO
-RUNNING
-REVIEWING
-NEEDS_DECISION
-DONE
-```
-
-不建议在 P0 阶段新增平行状态机。
-
-以下概念作为检查点或证据标签，而不是主状态：
-
-```text
-BASELINE_CHECKED
-  接手前已完成基线复核。
-
-COMMITTED
-  产物已进入项目事实源。
-
-VERIFIED
-  产物已通过 QA / 截图 / 审查等证据验证。
-
-ACCEPTED
-  产物已被用户、协同规划岗或交付审查岗确认。
-```
-
-**P0 记录方式：** 检查点标签可在 TaskTicket / Node 的 Markdown 文档中以字段或标签形式记录（例如 `verificationEvidence` 条目中注明 `[VERIFIED]`），也可在节点标题后附加标签。检查点不作为主状态字段，不替代 TaskEvent 机制。
+- 不实现完整数据库模型；
+- 不实现完整状态机；
+- 不实现 Runtime 自动调度；
+- 不实现任务锁或文件锁；
+- 不实现完整 Artifact Store；
+- 不把 Markdown Node 与数据库 TaskTicket 强行拆成两套对象。
 
 ---
 
-## 7. 对现有对象的挂载关系
+## 7. 三文档口径一致性矩阵
 
-建议关系：
-
-```text
-TaskFlow
-  挂载：阶段目标、节点列表、整体风险、任务流交接包。
-
-TaskTicket / Node
-  挂载：执行目标、负责人、输入输出、验证证据、审查记录、待决策项。
-
-Artifact
-  默认挂到 TaskTicket；必要时也可被 TaskFlow 汇总引用。
-
-ReviewRecord
-  默认挂到 TaskTicket。
-
-DecisionItem
-  可挂到 TaskTicket；若影响整个任务流或阶段，则上升到 TaskFlow / Stage。
-
-HandoffPackage
-  默认挂到 TaskFlow，可引用多个 TaskTicket。
-
-BaselineCheckTask
-  是接手前的特殊 TaskTicket / Node，也可作为 TaskFlow 的前置节点。
-```
+| 概念 | SDD 正文口径 | recommendations 口径 | 本子设计口径 | 结论 |
+|---|---|---|---|---|
+| TaskTicket | 系统事实来源 / 最小任务对象 | TaskTicket First，所有协作围绕任务单沉淀 | Node 是 TaskTicket 文档化视图 | 一致 |
+| WorkPackage / TaskFlowGroup | 主 SDD 原有层级未显式展开 | 一组相关 TaskFlow 的工作包清单 | Plan 与 TaskFlow 之间的组织层 | 已补齐 |
+| TaskFlow | Agent-led Task List / Guarded Task Flow 的编排载体 | 用户口头任务和文档清单应产品化 | 一组 TaskTicket / Node 的编排视图 | 一致 |
+| ProjectPlan / Stage / Plan | PlannerAgent 生成 ProjectPlan | 计划进入 TaskTicket | TaskFlow 挂载到 Stage / Plan | 一致 |
+| TaskEvent | 执行反馈与通讯记录 | 执行结果必须回写 | 状态变化、反馈、恢复均追加 TaskEvent | 一致 |
+| ReviewRecord | 审查记录 | Review / Acceptance 挂 TaskTicket | 审查结论和返工建议 | 一致 |
+| DecisionItem | 待决策对象 | ChangeRequest / DecisionItem | 关键取舍、阻塞升级 | 一致 |
+| HandoffPackage | 阶段性交接材料 | 交接文档逐步结构化 | TaskFlow / TaskTicket 集合交接 | 一致 |
+| Artifact / Evidence | QA Artifact / 产物引用 | Git 仓库事实源，需证据标签 | Artifact 指产物；Evidence 指验证 | 已修正冲突 |
+| doneCriteria | 主 SDD 原有字段不足 | 需要可执行、可验证任务单 | P0 建议字段，Markdown bullet 表达 | 已补齐 |
+| DesignImplementationSync | 设计/实施同步需回写事件 | P0 流程建议 | 非独立执行层，回写 TaskEvent 等 | 已补齐 |
 
 ---
 
-## 8. 与当前项目实践的映射
+## 8. 合并检查结论
 
-以 TF-P0B-05 为例：
-
-```text
-Project:
-  agent-team / 智能软件工厂
-
-Stage / Plan:
-  P0B 前端工程化
-
-TaskFlow:
-  TF-P0B-05 Avatar Base64 Fallback 移除与资源路径回归
-
-TaskTicket / Node:
-  TF-P0B-05-N01 盘点头像 data-uri 来源
-  TF-P0B-05-N02 生成 slim 原型
-  TF-P0B-05-N03 替换 apps/web 头像路径
-  TF-P0B-05-N04 运行图片完整性验证
-  TF-P0B-05-N05 提交报告与交接
-
-Artifact / Evidence:
-  docs/prototypes/agent-team-v0.6.33.45-prototype.html
-  apps/web/src/legacy/prototype-runtime.js
-  docs/reports/TF-P0B-05-Image-Check-v0.6.33.45.md
-  brokenImages=0 / pageErrors=0 / httpErrors=0
-```
-
----
-
-## 8.1 P0 文档化落地约定
-
-P0 阶段推荐以 Markdown 文件落地 TaskFlow，无需数据库或自动化工具。
-
-**推荐路径与文件名：**
-
-```text
-docs/tasks/taskflows/TF-P0B-05.md       ← 独立 TaskFlow 文档
-docs/tasks/plans/P0B-plan.md            ← Stage 计划（可内嵌多个 TaskFlow WBS）
-```
-
-也可将 TaskFlow 内嵌到阶段计划文档或 WBS 表格中，二者均可接受。
-
-**Markdown 记录方式：**
-
-```text
-- 每个 TaskFlow 文档包含：任务流目标、节点列表（含字段）、整体进度、交接包。
-- 每个 Node 以二级或三级标题标识，字段以 key: value 列表或表格形式记录。
-- verificationEvidence 和 decisionItems 各自单独列出。
-```
-
-**状态维护责任：**
-
-```text
-- 执行智能体（@fixer 等）在完成节点后更新对应 Node 的 status 和 verificationEvidence。
-- TaskFlow 整体进度由调度方（overmind）在交接时更新。
-- 当前不强制迁移历史任务流文档；新建 TaskFlow 从本约定起执行。
-```
-
----
-
-## 9. 当前阶段不做范围
-
-P0 阶段不建议做：
-
-```text
-1. 不做完整数据库表设计。
-2. 不做复杂状态机。
-3. 不做自动 Runtime 调度。
-4. 不做任务级/文件级锁。
-5. 不做复杂权限模型。
-6. 不要求所有历史任务流立刻补齐字段。
-```
-
-当前优先级是让后续任务流按该模型逐步收敛，而不是回填全部历史资料。
-
----
-
-## 10. 后续需要继续收敛的问题
-
-1. TaskTicket 的 P0 最小字段是否需要加入 `doneCriteria`？
-2. `ownerRole` 与 `ownerWorker` 是否必须同时存在？
-3. BaselineCheckTask 是否总是 TaskFlow 的第一个节点？
-4. HandoffPackage 是 TaskFlow 级对象，还是 Stage 级对象？
-5. `artifactConfidence` 是否只保留 Committed / Verified / Accepted 三层？
-6. Stage / Plan 是否需要独立状态？
-7. 任务流并行执行时，TaskTicket 依赖关系如何表达？
-8. TaskFlow 之间是否需要声明依赖或前置关系？（例如 TF-P0B-05 是否需要显式声明依赖 TF-P0B-04 完成）
-
-这些问题可在后续几轮设计中继续完善。
+本子设计仅补齐 TaskFlow / TaskTicket 的层级与字段口径，不改变主 SDD 的分阶段演进策略。后续如进入产品化实现，应优先保持 P0 文档化落地，不提前复杂化。

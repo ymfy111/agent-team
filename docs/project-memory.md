@@ -1,232 +1,152 @@
-# 智能软件工厂项目记忆
+# project-memory｜agent-team 当前项目记忆
 
-> 当前版本：v0.6.33（原型 v0.6.33.45）  
-> 当前前端迁移基线：TF-P0B-05  
-> 状态：长期项目记忆 / 下一步工作锚点
-
----
-
-## 1. 当前项目定位
-
-`agent-team` 是智能软件工厂的项目仓库，也是智能软件工厂自身研发过程的半手工 POC。
-
-当前智能软件工厂系统尚未实现，因此还不能自动完成岗位确认、任务分派、进度跟踪、阻塞协调、决策上报和验收门禁。当前阶段由项目负责人手动调度外部智能体协作：
-
-```text
-项目负责人 ↔ 设计智能体（ChatGPT 主导）
-  形成需求、设计、施工图、评审意见、任务单、原型迁移。
-
-项目负责人 ↔ 编程智能体（OpenCode / Codex）
-  按任务单创建工程、写代码、跑测试、修复问题。
-
-项目负责人 ↔ 评审 / 交付审查智能体
-  独立检查设计、计划、代码或交付结果是否满足标准。
-```
-
-智能软件工厂的产品目标，就是把这种依赖人工搬运上下文的协作方式系统化。
+> 更新时间：2026-05-24  
+> 当前基线：v0.6.33.45  
+> 当前主线：TaskFlow First / WorkPackage / Guarded Flow 最小实现  
+> 当前 skill 参考：taskflow v0.9.25  
+> 当前 docs 状态：DOC-CLOSEOUT，已清理历史过程文件与过时入口。
 
 ---
 
-## 2. 当前 AI 原生岗位模型
+## 1. 当前核心结论
 
-三个核心 AI 原生岗位：
+智能软件工厂的核心不是智能体对话，而是围绕 `TaskFlow / TaskTicket` 组织计划、执行、协作、验证、评审和交付。
 
-```text
-协同规划岗
-  默认担任团队 Leader / 组长。
-  负责用户沟通、需求沉淀、系统设计、阶段计划、任务单、进度跟踪、阻塞协调、分歧初判和对人反馈。
+对话是用户与智能体的交互入口；TaskFlow / TaskTicket 是项目推进的事实主线。
 
-实现验证岗
-  负责编码、TDD、自测、局部集成、修复、执行回执。
-  可以多个实例并行。
-
-交付审查岗
-  负责独立验收、质量门禁、整改建议、初验收报工。
-  不参与实现验证岗的日常 TDD 循环。
-```
-
-`Leader / 组长` 是团队角色，不是第四个岗位。默认规则是：团队 Leader 由协同规划岗数字员工担任。
-
----
-
-## 3. 当前工作闭环
+当前项目 `agent-team` 已经是智能软件工厂的一个简化雏形：
 
 ```text
-岗位确认
-→ 工作指南
-→ 项目上下文
-→ 阶段计划
-→ TaskTicket / 任务单
-→ 执行回执（TaskEvent / ExecutionResult）
-→ 进度 / 阻塞 / 分歧
-→ ReviewRecord / DecisionItem / ChangeRequest
-→ AcceptanceRecord / ReworkOrder
-→ Activity 回写
+Project
+  → Stage / Plan
+    → WorkPackage / TaskFlowGroup
+      → TaskFlow
+        → TaskTicket / Node
+          → Artifact / Evidence / Review / Decision / Handoff
 ```
 
 ---
 
-## 4. 当前文档与工程状态
+## 2. 当前目录口径
 
-### 4.1 核心文档入口
+| 目录 | 当前含义 |
+|---|---|
+| `docs/plans/` | Stage / Plan：阶段目标、路线图、能力路线。 |
+| `docs/tasks/` | WorkPackage / TaskFlowGroup：一组有序 TaskFlow 的工作包清单。 |
+| `docs/tasks/runs/` | TaskFlow Run：单次执行记录目录；本次收尾后历史 run 已清理。 |
+| `docs/specs/` | 产品 / 系统 / 对象模型 / 子设计。 |
+| `docs/reports/` | ReviewRecord、验证报告、复盘报告目录；本次收尾后历史报告已清理。 |
+| `docs/recommendations/` | 产品化建议和多智能体协作建议。 |
+| `docs/guides/` | 方法、技能治理、Guarded Flow、Markdown 契约。 |
+| `docs/templates/` | 结构化 Markdown 模板。 |
 
-```text
-README.md
-docs/文档导航.md
-docs/project-memory.md（本文件）
-```
-
-### 4.2 核心设计文档（v0.6.33 基线）
-
-```text
-docs/specs/PRD-v0.6.33.md
-docs/specs/SDD-v0.6.33.md
-docs/plans/IMPL-PLN-v0.6.33.md
-docs/tasks/WBS-v0.6.33.md
-docs/tasks/DEV-TASKFLOW-v0.6.33.md
-docs/decisions/ADR-0009-Agent-Team-Orchestration-v0.6.33.md
-docs/changes/CHANGELOG-v0.6.33.md
-```
-
-### 4.3 原型参考
-
-```text
-docs/prototypes/agent-team-v0.6.33.45-prototype.html（slim 归档，已移除 base64 头像）
-docs/prototypes/pic/（头像与视觉素材）
-```
-
-### 4.4 前端工程（apps/web）
-
-```text
-当前形态：无构建 ESM（不引入 TS/Vite/pnpm/第三方包）
-入口：index.html + src/main.js
-CSS：src/styles/prototype.css
-Legacy 渲染：src/legacy/prototype-runtime.js（约 720KB，已 slim）
-结构：bootstrap / adapters / services / app / pages / templates / tools / qa
-资源：pic/ 与 index.html 同级，部署时必须携带 pic/avatars/
-头像策略：统一 pic/avatars/*.png，avatar-default.png 兜底，无 base64 fallback
-```
-
-### 4.5 QA 验证基准
-
-```text
-brokenImages=0, pageErrors=0, httpErrors=0
-teamCards=5, masters=5, workers=17
-验证命令：cd apps/web && python tools/sandbox_verify.py
-```
+当前文档导航入口：`docs/文档导航.md`。
 
 ---
 
-## 5. 已完成的任务流（P0B/P0C）
+## 3. 当前必读文档
 
-### TF-P0B-01：结构化前端工程收口
-- Data Provider 抽离、Factory API 抽象、Prototype Store 收口
-- AppShell / Router / MenuConfig 收口
-- EventBus / Action Dispatcher 收口
-- Legacy Page Module 初步拆分
-
-### TF-P0B-02：前端源码基线校准
-- README / QA / manifest / package.json 对齐
-- index.html 与 prototype-runtime.js 瘦身边界清单
-- entry-map.js、page-meta.js
-
-### TF-P0B-03：第一个 DOM 模板化试点
-- loadingPage 作为最低风险试点
-- page-template-host.js、loading-page-template.js
-
-### TF-P0B-04：第二个 DOM 模板化试点
-- top-banners-container / networkErrorBanner 模板化
-- top-banner-template.js
-
-### TF-P0B-05：Avatar Base64 Fallback 移除
-- 原型与 apps/web 头像统一走静态路径
-- prototype-runtime.js 从 ~4MB 降到 ~720KB
-- 图片验证通过
-
-### TF-P0C-01/02（试做）：Taskflow UI 对齐
-- 总览页任务流摘要、项目页节点证据面板
-- Decision / Blocker / Node Evidence 语义
-- 团队/员工页当前节点状态
+1. `docs/plans/SMART-FACTORY-ROADMAP-v0.6.33.45.md`
+2. `docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md`
+3. `docs/tasks/TF-GF-IMPL-v0.6.33.45.md`
+4. `docs/specs/SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`
+5. `docs/specs/SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md`
+6. `docs/recommendations/多智能体协作产品化建议-v0.6.33.md`
+7. `docs/guides/TASKFLOW-GOVERNANCE-v0.9.25.md`
+8. `docs/changes/CHANGELOG-v0.6.33.md`
 
 ---
 
-## 6. 架构演进路线
+## 4. 已完成主线
 
-```text
-阶段 A: Agent-led Task List（当前，主智能体任务清单驱动）
-阶段 B: Guarded Task Flow（轻量状态约束）
-阶段 C: State-machine Orchestration（程序状态机）
-阶段 D: Factory Runtime Orchestration（多 Runtime 工厂化编排）
-```
+| TaskFlow | 状态 | 沉淀结果 |
+|---|---|---|
+| `TF-DOC-STRUCT-01` | done | 结构化 Markdown TaskFlow 模板：`docs/templates/STRUCTURED-TASKFLOW-MD-TEMPLATE.md`。 |
+| `TF-POC-MD-01` | done | Markdown TaskFlow 可读写经验已沉淀到 `TASKFLOW-MD-CONTRACT`、TaskTicket 子设计和 taskflow skill 映射设计。 |
+| `TF-GUARDED-FLOW-01` | done | Guarded Flow 最小约束设计已沉淀到 `TASKFLOW-GUARDED-FLOW`。 |
+| `TF-GF-IMPL-01` | done | 依赖检查最小实现，落地 `validate-dependencies`，摘要见 `TF-GF-IMPL` 工作包。 |
+| `TF-GF-IMPL-02` | done | Blocker / Decision 检查最小实现，落地 `validate-gates`，摘要见 `TF-GF-IMPL` 工作包。 |
+| `TF-GF-IMPL-03` | done | 验证失败状态最小实现，落地 `validate-statuses`，摘要见 `TF-GF-IMPL` 工作包。 |
+| `TF-DOC-MERGE-01 / 02` | done | TaskFlow / TaskTicket 子设计与 recommendations 口径收口。 |
+| `TF-DOC-WP-01` | done | 补充 WorkPackage / TaskFlowGroup 层级，并调整 plans/tasks 文档组织口径。 |
 
-当前处于阶段 A，不要直接实现完整状态机。
-
----
-
-## 7. 下一步方向
-
-```text
-方案 A：继续前端瘦身（清理残留 data-uri 兼容逻辑）
-方案 B：继续 DOM 模板化试点（第三个低风险模块）
-方案 C：基线复核（GitHub 拉取 → QA → 确认基线 → 再选任务流）
-```
-
-推荐新会话先做基线复核（方案 C），再选 A 或 B。
+本次 DOC-CLOSEOUT 已清理上述任务的历史 run / report / patch / 测试记录；有复用价值的结论已沉淀到当前文档。
 
 ---
 
-## 8. 长期设计约束
+## 5. 当前下一步
 
-```text
-1. P0 阶段保持无构建 ESM，不引入 Vite/TS/pnpm。
-2. agent-team 是业务状态真源（Gateway 不是）。
-3. 前端只传 agentId / conversationId / hostContext。
-4. Worker 绑定 RuntimeHost / workspace / OpenCode 主智能体。
-5. OpenCode 内部子智能体 ≠ 软件工厂正式 Worker。
-6. 关键验收支持独立 Worker / 独立会话 / 不同模型。
-7. 交付审查采用批量门禁，不做碎片化即时往返。
-8. 结构化 Markdown = YAML Front Matter + 正文 + 标记区块 + 可选 JSONL 事件。
-9. 不把主子智能体自由聊天当事实来源；关键信息必须回写结构化记录。
-```
+建议下一步：`TF-GF-IMPL-04｜恢复记录最小实现`。
 
----
+目标：补充节点从 `needs_review / blocked / paused` 等状态恢复继续时的最小事件记录能力。
 
-## 9. 多智能体协作分工
+边界：
 
-本项目采用"设计-实施"分离的多智能体协作模式：
+- 不做完整状态机；
+- 不做 UI；
+- 不做 Runtime 自动调度；
+- 不新增数据库任务锁；
+- 只补最小命令或事件追加能力，并用结构化 Markdown 运行副本验证。
 
-```text
-设计侧智能体
-  职责：产品设计、PRD、原型迭代、架构决策起草、taskflow 编排、方案比选
-  产出：docs/specs/、docs/plans/、docs/tasks/、docs/decisions/、原型 HTML、交接文档
-  约束：产出必须经 git 落盘才算生效；沙箱/临时环境中的内容不作为事实源
-
-实施侧智能体
-  职责：代码实现、测试/QA/浏览器验证、文档落盘与格式校验、长程任务自主推进
-  产出：apps/、docs/project-memory.md、docs/changes/、QA 报告
-  约束：实施前必须 pull 并确认最新 docs 基线版本；不自行修改设计文档内容
-
-用户（项目负责人）
-  职责：触发同步节奏、决策仲裁、验收确认
-  约束：设计完→push→通知实施侧接手
-```
-
-协作规则：
-
-```text
-1. 唯一事实源：git 仓库中的 docs/ 和 apps/。
-2. 边界划分：设计侧写 specs/plans/tasks/decisions/prototypes；实施侧写 apps/src + project-memory + changes + QA。
-3. 不交叉改同一文件，避免冲突。
-4. 反馈回路：实施过程发现设计问题，记录到 docs/tasks/ 反馈给设计侧，不擅自改设计。
-5. 任一侧均可由不同智能体/工具/人工承担，角色可替换，协议不变。
-```
+后续：`TF-GF-REVIEW-01｜Guarded Flow 产品化映射评审`，用于判断当前单智能体工厂经验如何进入多智能体软件工厂产品模型。
 
 ---
 
-## 10. Git 远程
+## 6. 关键设计口径
+
+### 6.1 单智能体工厂与多智能体工厂
+
+简单项目可以使用 `taskflow skill + 结构化 Markdown + taskflow-md.mjs` 形成单智能体工厂：
 
 ```text
-码云（origin）：git@gitee.com:ai-craft/agent-team.git
-GitHub：git@github.com:ymfy111/agent-team.git
-分支：main
+用户目标 → TaskFlow → TaskTicket / Node → 单智能体执行 → Artifact / Evidence / Review
 ```
+
+复杂项目应由软件工厂平台组织多智能体协同：
+
+```text
+Project / Stage / Plan
+  → WorkPackage / TaskFlowGroup
+    → TaskFlow
+      → 多个 TaskTicket / Node
+        → 多个数字员工协同执行
+```
+
+两者本质都是任务流驱动，差异在于协作规模和平台能力。
+
+### 6.2 TaskTicket / Node 完成口径
+
+- `doneCriteria` 是节点进入 `done / accepted` 的完成判定标准。
+- `actualDuration` 不是独立事实源，只能由 `actualCompletedAt - actualStartedAt` 计算展示。
+- Evidence 应说明验证的是哪个 Artifact / Change Reference。
+- `done` 表示执行者完成并提交证据；`accepted` 表示评审或验收确认通过。
+
+### 6.3 WorkPackage / TaskFlowGroup
+
+WorkPackage 是 Plan 和 TaskFlow 之间的组织层。一个 WorkPackage 可以包含多个有序 TaskFlow，并维护状态清单、当前焦点、运行记录、评审报告和下一步。
+
+P0 文档化阶段，`docs/tasks/*.md` 主文档可作为 WorkPackage 的轻量表现形式。
+
+---
+
+## 7. taskflow 执行经验
+
+当前 taskflow skill 已收敛到以下口径：
+
+- 默认模式：`batch-auto-summary`，无人值守完成任务流，最终给完整审计。
+- 对话框审计输出应包含：节点开始、节点完成、完成时间、实际耗时、状态清单和 7 列节点进度表。
+- 节点实际耗时由 TaskTicket 状态中的实际开始 / 完成时间计算。
+- 若证据未在完成前落盘，不能输出可信实际耗时。
+- 普通节点不应强制用户逐节点点击“继续”；只有高风险、人工验收、调试或可见性测试才使用 checkpoint-visible。
+
+---
+
+## 8. 文档清理规则
+
+后续更新 docs 时默认遵循：
+
+1. 当前事实源、路线图、工作包、设计、模板和通用指南应保留。
+2. 已完成任务的 run / report / 测试记录不默认长期保留。
+3. 若完成任务有复用价值，应先沉淀到通用文档，再清理原始过程文件。
+4. 每次 docs 包更新必须同步 `docs/文档导航.md` 与本文件。
+5. 本包只包含 `docs/`，不包含 `skills/`、`apps/`、`prototypes/` 和图片资源。
