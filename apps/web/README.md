@@ -135,3 +135,9 @@ npm run qa:sandbox
 - pic/ 与 index.html 同级；
 - 后续复杂页面模板化必须另开任务流。
 ```
+
+## TF-P0B-05：头像资源策略
+
+当前 `src/legacy/prototype-runtime.js` 已移除 v0.6.33.45 原型中的头像 base64 data-uri fallback。头像统一直接引用 `pic/avatars/*.png`，默认兜底为 `pic/avatars/avatar-default.png`。
+
+注意：`apps/web/pic/avatars/` 必须随 `index.html` 一起部署；不再支持只拷贝单个 HTML/JS 文件而不带图片目录的头像兜底场景。

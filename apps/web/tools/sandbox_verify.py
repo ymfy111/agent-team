@@ -93,7 +93,7 @@ def run():
             masters: document.querySelectorAll('#topologyHtml .topo-master').length,
             workers: document.querySelectorAll('#topologyHtml .topo-worker').length,
             pages: Array.from(document.querySelectorAll('.page')).map(p => p.id).filter(Boolean).slice(0,20),
-            brokenImages: imgs.filter(img => { const src = img.getAttribute('src') || ''; return !src.startsWith('data:') && (!img.complete || img.naturalWidth === 0); }).map(img => img.getAttribute('src')).slice(0,20),
+            brokenImages: imgs.filter(img => { const src = img.getAttribute('src') || ''; return !src.startsWith('data:') && img.complete && img.naturalWidth === 0; }).map(img => img.getAttribute('src')).slice(0,20),
             textHasUndefined: document.body.innerText.includes('undefined') || document.body.innerText.includes('null'),
             duplicateBusyText: document.body.innerText.includes('忙碌忙碌'),
             topBannerMounted: document.documentElement.dataset.topBannerTemplate || null,

@@ -166,3 +166,15 @@ managed task 说明长程任务中可以连续执行子任务，但必须保留�
 - 验证：`npm run qa:sandbox` 通过，`teamCards=5`、`masters=5`、`workers=17`、`brokenImages=0`、`pageErrors=0`、`httpErrors=0`。
 - 流程：taskflow 已升级到 v0.9.9，新增节点内部修复循环规则；验证失败先定位和最小修复，不立即中断找用户。
 - 文档：新增 `TF-P0B-04-FRONTEND-SUMMARY-v0.6.33.45.md` 与 `TF-P0B-04-QA-Report-v0.6.33.45.md`。
+
+## 2026-05-23 / TF-P0B-05 Avatar Base64 Fallback 移除与资源路径回归
+
+- 原型：生成 `agent-team-v0.6.33.45-prototype-slim.html`，移除头像 `AVATAR_DATA_V41` / data-uri fallback。
+- 原型：头像统一直接引用 `pic/avatars/*.png`，`avatar-default.png` 作为图片兜底。
+- 原型体积：HTML 从 4,402,872 bytes 降至 1,124,952 bytes，减少约 3.13 MB。
+- 前端：同步迁移后 `apps/web/src/legacy/prototype-runtime.js`，移除头像 base64 fallback。
+- 前端体积：`prototype-runtime.js` 从 3,998,127 bytes 降至 720,208 bytes，减少约 3.13 MB。
+- 验证：原型 slim 与迁移后 apps/web 均通过头像/关键页面回归；`brokenImages=0`、`pageErrors=0`、`httpErrors=0`。
+- 迁移规则：后续 prototype-migration 默认禁止迁移头像/普通图片 data-uri fallback；除非明确要求单文件离线原型，否则统一使用 `pic/` 静态资源。
+- 技能：`taskflow / task-runner / prototype-migration` 已升级到 v0.9.10，补充图片资源迁移与 lazy-loading 验证规则。
+

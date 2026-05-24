@@ -1,0 +1,116 @@
+{
+  "pageErrors": [],
+  "httpErrors": [],
+  "imageRequests": [
+    "pic/avatars/avatar-implementer-01-large.png",
+    "pic/avatars/avatar-implementer-01.png",
+    "pic/avatars/avatar-implementer-02-large.png",
+    "pic/avatars/avatar-implementer-02.png",
+    "pic/avatars/avatar-implementer-03-large.png",
+    "pic/avatars/avatar-implementer-03.png",
+    "pic/avatars/avatar-implementer-04.png",
+    "pic/avatars/avatar-implementer-05-large.png",
+    "pic/avatars/avatar-implementer-05.png",
+    "pic/avatars/avatar-leader-planner-01-large.png",
+    "pic/avatars/avatar-leader-planner-01.png",
+    "pic/avatars/avatar-leader-planner-02-large.png",
+    "pic/avatars/avatar-leader-planner-02.png",
+    "pic/avatars/avatar-leader-planner-03-large.png",
+    "pic/avatars/avatar-leader-planner-03.png",
+    "pic/avatars/avatar-leader-planner-04-large.png",
+    "pic/avatars/avatar-leader-planner-04.png",
+    "pic/avatars/avatar-leader-planner-05-large.png",
+    "pic/avatars/avatar-leader-planner-05.png",
+    "pic/avatars/avatar-reviewer-01-large.png",
+    "pic/avatars/avatar-reviewer-01.png",
+    "pic/avatars/avatar-reviewer-02-large.png",
+    "pic/avatars/avatar-reviewer-02.png",
+    "pic/avatars/avatar-reviewer-03-large.png",
+    "pic/avatars/avatar-reviewer-03.png",
+    "pic/avatars/avatar-reviewer-04-large.png",
+    "pic/avatars/avatar-reviewer-04.png",
+    "pic/avatars/avatar-reviewer-05.png",
+    "pic/xiaoyun/xiaoyun-global-assistant.png"
+  ],
+  "picFiles": [
+    "pic/avatars/avatar-architect-01-large.png",
+    "pic/avatars/avatar-architect-01.png",
+    "pic/avatars/avatar-default-large.png",
+    "pic/avatars/avatar-default.png",
+    "pic/avatars/avatar-implementer-01-large.png",
+    "pic/avatars/avatar-implementer-01.png",
+    "pic/avatars/avatar-implementer-02-large.png",
+    "pic/avatars/avatar-implementer-02.png",
+    "pic/avatars/avatar-implementer-03-large.png",
+    "pic/avatars/avatar-implementer-03.png",
+    "pic/avatars/avatar-implementer-04-large.png",
+    "pic/avatars/avatar-implementer-04.png",
+    "pic/avatars/avatar-implementer-05-large.png",
+    "pic/avatars/avatar-implementer-05.png",
+    "pic/avatars/avatar-leader-planner-01-large.png",
+    "pic/avatars/avatar-leader-planner-01.png",
+    "pic/avatars/avatar-leader-planner-02-large.png",
+    "pic/avatars/avatar-leader-planner-02.png",
+    "pic/avatars/avatar-leader-planner-03-large.png",
+    "pic/avatars/avatar-leader-planner-03.png",
+    "pic/avatars/avatar-leader-planner-04-large.png",
+    "pic/avatars/avatar-leader-planner-04.png",
+    "pic/avatars/avatar-leader-planner-05-large.png",
+    "pic/avatars/avatar-leader-planner-05.png",
+    "pic/avatars/avatar-leader-planner-large.png",
+    "pic/avatars/avatar-planner-female-reference.png",
+    "pic/avatars/avatar-reviewer-01-large.png",
+    "pic/avatars/avatar-reviewer-01.png",
+    "pic/avatars/avatar-reviewer-02-large.png",
+    "pic/avatars/avatar-reviewer-02.png",
+    "pic/avatars/avatar-reviewer-03-large.png",
+    "pic/avatars/avatar-reviewer-03.png",
+    "pic/avatars/avatar-reviewer-04-large.png",
+    "pic/avatars/avatar-reviewer-04.png",
+    "pic/avatars/avatar-reviewer-05-large.png",
+    "pic/avatars/avatar-reviewer-05.png",
+    "pic/xiaoyun/xiaoyun-global-assistant.png"
+  ],
+  "perPageSummary": [
+    {
+      "page": "overview",
+      "imgCount": 48,
+      "broken": []
+    },
+    {
+      "page": "teams",
+      "imgCount": 48,
+      "broken": []
+    },
+    {
+      "page": "pool",
+      "imgCount": 48,
+      "broken": []
+    },
+    {
+      "page": "decisions",
+      "imgCount": 48,
+      "broken": []
+    },
+    {
+      "page": "projects",
+      "imgCount": 48,
+      "broken": []
+    },
+    {
+      "page": "roles",
+      "imgCount": 48,
+      "broken": []
+    },
+    {
+      "page": "skills",
+      "imgCount": 48,
+      "broken": []
+    },
+    {
+      "page": "settings",
+      "imgCount": 48,
+      "broken": []
+    }
+  ]
+}
