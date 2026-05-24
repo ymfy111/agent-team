@@ -93,7 +93,7 @@ P0 阶段 WorkPackage 用于管理一组有序 TaskFlow，避免 `docs/tasks/` �
 ```yaml
 workPackageId: TF-GF-IMPL
 title: Guarded Flow 最小实现工作包
-parentPlan: docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md
+parentPlan: docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md
 status: running | done | accepted | blocked | deferred
 currentTaskFlow: TF-GF-IMPL-04
 taskFlows:
@@ -242,7 +242,7 @@ DesignImplementationSync 不是独立执行层，而是围绕 TaskFlow / TaskTic
 
 ## 7. 三文档口径一致性矩阵
 
-| 概念 | SDD 正文口径 | recommendations 口径 | 本子设计口径 | 结论 |
+| 概念 | SDD 正文口径 | recs 口径 | 本子设计口径 | 结论 |
 |---|---|---|---|---|
 | TaskTicket | 系统事实来源 / 最小任务对象 | TaskTicket First，所有协作围绕任务单沉淀 | Node 是 TaskTicket 文档化视图 | 一致 |
 | WorkPackage / TaskFlowGroup | 主 SDD 原有层级未显式展开 | 一组相关 TaskFlow 的工作包清单 | Plan 与 TaskFlow 之间的组织层 | 已补齐 |

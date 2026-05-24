@@ -1,15 +1,15 @@
-# Guarded Flow 阶段路线图（v0.6.33.45）
+# PLAN-SMART-FACTORY-GUARDED-FLOW｜Guarded Flow 阶段路线图
 
-> 文件：`docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md`  
+> 文件：`docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`  
 > 目的：解释当前 Guarded Flow 相关任务流编号、已完成项和后续项，避免后续只依赖对话上下文理解进展。
 
 ## 0. 与 WorkPackage / TaskFlowGroup 的关系
 
-本文属于 `docs/plans/`，用于说明 Guarded Flow 的阶段目标和能力路线。具体执行清单由 `docs/tasks/TF-GF-IMPL-v0.6.33.45.md` 维护。
+本文属于 `docs/plans/`，用于说明 Guarded Flow 的阶段目标和能力路线。具体执行清单由 `docs/tasks/TF-GF-IMPL.md` 维护。
 
 ```text
-Plan / Roadmap：docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md
-  → WorkPackage / TaskFlowGroup：docs/tasks/TF-GF-IMPL-v0.6.33.45.md
+Plan / Roadmap：docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md
+  → WorkPackage / TaskFlowGroup：docs/tasks/TF-GF-IMPL.md
     → TaskFlow：TF-GF-IMPL-01/02/03/04
       → Run：docs/tasks/runs/TF-GF-IMPL-xx-RUN-v0.6.33.45.md（按需生成；沉淀后可清理）
 ```

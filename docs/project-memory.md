@@ -36,7 +36,7 @@ Project
 | `docs/tasks/runs/` | TaskFlow Run：单次执行记录目录；本次收尾后历史 run 已清理。 |
 | `docs/specs/` | 产品 / 系统 / 对象模型 / 子设计。 |
 | `docs/reports/` | ReviewRecord、验证报告、复盘报告目录；本次收尾后历史报告已清理。 |
-| `docs/recommendations/` | 产品化建议和多智能体协作建议。 |
+| `docs/recs/` | 产品化建议和多智能体协作建议。 |
 | `docs/guides/` | 方法、技能治理、Guarded Flow、Markdown 契约。 |
 | `docs/templates/` | 结构化 Markdown 模板。 |
 
@@ -46,12 +46,12 @@ Project
 
 ## 3. 当前必读文档
 
-1. `docs/plans/SMART-FACTORY-ROADMAP-v0.6.33.45.md`
-2. `docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md`
-3. `docs/tasks/TF-GF-IMPL-v0.6.33.45.md`
+1. `docs/plans/PLAN-SMART-FACTORY.md`
+2. `docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`
+3. `docs/tasks/TF-GF-IMPL.md`
 4. `docs/specs/SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`
 5. `docs/specs/SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md`
-6. `docs/recommendations/多智能体协作产品化建议-v0.6.33.md`
+6. `docs/recs/REC-MAC-PROD-v0.6.33.md`
 7. `docs/guides/TASKFLOW-GOVERNANCE-v0.9.25.md`
 8. `docs/changes/CHANGELOG-v0.6.33.md`
 
@@ -67,7 +67,7 @@ Project
 | `TF-GF-IMPL-01` | done | 依赖检查最小实现，落地 `validate-dependencies`，摘要见 `TF-GF-IMPL` 工作包。 |
 | `TF-GF-IMPL-02` | done | Blocker / Decision 检查最小实现，落地 `validate-gates`，摘要见 `TF-GF-IMPL` 工作包。 |
 | `TF-GF-IMPL-03` | done | 验证失败状态最小实现，落地 `validate-statuses`，摘要见 `TF-GF-IMPL` 工作包。 |
-| `TF-DOC-MERGE-01 / 02` | done | TaskFlow / TaskTicket 子设计与 recommendations 口径收口。 |
+| `TF-DOC-MERGE-01 / 02` | done | TaskFlow / TaskTicket 子设计与 recs 口径收口。 |
 | `TF-DOC-WP-01` | done | 补充 WorkPackage / TaskFlowGroup 层级，并调整 plans/tasks 文档组织口径。 |
 
 本次 DOC-CLOSEOUT 已清理上述任务的历史 run / report / patch / 测试记录；有复用价值的结论已沉淀到当前文档。

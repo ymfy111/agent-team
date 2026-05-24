@@ -1,4 +1,4 @@
-# SMART-FACTORY-ROADMAP v0.6.33.45
+# PLAN-SMART-FACTORY｜智能软件工厂 TaskFlow First 总路线图
 
 > 文档类型：项目总路线图 / 产品理论映射  
 > 当前基线：v0.6.33.45  
@@ -96,10 +96,27 @@ Project / Stage / Plan
 
 ---
 
-## 5. 当前 plans / tasks 的使用口径
+## 5. 与 Guarded Flow 子路线图的关系
 
-- `docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md`：作为 Guarded Flow 子路线图，说明阶段目标和能力演进。
-- `docs/tasks/TF-GF-IMPL-v0.6.33.45.md`：作为 GF-IMPL 工作包 / TaskFlowGroup，维护 01/02/03/04 的状态、已落地能力和下一步。
+`PLAN-SMART-FACTORY` 是项目级总路线图，回答“智能软件工厂为什么以 TaskFlow First 为主线、当前项目如何作为软件工厂雏形推进”。
+
+`PLAN-SMART-FACTORY-GUARDED-FLOW` 是总路线图下的 Guarded Flow 子路线图，回答“TaskFlow 从文档化清单走向受控执行链时，依赖、阻塞、决策、验证失败、恢复记录等门禁如何逐步落地”。
+
+两者关系是：
+
+```text
+PLAN-SMART-FACTORY（总路线图 / 产品主线）
+  → PLAN-SMART-FACTORY-GUARDED-FLOW（Guarded Flow 子路线图）
+    → TF-GF-IMPL（WorkPackage / TaskFlowGroup）
+      → TF-GF-IMPL-01/02/03/04（具体 TaskFlow）
+```
+
+因此，前者不替代后者；前者用于统领项目方向，后者用于管理 Guarded Flow 这条能力线的阶段拆解。
+
+## 6. 当前 plans / tasks 的使用口径
+
+- `docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`：作为 Guarded Flow 子路线图，说明阶段目标和能力演进。
+- `docs/tasks/TF-GF-IMPL.md`：作为 GF-IMPL 工作包 / TaskFlowGroup，维护 01/02/03/04 的状态、已落地能力和下一步。
 - `SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`：作为 TaskFlow / TaskTicket / WorkPackage 产品对象子设计。
 - `SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md`：作为 skill 经验向产品引擎映射的设计说明。
 
@@ -107,7 +124,7 @@ Project / Stage / Plan
 
 ---
 
-## 6. 后续推进建议
+## 7. 后续推进建议
 
 1. 先完成 `TF-GF-IMPL-04｜恢复记录最小实现`，补齐暂停 / 恢复 / 追加事件能力。
 2. 再做 `TF-GF-REVIEW-01｜产品化映射评审`，判断单智能体工厂经验如何进入多智能体软件工厂产品。
@@ -115,6 +132,6 @@ Project / Stage / Plan
 
 ---
 
-## 7. 边界
+## 8. 边界
 
 本文不引入新的数据库模型、完整状态机、Runtime 自动调度或任务锁；它只用于说明当前项目计划与智能软件工厂产品理论之间的映射关系，并指导后续任务流优先级。

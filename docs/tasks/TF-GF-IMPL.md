@@ -2,7 +2,7 @@
 
 > 文档类型：TaskFlow Group / WorkPackage
 > 当前基线：v0.6.33.45
-> 所属计划：`docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md`
+> 所属计划：`docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`
 > 状态：running
 > 当前焦点：`TF-GF-IMPL-04｜恢复记录最小实现`
 
@@ -18,8 +18,8 @@
 
 ## 2. 所属计划
 
-- 总路线图：`docs/plans/SMART-FACTORY-ROADMAP-v0.6.33.45.md`
-- 阶段路线：`docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md`
+- 总路线图：`docs/plans/PLAN-SMART-FACTORY.md`
+- 阶段路线：`docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`
 - 产品对象子设计：`docs/specs/SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`
 
 ---

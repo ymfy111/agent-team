@@ -20,9 +20,9 @@
 
 - 文档结构：新增并启用 `docs/plans/`，承载阶段目标、路线图和能力路线。
 - 任务组织：`docs/tasks/` 统一为 WorkPackage / TaskFlowGroup，主文档可管理一组有序 TaskFlow。
-- 当前工作包：新增 `docs/tasks/TF-GF-IMPL-v0.6.33.45.md`，统一维护 `TF-GF-IMPL-01/02/03/04` 的状态、已落地能力和下一步。
+- 当前工作包：新增 `docs/tasks/TF-GF-IMPL.md`，统一维护 `TF-GF-IMPL-01/02/03/04` 的状态、已落地能力和下一步。
 - 设计口径：在 `SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md` 中补充 `WorkPackage / TaskFlowGroup` 层级，形成 `Project → Stage/Plan → WorkPackage → TaskFlow → TaskTicket/Node`。
-- 产品映射：同步 `SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md` 与 `多智能体协作产品化建议-v0.6.33.md`，明确简单项目可由 skill + 文档驱动，复杂项目由软件工厂平台驱动，本质均为任务流驱动。
+- 产品映射：同步 `SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md` 与 `REC-MAC-PROD-v0.6.33.md`，明确简单项目可由 skill + 文档驱动，复杂项目由软件工厂平台驱动，本质均为任务流驱动。
 
 ---
 
@@ -82,3 +82,4 @@
 2. 当前事实源、路线图、工作包、设计、模板和通用指南应保留。
 3. 已完成任务的 run / report / 测试记录不默认长期保留；有复用价值的信息应先沉淀到通用文档。
 4. 不为保留历史而堆积文档；历史需要追溯时以 Git 记录为准。
+- 统一 plans 路线图命名：`SMART-FACTORY-ROADMAP-v0.6.33.45.md` → `PLAN-SMART-FACTORY.md`，`TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md` → `PLAN-SMART-FACTORY-GUARDED-FLOW.md`，以 `PLAN-` 前缀体现文档类型和主子关系。
