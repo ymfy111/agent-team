@@ -1,8 +1,22 @@
 # CHANGELOG v0.6.33
 
-> 当前同步批次：DOC-CLOSEOUT / v0.6.33.45  
+> 当前同步批次：DOCS-SYNC-REVIEW / v0.6.33.45  
 > 当前主线：TaskFlow First + WorkPackage / TaskFlowGroup + Guarded Flow 最小实现  
-> 说明：本文件仅保留当前阶段对后续推进有价值的变更摘要；历史过程性 run / report / patch / 测试记录已在本次 docs 收尾中清理。
+> 说明：本文件仅保留当前阶段对后续推进有价值的变更摘要；历史过程性 run / report / patch / 测试记录如已沉淀到通用文档，可不长期保留。
+
+---
+
+## 2026-05-24 / DOCS-SYNC-REVIEW docs 完整性修补与评审
+
+- 事实源：以用户上传的完整项目 ZIP 中 `docs/` 为基线同步到沙箱，恢复主规格文档、模板和原型归档。
+- 主规格：确认并保留 `PRD-v0.6.33.md`、`SDD-v0.6.33.md`、`DEPLOY-v0.6.33.md`；主 PRD / 主 SDD 不应被子设计替代。
+- 子设计：保留 `SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md` 与 `SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md`。
+- 模板：确认并保留结构化 Plan / Task / TaskFlow / Decision / Review 模板。
+- 原型：确认 `docs/prototypes/agent-team-v0.6.33.45-prototype.html` 与 `docs/prototypes/pic/` 是 docs 归档的一部分。
+- 导航：重写 `docs/文档导航.md`，补齐主规格、模板、原型归档和当前计划 / 工作包入口。
+- 评审：新增 `docs/reports/RPT-DOCS-SYNC-REVIEW-v0.6.33.45.md`，记录 docs 完整性修补与同步评审结论。
+- 项目记忆：更新 `docs/project-memory.md`，修正“docs 不包含 prototypes”的旧口径，并记录交接时以用户提供的完整 ZIP 为优先事实源。
+- 注意：当前同步源未包含 `SDD-PROTOTYPE-MIGRATION-v0.6.33.md`；如后续确认仍属正式专项设计，应重新补回并同步导航。
 
 ---
 
@@ -11,7 +25,7 @@
 - 导航：重写 `docs/文档导航.md`，将当前入口收敛到 TaskFlow First / WorkPackage / Guarded Flow 主线。
 - 项目记忆：更新 `docs/project-memory.md`，记录当前基线、目录口径、已完成主线、下一步建议和关键设计口径。
 - 文档瘦身：清理历史 taskflow 治理旧版本、补丁文件、已完成任务的 run / report / 测试记录。
-- 沉淀规则：已完成任务如有复用价值，应先沉淀到指南、模板、路线图、工作包或子设计，再清理原始过程文件。
+- 沉淀规则：已完成任务如有复用价值，应先沉淀到指南、模板、路线图、工作包或子设计，再判断是否保留原始过程文件。
 - 当前下一步：`TF-GF-IMPL-04｜恢复记录最小实现`。
 
 ---
@@ -21,6 +35,7 @@
 - 文档结构：新增并启用 `docs/plans/`，承载阶段目标、路线图和能力路线。
 - 任务组织：`docs/tasks/` 统一为 WorkPackage / TaskFlowGroup，主文档可管理一组有序 TaskFlow。
 - 当前工作包：新增 `docs/tasks/TF-GF-IMPL.md`，统一维护 `TF-GF-IMPL-01/02/03/04` 的状态、已落地能力和下一步。
+- 计划命名：`SMART-FACTORY-ROADMAP-v0.6.33.45.md` 改为 `PLAN-SMART-FACTORY.md`，`TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md` 改为 `PLAN-SMART-FACTORY-GUARDED-FLOW.md`，以 `PLAN-` 前缀体现文档类型和主子关系。
 - 设计口径：在 `SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md` 中补充 `WorkPackage / TaskFlowGroup` 层级，形成 `Project → Stage/Plan → WorkPackage → TaskFlow → TaskTicket/Node`。
 - 产品映射：同步 `SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md` 与 `REC-MAC-PROD-v0.6.33.md`，明确简单项目可由 skill + 文档驱动，复杂项目由软件工厂平台驱动，本质均为任务流驱动。
 
@@ -79,7 +94,6 @@
 ## 维护约定
 
 1. 每次 docs 包更新必须同步 `docs/文档导航.md` 与 `docs/project-memory.md`。
-2. 当前事实源、路线图、工作包、设计、模板和通用指南应保留。
+2. 当前事实源、主规格、路线图、工作包、设计、模板、原型归档和通用指南应保留。
 3. 已完成任务的 run / report / 测试记录不默认长期保留；有复用价值的信息应先沉淀到通用文档。
 4. 不为保留历史而堆积文档；历史需要追溯时以 Git 记录为准。
-- 统一 plans 路线图命名：`SMART-FACTORY-ROADMAP-v0.6.33.45.md` → `PLAN-SMART-FACTORY.md`，`TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md` → `PLAN-SMART-FACTORY-GUARDED-FLOW.md`，以 `PLAN-` 前缀体现文档类型和主子关系。
