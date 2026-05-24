@@ -191,7 +191,39 @@ teamCards=5, masters=5, workers=17
 
 ---
 
-## 9. Git 远程
+## 9. 多智能体协作分工
+
+本项目采用"设计-实施"分离的多智能体协作模式：
+
+```text
+设计侧智能体
+  职责：产品设计、PRD、原型迭代、架构决策起草、taskflow 编排、方案比选
+  产出：docs/specs/、docs/plans/、docs/tasks/、docs/decisions/、原型 HTML、交接文档
+  约束：产出必须经 git 落盘才算生效；沙箱/临时环境中的内容不作为事实源
+
+实施侧智能体
+  职责：代码实现、测试/QA/浏览器验证、文档落盘与格式校验、长程任务自主推进
+  产出：apps/、docs/project-memory.md、docs/changes/、QA 报告
+  约束：实施前必须 pull 并确认最新 docs 基线版本；不自行修改设计文档内容
+
+用户（项目负责人）
+  职责：触发同步节奏、决策仲裁、验收确认
+  约束：设计完→push→通知实施侧接手
+```
+
+协作规则：
+
+```text
+1. 唯一事实源：git 仓库中的 docs/ 和 apps/。
+2. 边界划分：设计侧写 specs/plans/tasks/decisions/prototypes；实施侧写 apps/src + project-memory + changes + QA。
+3. 不交叉改同一文件，避免冲突。
+4. 反馈回路：实施过程发现设计问题，记录到 docs/tasks/ 反馈给设计侧，不擅自改设计。
+5. 任一侧均可由不同智能体/工具/人工承担，角色可替换，协议不变。
+```
+
+---
+
+## 10. Git 远程
 
 ```text
 码云（origin）：git@gitee.com:ai-craft/agent-team.git
