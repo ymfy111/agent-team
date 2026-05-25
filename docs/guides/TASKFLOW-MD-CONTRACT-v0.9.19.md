@@ -67,8 +67,8 @@ POC 阶段只允许脚本更新：
 
 | Markdown 区域 | 产品化对象 |
 |---|---|
-| Front Matter | TaskFlowPlan / WorkPackage |
-| `TASKFLOW:NODES` | WorkPackageNode / TaskTicket |
+| Front Matter | TaskFlowPlan / WorkItem |
+| `TASKFLOW:NODES` | WorkItemNode / TaskTicket |
 | `TASKFLOW:STATUS` | TaskTicket.status / TaskExecutionState |
 | `TASKFLOW:EVENTS` | TaskEvent |
 | `TASKFLOW:EVIDENCE` | EvidenceRef |

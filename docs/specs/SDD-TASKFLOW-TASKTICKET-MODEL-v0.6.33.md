@@ -24,10 +24,9 @@
 ```text
 Project
   └── Stage / Plan
-        └── WorkPackage / TaskFlowGroup
-              └── TaskFlow
-                    └── TaskTicket / Node
-                          └── Artifact / Evidence
+        └── TaskFlow
+              └── TaskTicket / Node
+                    └── Artifact / Evidence
 ```
 
 P0 阶段的约定：
@@ -37,27 +36,6 @@ TaskFlow Node = TaskTicket 的文档化视图与轻量实现形式
 ```
 
 也就是说，当前结构化 Markdown 中的节点不是新的平行对象，而是 TaskTicket 在 TaskFlow 文档里的轻量表达。后续如果进入数据库或服务端持久化阶段，可以把 Node 拆解为正式 TaskTicket 记录，TaskFlow 文档仍保留为人和智能体友好的视图。
-
-### 1.1 WorkPackage / TaskFlowGroup
-
-`WorkPackage / TaskFlowGroup` 是 `Stage / Plan` 与 `TaskFlow` 之间的组织层，用于承接一个计划目标下的一组有序任务流。
-
-```text
-Plan / Roadmap
-  └── WorkPackage / TaskFlowGroup
-        ├── TaskFlow-01
-        ├── TaskFlow-02
-        └── TaskFlow-03
-```
-
-P0 阶段的约定：
-
-- 一个 WorkPackage 可以包含多个有顺序、有状态、有依赖关系的 TaskFlow；
-- WorkPackage 维护任务流组状态清单、当前焦点、阻塞项、运行记录链接和评审报告链接；已完成任务若结论已沉淀，原始运行记录/评审报告可清理，仅保留摘要；
-- WorkPackage 不承载每次执行的详细日志，详细过程按需放入 `docs/tasks/runs/` 和 `docs/reports/`，沉淀后可清理；
-- P0 文档化阶段，`docs/tasks/*.md` 的主文档可作为 WorkPackage / TaskFlowGroup 的轻量表现；
-- 不提前引入数据库任务锁、复杂排期算法、Runtime 自动调度或完整工作流引擎。
-
 
 ---
 
@@ -82,36 +60,6 @@ ownerRole: 协同规划岗
 createdAt: 2026-05-24T00:00:00Z
 updatedAt: 2026-05-24T00:10:00Z
 ```
-
-
-### 2.1.1 WorkPackage / TaskFlowGroup
-
-P0 阶段 WorkPackage 用于管理一组有序 TaskFlow，避免 `docs/tasks/` 中出现大量散乱的单任务流文档。
-
-建议字段：
-
-```yaml
-workPackageId: TF-GF-IMPL
-title: Guarded Flow 最小实现工作包
-parentPlan: docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md
-status: running | done | accepted | blocked | deferred
-currentTaskFlow: TF-GF-IMPL-04
-taskFlows:
-  - flowId: TF-GF-IMPL-01
-    status: done
-    goal: 依赖检查最小实现
-    runRef: 已清理，结论沉淀于工作包摘要
-    reportRef: 已清理，结论沉淀于工作包摘要
-  - flowId: TF-GF-IMPL-04
-    status: ready
-    goal: 恢复记录最小实现
-```
-
-设计要点：
-
-1. `plans/` 指向 WorkPackage，不直接管理所有 01/02/03 子任务流。
-2. WorkPackage 只维护状态摘要和必要链接，详细执行过程按需进入 `runs/` 与 `reports/`；任务完成并沉淀后可清理原始过程文件。
-3. WorkPackage 是组织层，不是新的执行层；真正执行的仍是 TaskFlow 与 TaskTicket / Node。
 
 ### 2.2 TaskTicket / Node
 
@@ -189,8 +137,7 @@ commit hash 更适合作为 Artifact / Change Reference，不应单独作为 Evi
 
 | 对象 | 关系 | P0 落地方式 |
 |---|---|---|
-| ProjectPlan / Stage / Plan | WorkPackage / TaskFlowGroup 所属计划或阶段 | Front Matter 或文档正文引用 |
-| WorkPackage / TaskFlowGroup | 一个计划目标下的一组有序 TaskFlow | `docs/tasks/*.md` 工作包主文档 |
+| ProjectPlan / Stage / Plan | TaskFlow 所属计划或阶段 | Front Matter 或文档正文引用 |
 | TaskFlow | 一组 TaskTicket / Node 的编排视图 | 结构化 Markdown |
 | TaskTicket / Node | 最小可执行、可验证任务单元 | Markdown 表格 + 标记区块 |
 | TaskEvent | 状态变化、执行反馈、恢复记录 | JSONL 追加记录 |
@@ -242,10 +189,9 @@ DesignImplementationSync 不是独立执行层，而是围绕 TaskFlow / TaskTic
 
 ## 7. 三文档口径一致性矩阵
 
-| 概念 | SDD 正文口径 | recs 口径 | 本子设计口径 | 结论 |
+| 概念 | SDD 正文口径 | recommendations 口径 | 本子设计口径 | 结论 |
 |---|---|---|---|---|
 | TaskTicket | 系统事实来源 / 最小任务对象 | TaskTicket First，所有协作围绕任务单沉淀 | Node 是 TaskTicket 文档化视图 | 一致 |
-| WorkPackage / TaskFlowGroup | 主 SDD 原有层级未显式展开 | 一组相关 TaskFlow 的工作包清单 | Plan 与 TaskFlow 之间的组织层 | 已补齐 |
 | TaskFlow | Agent-led Task List / Guarded Task Flow 的编排载体 | 用户口头任务和文档清单应产品化 | 一组 TaskTicket / Node 的编排视图 | 一致 |
 | ProjectPlan / Stage / Plan | PlannerAgent 生成 ProjectPlan | 计划进入 TaskTicket | TaskFlow 挂载到 Stage / Plan | 一致 |
 | TaskEvent | 执行反馈与通讯记录 | 执行结果必须回写 | 状态变化、反馈、恢复均追加 TaskEvent | 一致 |

@@ -33,11 +33,11 @@ ReviewRecord / DecisionItem / HandoffPackage：质量、决策与交接沉淀
 | Project | agent-team 项目 | GitHub 仓库 + docs 目录 |
 | ProjectRepository / 事实源 | GitHub main + 沙箱工作区 | 文档、代码、原型、报告 |
 | Stage / Plan | 阶段计划、路线图 | `docs/plans/` |
-| WorkPackage / TaskFlowGroup | 一组有序 TaskFlow 的工作包 | `docs/tasks/*.md` 主文档，如 `TF-GF-IMPL` |
+| WorkItem | 一组有序 TaskFlow 的工作项 | `docs/workitems/*.md` 主文档，如 `TF-GF-IMPL` |
 | TaskFlow | `TF-DOC-STRUCT`、`TF-POC-MD`、`TF-GF-IMPL-01/02/03/04` | 结构化 Markdown 任务流 / 执行记录 |
 | TaskTicket / Node | 每个任务流节点 | Markdown 表格 + `TASKFLOW:STATUS` |
 | Worker / Agent | ChatGPT、OpenCode、后续数字员工 | 任务执行者 / 评审者 / 协同规划者 |
-| Artifact | 文档、脚本、原型、运行记录 | `docs/specs`、`tools`、`docs/tasks/runs` |
+| Artifact | 文档、脚本、原型、运行记录 | `docs/specs`、`tools`、`docs/workitems/runs` |
 | Evidence | 命令输出、截图、评审报告、QA 结果 | `docs/reports`、验证日志 |
 | ReviewRecord | 独立评审与质量结论 | `docs/reports/*Review*.md` |
 | DecisionItem / Blocker | 用户确认、关键取舍、阻塞 | 任务流门禁 / 待决策记录 |
@@ -69,7 +69,7 @@ ReviewRecord / DecisionItem / HandoffPackage：质量、决策与交接沉淀
 
 ```text
 Project / Stage / Plan
-  → WorkPackage / TaskFlowGroup
+  → WorkItem
       → TaskFlow
       → TaskTicket A：协同规划岗
       → TaskTicket B：开发与测试岗
@@ -107,7 +107,7 @@ Project / Stage / Plan
 ```text
 PLAN-SMART-FACTORY（总路线图 / 产品主线）
   → PLAN-SMART-FACTORY-GUARDED-FLOW（Guarded Flow 子路线图）
-    → TF-GF-IMPL（WorkPackage / TaskFlowGroup）
+    → TF-GF-IMPL（WorkItem）
       → TF-GF-IMPL-01/02/03/04（具体 TaskFlow）
 ```
 
@@ -116,11 +116,11 @@ PLAN-SMART-FACTORY（总路线图 / 产品主线）
 ## 6. 当前 plans / tasks 的使用口径
 
 - `docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`：作为 Guarded Flow 子路线图，说明阶段目标和能力演进。
-- `docs/tasks/TF-GF-IMPL.md`：作为 GF-IMPL 工作包 / TaskFlowGroup，维护 01/02/03/04 的状态、已落地能力和下一步。
-- `SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`：作为 TaskFlow / TaskTicket / WorkPackage 产品对象子设计。
+- `docs/workitems/TF-GF-IMPL.md`：作为 GF-IMPL 工作项 / WorkItem，维护 01/02/03/04 的状态、已落地能力和下一步。
+- `SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md`：作为 TaskFlow / TaskTicket / WorkItem 产品对象子设计。
 - `SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md`：作为 skill 经验向产品引擎映射的设计说明。
 
-本次 DOC-CLOSEOUT 后，早期历史建议文件、补丁文件、过程性 run / report 已从 docs 包中清理；可复用内容已沉淀到路线图、工作包、指南、模板和子设计。
+本次 DOC-CLOSEOUT 后，早期历史建议文件、补丁文件、过程性 run / report 已从 docs 包中清理；可复用内容已沉淀到路线图、工作项、指南、模板和子设计。
 
 ---
 

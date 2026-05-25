@@ -230,7 +230,7 @@ minimax 小步执行
 结构化 Markdown 模板按以下顺序补齐：
 
 ```text
-1. STRUCTURED-TASK-MD-TEMPLATE.md
+1. STRUCTURED-WORKITEM-MD-TEMPLATE.md
 2. STRUCTURED-PLAN-MD-TEMPLATE.md
 3. STRUCTURED-DECISION-MD-TEMPLATE.md
 4. STRUCTURED-REVIEW-MD-TEMPLATE.md
@@ -364,15 +364,15 @@ FLOW-REPORT.md  阶段汇总
 短期要求：
 
 - 单个任务使用 `任务执行`；
-- 多工作包使用 `任务流执行`；
-- 用户未明确 SOW 时，先做候选工作包选择；
+- 多工作项使用 `任务流执行`；
+- 用户未明确 SOW 时，先做候选工作项选择；
 - 完成后记录预计/实际耗时，无法精确计时必须明确说明。
 
 ### 12.2 中期：抽象为任务清单产品机制
 
-将 SOW、工作包、任务单、暂停门禁、评审追踪逐步映射到产品模型：
+将 SOW、工作项、任务单、暂停门禁、评审追踪逐步映射到产品模型：
 
-- SOW → 项目阶段 / 工作包；
+- SOW → 项目阶段 / 工作项；
 - taskflow 节点 → 可验收任务组；
 - task → 单个任务单闭环；
 - 暂停 → 待决策 / 阻塞；

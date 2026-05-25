@@ -1,69 +1,56 @@
-﻿# 结构化待决策 Markdown 模板
+# STRUCTURED-DECISION-MD-TEMPLATE
 
-> 用途：记录需要用户介入的关键取舍，作为待决策工作台和任务单流转的可读载体。  
-> 原则：待决策不是聊天记录，应具备问题、选项、推荐方案、风险影响和处理结果。
+> 文档类型：DecisionItem / 待决策模板  
+> 适用场景：TaskFlow 执行中的关键取舍、用户确认、范围变化或阻塞解除。  
+> 原则：待决策不是聊天记录，应具备问题、选项、推荐方案、影响和处理结果。
 
-```md
 ---
-id: DEC-001
-projectId: PROJ-HR-MIGRATION
-taskId: TASK-001
-status: OPEN
+
+```yaml
+id: DEC-EXAMPLE-001
+relatedPlan: PLAN-EXAMPLE
+relatedStage: STAGE-01
+relatedWorkItem: TF-EXAMPLE-IMPL
+relatedTaskFlow: TF-EXAMPLE-001
+relatedTaskTicket: TF-EXAMPLE-001-N02
+status: open
 priority: P1
-ownerRole: planner
-createdBy: emp-planner-1
-createdAt: 2026-05-21T11:00:00+08:00
-updatedAt: 2026-05-21T11:00:00+08:00
+createdAt: 2026-05-25
+updatedAt: 2026-05-25
 recommendedOption: option-a
 resolvedBy: null
 resolvedAt: null
----
-
-# 待决策事项
-
-## 问题
-
-是否保留旧版导出接口的兼容逻辑？
-
-## 背景
-
-说明为什么需要用户决策，以及该问题来自哪个任务单、哪个团队和哪个执行反馈。
-
-## 可选方案
-
-<!-- options:start -->
-### option-a：保留兼容逻辑
-
-优点：风险低；缺点：迁移成本略高。
-
-### option-b：改用新接口
-
-优点：后续维护简单；缺点：需要业务方重新确认。
-<!-- options:end -->
-
-## 推荐方案
-
-<!-- recommendation:start -->
-建议选择 option-a，先保证迁移风险可控。
-<!-- recommendation:end -->
-
-## 风险影响
-
-<!-- impact:start -->
-如果不决策，TASK-001 将停留在 NEEDS_DECISION，无法进入审查。
-<!-- impact:end -->
-
-## 处理结果
-
-<!-- resolution:start -->
-等待用户处理。
-<!-- resolution:end -->
 ```
 
-## 程序更新规则
+# DEC-EXAMPLE-001｜待决策事项
 
-```text
-1. 程序可以更新 status、priority、updatedAt、recommendedOption、resolvedBy、resolvedAt。
-2. 程序可以更新 resolution 标记区块。
-3. 用户处理后，系统应同步更新关联 TaskTicket 的 status 和 nextStep。
-```
+## 1. 问题
+
+说明需要决策的问题。
+
+## 2. 背景
+
+说明问题来自哪个计划、阶段、工作项、任务或步骤，以及为什么需要用户/评审方介入。
+
+## 3. 可选方案
+
+| 选项 | 说明 | 优点 | 风险 |
+|---|---|---|---|
+| option-a | 方案 A | 优点 | 风险 |
+| option-b | 方案 B | 优点 | 风险 |
+
+## 4. 推荐方案
+
+建议选择的方案及理由。
+
+## 5. 影响范围
+
+| 影响对象 | 影响说明 |
+|---|---|
+| WorkItem / TaskFlow / TaskTicket | 说明影响。 |
+
+## 6. 处理结果
+
+| 状态 | 处理人 | 时间 | 结论 |
+|---|---|---|---|
+| open | - | - | 等待处理 |

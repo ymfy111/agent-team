@@ -63,7 +63,7 @@ Guarded Flow 不需要引入复杂状态机，但建议在 TaskTicket 级别保�
 
 | Guarded Flow 概念 | 产品对象 |
 |---|---|
-| 节点依赖 | WorkPackageNode.dependencies |
+| 节点依赖 | WorkItemNode.dependencies |
 | 节点状态 | TaskTicket.status |
 | 暂停原因 | Blocker / DecisionItem |
 | 验证记录 | ValidationResult / ReviewRecord |

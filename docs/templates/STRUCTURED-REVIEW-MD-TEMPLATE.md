@@ -1,59 +1,55 @@
-﻿# 结构化审查 Markdown 模板
+# STRUCTURED-REVIEW-MD-TEMPLATE
 
-> 用途：记录交付审查岗对任务产物的审查意见，作为通过、返工、待决策的依据。  
-> 原则：审查结论必须可回写任务单，不应只存在于聊天记录中。
+> 文档类型：Review / Report 模板  
+> 适用目录：`docs/reports/`  
+> 命名规则：`RPT-<TaskFlowId>-<主题>-vX.md`  
+> 用途：记录评审、验证、复盘结论；不复制完整运行日志。
 
-```md
----
-id: REV-001
-projectId: PROJ-HR-MIGRATION
-taskId: TASK-001
-status: OPEN
-reviewerRole: reviewer
-reviewerAgentId: emp-review-1-1
-result: PENDING
-createdAt: 2026-05-21T12:00:00+08:00
-updatedAt: 2026-05-21T12:00:00+08:00
-requiresRework: false
-requiresDecision: false
 ---
 
-# 审查记录
-
-## 审查对象
-
-说明本次审查的任务、产物、代码路径、文档路径或验证结果。
-
-## 审查结论
-
-<!-- review-result:start -->
-等待交付审查岗填写。
-<!-- review-result:end -->
-
-## 发现问题
-
-<!-- issues:start -->
-暂无。
-<!-- issues:end -->
-
-## 返工要求
-
-<!-- rework:start -->
-暂无返工要求。
-<!-- rework:end -->
-
-## 后续流转建议
-
-<!-- next-flow:start -->
-等待审查结论。
-<!-- next-flow:end -->
+```yaml
+id: RPT-EXAMPLE-001
+relatedTaskFlow: TF-EXAMPLE-001
+relatedWorkItem: TF-EXAMPLE-IMPL
+type: review
+result: PASS
+createdAt: 2026-05-25
+updatedAt: 2026-05-25
 ```
 
-## 程序更新规则
+# RPT-EXAMPLE-001｜示例评审报告
 
-```text
-1. 程序可以更新 status、result、updatedAt、requiresRework、requiresDecision。
-2. 程序可以更新 review-result、issues、rework、next-flow 标记区块。
-3. 如果 requiresRework=true，关联任务应回到 RUNNING 或 REWORK。
-4. 如果 requiresDecision=true，系统应创建或关联 DecisionItem。
-```
+## 1. 评审对象
+
+| 类型 | 对象 | 说明 |
+|---|---|---|
+| WorkItem | TF-EXAMPLE-IMPL | 所属工作项 |
+| TaskFlow | TF-EXAMPLE-001 | 本次评审任务 |
+| Run | `docs/workitems/runs/TF-EXAMPLE-001-RUN-vX.md` | 执行记录 |
+| Artifact | `path/to/artifact` | 评审对象 |
+
+## 2. 评审结论
+
+| 维度 | 结论 | 说明 |
+|---|---:|---|
+| 范围一致性 | PASS | 未发现范围偏移。 |
+| 验证充分性 | PASS | 证据满足 doneCriteria。 |
+| 文档同步 | PASS | 需要回写的文档已同步。 |
+| 风险 | PASS | 未发现 P0/P1 风险。 |
+
+## 3. 问题与遗留
+
+| 类型 | 级别 | 内容 | 处理方式 |
+|---|---:|---|---|
+| 无阻塞 | - | 未发现 P0/P1 问题 | 可继续 |
+
+## 4. 建议
+
+- 下一步建议。
+
+## 5. 回写项
+
+| 文档 | 回写内容 |
+|---|---|
+| `docs/workitems/<WorkItem>.md` | 更新 TaskFlow 状态和报告链接。 |
+| `docs/changes/CHANGELOG-vX.md` | 重要变化时记录。 |

@@ -12,15 +12,15 @@
 `taskflow` skill 已经验证了一套有效的长程任务执行闭环：
 
 ```text
-先确认工作包范围 → 固定节点清单 → 逐节点执行 → 节点内验证与修复 → 可见进度 → 证据记录 → 最终总结
+先确认工作项范围 → 固定节点清单 → 逐节点执行 → 节点内验证与修复 → 可见进度 → 证据记录 → 最终总结
 ```
 
 但它不能被原样复制成普通用户可见 UI。产品化时应将内部执行术语转译为用户可理解的项目推进能力：
 
 | skill 术语 | 产品化术语 | 用户心智 |
 |---|---|---|
-| taskflow | 项目推进计划 / 工作包流 | 这个项目按哪些阶段 / 工作包推进 |
-| node | 可验收工作包 / 阶段任务 | 当前正在完成哪块成果 |
+| taskflow | 项目推进计划 / 工作项流 | 这个项目按哪些阶段推进 |
+| node | 可验收工作项 / 阶段任务 | 当前正在完成哪块成果 |
 | task-runner | 数字员工执行闭环 | 谁负责把这件事做完并验证 |
 | pause gate | 待决策 / 阻塞 / 风险门禁 | 哪些地方需要用户或负责人拍板 |
 | Node Repair Loop | 节点内修复循环 | 失败后先自动修，不轻易打断用户 |
@@ -48,7 +48,7 @@
 第一阶段产品能力不做复杂状态机，先实现：
 
 ```text
-SOW / WorkPackage：定义本轮工作范围与任务流组；
+SOW / WorkItem：定义本轮工作范围；
 ProjectPlan：主智能体生成阶段计划；
 TaskTicket：结构化任务单；
 TaskEvent：任务状态和反馈事件；
@@ -74,7 +74,7 @@ RuntimeHost / RuntimeNode / WorkerRuntimeBinding；
 
 ## 3. 核心对象映射
 
-### 3.1 SOW / WorkPackage
+### 3.1 SOW / WorkItem
 
 用于承接 taskflow 启动前的“本轮工作范围”。
 
@@ -104,39 +104,11 @@ status: CONFIRMED
 
 ```text
 1. SOW 是“本轮做什么 / 不做什么”的边界，不等同于完整项目计划。
-2. taskflow 未给出明确 SOW 时，应先让用户选择候选工作包。
-3. SOW 通过后，才能生成 TaskTicket 或 WorkPackage nodes。
+2. taskflow 未给出明确 SOW 时，应先让用户选择候选工作项。
+3. SOW 通过后，才能生成 TaskTicket 或 WorkItem nodes。
 ```
 
-### 3.1.1 WorkPackage / TaskFlowGroup
-
-`WorkPackage / TaskFlowGroup` 是产品化后的工作包层，用于承接一个阶段计划下的一组有序 TaskFlow。它对应当前 `docs/tasks/*.md` 的工作包主文档。
-
-```yaml
-workPackageId: TF-GF-IMPL
-parentPlanId: PLAN-GUARDED-FLOW
-title: Guarded Flow 最小实现工作包
-status: RUNNING
-currentFlowId: TF-GF-IMPL-04
-flows:
-  - flowId: TF-GF-IMPL-01
-    status: DONE
-    capability: 依赖检查
-  - flowId: TF-GF-IMPL-02
-    status: DONE
-    capability: Blocker / Decision 检查
-  - flowId: TF-GF-IMPL-04
-    status: READY
-    capability: 恢复记录
-```
-
-设计要点：
-
-1. Plan / Roadmap 不直接管理大量 01/02/03 子任务流，而是指向 WorkPackage。
-2. WorkPackage 维护一组 TaskFlow 的顺序、状态、当前焦点、运行记录和评审链接。
-3. WorkPackage 不替代 TaskFlow 执行；真正的执行、证据和事件仍发生在 TaskFlow / TaskTicket 层。
-
-### 3.2 TaskFlowPlan / WorkPackageNode
+### 3.2 TaskFlowPlan / WorkItemNode
 
 承接 taskflow 节点表格格式。
 
@@ -164,14 +136,14 @@ nodes:
 设计要点：
 
 ```text
-1. 产品中节点不应过碎，应代表可交付、可验收的工作包。
-2. 简单编辑、单次检查、局部修复不应单独成为 WorkPackageNode，应归入节点内部执行步骤。
+1. 产品中节点不应过碎，应代表可交付、可验收的工作项。
+2. 简单编辑、单次检查、局部修复不应单独成为 WorkItemNode，应归入节点内部执行步骤。
 3. 节点表格的“目标 / 验收点 / 预计耗时”可直接成为产品任务流字段。
 ```
 
 ### 3.3 TaskTicket
 
-TaskTicket 是单个可执行任务单，通常由 WorkPackageNode 拆出。
+TaskTicket 是单个可执行任务单，通常由 WorkItemNode 拆出。
 
 ```yaml
 taskId: TASK-001
@@ -186,7 +158,7 @@ inputs:
   - skills/taskflow/SKILL.md
   - skills/taskflow/README.md
 outputs:
-  - docs/guides/TASKFLOW-GOVERNANCE-v0.9.25.md
+  - docs/guides/TASKFLOW-GOVERNANCE-v0.9.11.md
 acceptanceCriteria:
   - 启动清单格式固定为表格
   - README 与文档导航同步
@@ -215,7 +187,7 @@ fromAgentId: emp-planner-001
 summary: 已同步 SKILL.md、README、文档导航和治理指南
 createdAt: 2026-05-24T20:05:00+08:00
 evidenceRefs:
-  - docs/guides/TASKFLOW-GOVERNANCE-v0.9.25.md
+  - docs/guides/TASKFLOW-GOVERNANCE-v0.9.11.md
   - _local/taskflow/TF-GOV-02-N02-list-output.md
 ```
 
@@ -243,7 +215,7 @@ decisionId: DEC-001
 flowId: FLOW-001
 nodeId: FLOW-001-N03
 question: 是否把 taskflow 内部节点术语直接显示到普通用户界面？
-context: 技能中使用 node/taskflow，但普通用户更理解项目阶段、工作包和待决策
+context: 技能中使用 node/taskflow，但普通用户更理解项目阶段、工作项和待决策
 options:
   - 保留内部术语
   - 转译为项目推进和岗位产出
@@ -280,9 +252,9 @@ status: OPEN
 ```yaml
 evidenceId: EVD-001
 type: DOC
-path: docs/guides/TASKFLOW-GOVERNANCE-v0.9.25.md
+path: docs/guides/TASKFLOW-GOVERNANCE-v0.9.11.md
 relatedTaskId: TASK-001
-summary: taskflow 当前治理指南
+summary: taskflow 启动清单格式与文档同步治理指南
 createdAt: 2026-05-24T20:05:00+08:00
 ```
 
@@ -363,7 +335,7 @@ createdAt: 2026-05-24T20:05:00+08:00
 |---|---|
 | 过早实现复杂状态机 | 第一阶段只做 Agent-led Task List 和轻量字段校验 |
 | taskflow 内部术语污染用户 UI | 产品文案做语义转译 |
-| 任务拆得过碎 | WorkPackageNode 只代表可验收工作包，内部步骤由数字员工自主管理 |
+| 任务拆得过碎 | WorkItemNode 只代表可验收工作项，内部步骤由数字员工自主管理 |
 | 进度与事实不一致 | TaskEvent / EvidenceRef 作为事实源，不依赖聊天上下文 |
 | 智能体长期卡住 | 引入 Blocker、ExecutionLease、超时和中断报告 |
 | skill 改了但文档没同步 | v0.9.11 规则要求同步 README、导航、版本说明或交接说明 |
