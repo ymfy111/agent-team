@@ -42,8 +42,8 @@ pauseGates:
 
 ### 范围内
 
-- 工作项 A
-- 工作项 B
+- 工作包 A
+- 工作包 B
 
 ### 范围外
 
@@ -151,10 +151,10 @@ pauseGates:
 | 模板字段 | skill / runner 用途 | 产品化对象 |
 |---|---|---|
 | `flowId` | 任务流标识 | TaskFlowPlan.flowId |
-| `baseline` | 当前基线 | WorkItem.baseline |
-| `mode` | 执行模式 | WorkItem.acceptanceMode |
+| `baseline` | 当前基线 | WorkPackage.baseline |
+| `mode` | 执行模式 | WorkPackage.acceptanceMode |
 | `freezeItems` | 冻结项 | SOW.freezeItems |
-| 节点清单 | 计划与执行单元 | WorkItemNode / TaskTicket |
+| 节点清单 | 计划与执行单元 | WorkPackageNode / TaskTicket |
 | 节点执行状态 | 进度恢复与总结 | TaskEvent / TaskTicket.status |
 | 证据引用 | 验收证据 | EvidenceRef |
 | 阻塞与待决策 | 暂停门禁 | Blocker / DecisionItem |

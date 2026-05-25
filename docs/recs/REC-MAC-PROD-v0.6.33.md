@@ -66,7 +66,7 @@ Git 仓库承载最终事实
 → AcceptanceRecord / ReworkOrder → Activity 回写
 ```
 
-TaskTicket 是执行层的核心挂载点；WorkItem 是计划到任务流的组织层。TaskTicket 是其他执行对象的挂载点：
+TaskTicket 是执行层的核心挂载点；WorkPackage / TaskFlowGroup 是计划到任务流的组织层。TaskTicket 是其他执行对象的挂载点：
 
 ```text
 Workspace 服务哪个任务
@@ -93,20 +93,20 @@ P0 阶段的任务单不需要很复杂，但至少应包含：
 
 关键原则：可以聊天、讨论和临时探索，但关键结论必须回写到 TaskTicket、Artifact、ReviewRecord、DecisionItem 或 AcceptanceRecord 中，不能只停留在聊天上下文。
 
-### 3.0.1 WorkItem：工作项 / 工作项
+### 3.0.1 WorkPackage / TaskFlowGroup：任务流组 / 工作包
 
-在 `Project / Stage / Plan` 与具体 `TaskFlow` 之间，应补充轻量的 `WorkItem` 层。
+在 `Project / Stage / Plan` 与具体 `TaskFlow` 之间，应补充轻量的 `WorkPackage / TaskFlowGroup` 层。
 
 它用于承接一个计划目标下的一组有序任务流，例如 `TF-GF-IMPL` 包含 `TF-GF-IMPL-01/02/03/04`。
 
 P0 阶段建议：
 
 - `plans/` 维护阶段目标和能力路线；
-- `tasks/` 主文档维护 WorkItem 状态清单；
+- `tasks/` 主文档维护 WorkPackage / TaskFlowGroup 状态清单；
 - `tasks/runs/` 记录单次 TaskFlow 执行审计；
 - reports 记录评审、验证和复盘。
 
-WorkItem 不应变成新的复杂执行层，只维护工作项的状态、当前焦点、运行记录链接和后续动作。
+WorkPackage 不应变成新的复杂执行层，只维护任务流组的状态、当前焦点、运行记录链接和后续动作。
 
 ### 3.1 Workspace：外部工作空间
 

@@ -524,3 +524,26 @@ RUNNING → NEEDS_DECISION → WAITING_USER → RUNNING / REVIEWING / REPLAN
 - 团队页不得继续显示已下架的“系统架构师 / 技术专家岗”作为用户可见岗位；相关评审能力应沉淀到交付审查岗、决策支持或后续后台机制中。
 - 团队页应补充“岗位产出”摘要：协同规划岗输出计划和任务拆解，实现验证岗输出实现和验证反馈，交付审查岗输出审查结论与下一步建议。
 - 任何任务流或状态机机制只作为设计/运行机制参考，不作为当前普通用户界面的主表达。
+
+
+---
+
+## 13. TaskFlow First 产品对象模型收口
+
+当前产品对象模型以 `docs/specs/SDD-TASKFLOW-TASKTICKET-MODEL-v0.6.33.md` 为专项设计事实源。主 SDD 保留总体架构口径：
+
+```text
+用户侧：计划 / 阶段 / 工作项 / 任务 / 步骤
+设计侧：Plan / Stage / WorkItem / TaskFlow / TaskTicket
+```
+
+核心边界：
+
+1. 用户与组长智能体对话；组长负责理解目标、解释状态、提出计划和决策建议。
+2. Orchestrator 负责把确认后的意图转为结构化任务、消息、评审、决策和状态变更，并负责调度、状态、事件、超时、恢复和升级。
+3. 大模型智能体完成真实认知和执行工作，包括需求、设计、计划拆解、任务执行和评审。
+4. 软件工厂侧负责 WorkItem → TaskFlow；被指派执行智能体负责 TaskFlow → TaskTicket / 步骤。
+5. 对话不是事实源；TaskFlow / TaskTicket / TaskEvent / EvidenceRef / ReviewRecord / DecisionItem / HandoffPackage 才是项目执行事实源。
+6. Webhook 只作为加速信号，最终状态应以持久化事件账本和 Orchestrator 对账结果为准。
+
+后续 `TF-LEADER-SKILL`、`TF-RUNTIME-ORCH`、`TF-FACTORY-UI` 应以该对象模型为前置输入。

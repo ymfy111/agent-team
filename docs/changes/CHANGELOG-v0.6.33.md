@@ -14,7 +14,7 @@
 
 ```text
 docs/decisions/ADR-0009-Agent-Team-Orchestration-v0.6.33.md
-docs/templates/STRUCTURED-WORKITEM-MD-TEMPLATE.md
+docs/templates/STRUCTURED-TASK-MD-TEMPLATE.md
 docs/templates/STRUCTURED-PLAN-MD-TEMPLATE.md
 docs/templates/STRUCTURED-DECISION-MD-TEMPLATE.md
 docs/templates/STRUCTURED-REVIEW-MD-TEMPLATE.md
@@ -28,7 +28,7 @@ docs/reports/DOC-QA-Report-v0.6.33.md
 docs/specs/PRD-v0.6.33.md
 docs/specs/SDD-v0.6.33.md
 docs/plans/IMPL-PLN-v0.6.33.md
-docs/workitems/WBS-v0.6.33.md
+docs/tasks/WBS-v0.6.33.md
 docs/changes/CHANGELOG-v0.6.33.md
 docs/文档导航.md
 ```
@@ -154,7 +154,7 @@ managed task 说明长程任务中可以连续执行子任务，但必须保留�
 - 原型：修复团队页旧“技术专家 / 系统架构师 / 待介入”口径残留；
 - 原型：清理异常重复占位文本；
 - 原型：团队页补充计划、执行、审查三类岗位产出摘要；
-- 文档：同步 taskflow v0.6 的 SOW 选择、工作项颗粒度、逐节点进度、临时计时和暂停/恢复/退出规则；
+- 文档：同步 taskflow v0.6 的 SOW 选择、工作包颗粒度、逐节点进度、临时计时和暂停/恢复/退出规则；
 - 设计：明确 taskflow 是单智能体串行参考模型，智能工厂是多智能体并行协同系统。
 
 
@@ -184,7 +184,7 @@ managed task 说明长程任务中可以连续执行子任务，但必须保留�
 - 更新 `skills/taskflow/SKILL.md`、`skills/taskflow/README.md`、`skills-README.md`，补充 skill 更新必须同步配套文档的规则。
 - 新增 `docs/guides/TASKFLOW-GOVERNANCE-v0.9.11.md`。
 - 新增 `docs/specs/SDD-TASKFLOW-SKILL-PRODUCT-MAPPING-v0.6.33.md`，说明 taskflow skill 经验到 SOW / TaskTicket / DecisionItem / Blocker / TaskEvent 的产品化映射。
-- 新增 `docs/workitems/DEV-TASKFLOW-NEXT-v0.6.33.45.md`，建议下一阶段优先推进结构化 Markdown 模板与 Agent-led Task List POC。
+- 新增 `docs/tasks/DEV-TASKFLOW-NEXT-v0.6.33.45.md`，建议下一阶段优先推进结构化 Markdown 模板与 Agent-led Task List POC。
 - 未提升产品版本号，仍沿用 v0.6.33.45 基线。
 
 ## TF-GOV-03 / v0.6.33.45 taskflow 节点进度可见性修正
@@ -196,10 +196,3 @@ managed task 说明长程任务中可以连续执行子任务，但必须保留�
 - 文档：同步更新 `skills/taskflow/SKILL.md`、`skills/taskflow/README.md`、`skills-README.md`、`docs/guides/TASKFLOW-GOVERNANCE-v0.9.12.md`、`docs/reports/TF-GOV-03-Taskflow-Progress-Visibility-Review-v0.6.33.45.md` 和 `docs/文档导航.md`。
 - 工具：`tools/taskflow/taskflow.mjs` 的 progress / summary / visible-summary 输出需匹配 7 列节点进度表。
 - 未提升产品版本号，仍沿用 v0.6.33.45 基线。
-
-## DOCS-FINAL-CHECK｜docs 完整性收尾复查
-
-- 统一当前命名口径：用户侧为计划 / 阶段 / 工作项 / 任务 / 步骤；设计侧为 Plan / Stage / WorkItem / TaskFlow / TaskTicket。
-- 将当前目录收口为 `plans / workitems / workitems/runs / reports / specs / guides / templates / recs / prototypes`。
-- 保留主规格、专项设计、模板、原型归档和当前工作项；清理旧 `tasks/`、旧 `recommendations/`、旧 roadmap 文件名和旧 governance 多版本堆积。
-- 新增 `docs/reports/RPT-DOCS-FINAL-CHECK-v0.6.33.45.md` 作为本轮完整性复查报告。

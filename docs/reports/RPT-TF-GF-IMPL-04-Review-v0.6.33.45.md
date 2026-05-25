@@ -1,8 +1,8 @@
 # RPT-TF-GF-IMPL-04｜恢复记录最小实现评审报告
 
 > 文档类型：ReviewRecord / 评审报告  
-> 关联工作项：`docs/workitems/TF-GF-IMPL.md`  
-> 关联运行记录：`docs/workitems/runs/TF-GF-IMPL-04-RUN-v0.6.33.45.md`  
+> 关联工作包：`docs/tasks/TF-GF-IMPL.md`  
+> 关联运行记录：`docs/tasks/runs/TF-GF-IMPL-04-RUN-v0.6.33.45.md`  
 > 基线：v0.6.33.45 / taskflow v0.9.26  
 > 结论：PASS
 

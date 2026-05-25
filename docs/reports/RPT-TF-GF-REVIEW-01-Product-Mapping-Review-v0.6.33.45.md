@@ -9,13 +9,13 @@
 
 ## 1. 评审结论
 
-当前 `taskflow skill + 结构化 Markdown + taskflow-md.mjs` 已经具备“单智能体软件工厂引擎”的 P0 雏形能力：它能以任务流为事实主线，把计划拆成工作项、任务流和任务节点，并围绕节点记录事件、证据、阻塞、决策、验证和恢复。
+当前 `taskflow skill + 结构化 Markdown + taskflow-md.mjs` 已经具备“单智能体软件工厂引擎”的 P0 雏形能力：它能以任务流为事实主线，把计划拆成工作包、任务流和任务节点，并围绕节点记录事件、证据、阻塞、决策、验证和恢复。
 
 但这套能力不应直接等同于完整软件工厂产品。产品化时应将其抽象为：
 
 ```text
-计划 / 阶段 / 工作项 / 任务流 / 任务节点（任务票）
-Plan / Stage / WorkItem / TaskFlow / TaskTicket(Node)
+计划 / 阶段 / 工作包 / 任务流 / 任务节点（任务票）
+Plan / Stage / WorkPackage / TaskFlow / TaskTicket(Node)
 ```
 
 当前适合进入下一步产品化映射和对象边界设计，不建议立即做 Runtime 自动调度或复杂状态机。
@@ -28,8 +28,8 @@ Plan / Stage / WorkItem / TaskFlow / TaskTicket(Node)
 |---|---|---|
 | `docs/plans/PLAN-SMART-FACTORY.md` | Plan / Roadmap | 项目级路线图，回答为什么做和能力演进方向。 |
 | `docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md` | Stage / Plan 子阶段 | Guarded Flow 阶段目标与能力路线。 |
-| `docs/workitems/TF-GF-IMPL.md` | WorkItem | 一组有序 TaskFlow 的工作项状态看板。 |
-| `docs/workitems/runs/TF-*-RUN*.md` | TaskFlow Run / TaskEvent Ledger | 单次任务流执行记录与生命周期审计。 |
+| `docs/tasks/TF-GF-IMPL.md` | WorkPackage / TaskFlowGroup | 一组有序 TaskFlow 的工作包状态看板。 |
+| `docs/tasks/runs/TF-*-RUN*.md` | TaskFlow Run / TaskEvent Ledger | 单次任务流执行记录与生命周期审计。 |
 | `TASKFLOW:NODES` | TaskTicket / Node 计划视图 | 节点目标、验收点、依赖和暂停门禁。 |
 | `TASKFLOW:STATUS` | TaskTicket 状态视图 | 节点状态、实际开始/完成时间、结果和耗时。 |
 | `TASKFLOW:EVENTS` JSONL | TaskEvent | 节点开始、完成、恢复、状态变化等事实事件。 |
@@ -45,7 +45,7 @@ Plan / Stage / WorkItem / TaskFlow / TaskTicket(Node)
 
 | 能力 | 当前实现 | 产品化意义 |
 |---|---|---|
-| 工作项看板 | `TF-GF-IMPL.md` | 避免任务流文件过多，形成计划到执行的中间组织层。 |
+| 工作包看板 | `TF-GF-IMPL.md` | 避免任务流文件过多，形成计划到执行的中间组织层。 |
 | 依赖门禁 | `validate-dependencies` / `start-node` 依赖检查 | 防止任务无序推进。 |
 | Blocker / Decision 门禁 | `validate-gates` | 防止带着阻塞或待决策继续执行。 |
 | 验证失败状态 | `needs_review` / `blocked` | 防止失败节点被伪装成完成。 |
@@ -63,7 +63,7 @@ Plan / Stage / WorkItem / TaskFlow / TaskTicket(Node)
 | 当前执行由单智能体 / ChatGPT 驱动，不具备多运行体调度 | P1 | 后续 Runtime 设计再接 WorkerRuntimeBinding / ExecutionLease。 |
 | TaskEvent 仅在 Markdown JSONL 中追加 | P1 | 产品化时迁移为可查询事件表或事件流。 |
 | 报告和证据主要是文档路径 | P2 | 后续补 EvidenceRef 类型、targetArtifact 和校验结果字段。 |
-| UI 尚未表达 WorkItem / TaskFlow / TaskTicket 层级 | P2 | 进入产品 UI 设计时补任务流看板和执行报告视图。 |
+| UI 尚未表达 WorkPackage / TaskFlow / TaskTicket 层级 | P2 | 进入产品 UI 设计时补任务流看板和执行报告视图。 |
 | 状态流仍是 P0 最小语义，不是完整状态机 | P2 | 当前不扩展，等产品对象稳定后再引入状态机。 |
 
 ---
@@ -73,7 +73,7 @@ Plan / Stage / WorkItem / TaskFlow / TaskTicket(Node)
 建议下一阶段不要继续堆工具命令，而是进入“产品对象 + 界面 + Runtime 边界”的分层评审：
 
 1. **TF-PROD-MODEL-01｜TaskFlow First 产品对象最小模型**  
-   明确 WorkItem、TaskFlow、TaskTicket、TaskEvent、EvidenceRef、ReviewRecord、DecisionItem 的最小字段和关系。
+   明确 WorkPackage、TaskFlow、TaskTicket、TaskEvent、EvidenceRef、ReviewRecord、DecisionItem 的最小字段和关系。
 
 2. **TF-FACTORY-UI-01｜任务流优先 UI 信息架构评审**  
    评审首页、项目页、员工页、协作全景如何从“对话入口”转向“任务流推进看板”。
@@ -87,7 +87,7 @@ Plan / Stage / WorkItem / TaskFlow / TaskTicket(Node)
 
 | 维度 | 结论 | 说明 |
 |---|---|---|
-| 产品方向 | PASS | TaskFlow First 与 WorkItem 层级能支撑软件工厂主线。 |
+| 产品方向 | PASS | TaskFlow First 与 WorkPackage 层级能支撑软件工厂主线。 |
 | 当前 P0 能力 | PASS | 依赖、门禁、状态失败、恢复、证据和审计能力已形成闭环。 |
 | 复杂度控制 | PASS | 仍保持 P0 文档化和脚本化边界，未提前引入完整调度系统。 |
 | 产品化准备度 | WARN | 对象 ID、事件查询、UI 表达和 Runtime 绑定仍需后续设计。 |

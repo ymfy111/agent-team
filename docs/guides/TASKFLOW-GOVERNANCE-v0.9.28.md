@@ -43,6 +43,6 @@ node tools/taskflow/taskflow-md.mjs render-report --file docs/workitems/runs/<Ta
 
 - 不在主对话中堆叠完整命令日志；
 - 不为每个步骤单独建长期文档；
-- 不用 `docs/workitems/` 作为当前记录目录；
+- 不用 `docs/tasks/` 作为当前记录目录；
 - 不把 WorkItem 叫“需求”；
 - 不承诺当前 ChatGPT 普通对话能无人值守实时输出每个步骤。
