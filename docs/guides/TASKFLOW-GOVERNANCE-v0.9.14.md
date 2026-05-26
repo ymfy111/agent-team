@@ -49,7 +49,7 @@
 长程任务不能只在工具活动或缓存里推进。taskflow 必须使用脚本缓存记录节点生命周期，并把缓存进度同步到主对话窗口。
 
 ```text
-缓存事实源：.taskflow/taskflows/<taskflowId>.json
+缓存事实源：.runtime/exec/taskflows/<taskflowId>.json
 开始节点：taskflow.mjs start → 写入 start event
 完成节点：taskflow.mjs done/fail → 写入 done/fail event
 生成待展示文本：taskflow.mjs render-pending

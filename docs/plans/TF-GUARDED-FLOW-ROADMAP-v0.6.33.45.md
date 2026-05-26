@@ -11,7 +11,7 @@
 Plan / Roadmap：docs/plans/TF-GUARDED-FLOW-ROADMAP-v0.6.33.45.md
   → WorkPackage / TaskFlowGroup：docs/tasks/TF-GF-IMPL-v0.6.33.45.md
     → TaskFlow：TF-GF-IMPL-01/02/03/04
-      → Run：docs/tasks/runs/TF-GF-IMPL-xx-RUN-v0.6.33.45.md
+      → Run：docs/tasks/<WorkItemId>/TF-GF-IMPL-xx-RUN-v0.6.33.45.md
 ```
 
 ## 1. 阶段关系

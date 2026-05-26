@@ -4,7 +4,7 @@
 > 当前基线：v0.6.33.45
 > 所属计划：`docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`
 > 状态：running
-> 当前焦点：`TF-GF-IMPL-04｜恢复记录最小实现`
+> 当前焦点：`TF-GF-REVIEW-01｜Guarded Flow 产品化映射评审`
 
 ---
 
@@ -31,8 +31,8 @@
 | TF-GF-IMPL-01 | done | 依赖检查最小实现 | `validate-dependencies` | 已清理，结论沉淀于本表 | 已清理，结论沉淀于本表 | 已完成 |
 | TF-GF-IMPL-02 | done | Blocker / Decision 检查最小实现 | `validate-gates` | 已清理，结论沉淀于本表 | 已清理，结论沉淀于本表 | 已完成 |
 | TF-GF-IMPL-03 | done | 验证失败状态最小实现 | `validate-statuses` | 已清理，结论沉淀于本表 | 已清理，结论沉淀于本表 | 已完成 |
-| TF-GF-IMPL-04 | ready | 恢复记录最小实现 | `resume-node` / `append-event` 待定 | 待生成 | 待生成 | 下一步候选 |
-| TF-GF-REVIEW-01 | planned | Guarded Flow 产品化映射评审 | 待定 | 待生成 | 待生成 | TF-GF-IMPL-04 后执行 |
+| TF-GF-IMPL-04 | done | 恢复记录最小实现 | `resume-node` / `append-event` | `docs/tasks/TF-GF-IMPL/TASK_TF-GF-IMPL-04.md` | 结论沉淀于本表与 Task 正式记录 | 已完成 |
+| TF-GF-REVIEW-01 | ready | Guarded Flow 产品化映射评审 | 待定 | 待生成 | 待生成 | 下一步候选 |
 
 状态说明：
 
@@ -49,16 +49,21 @@
 
 ## 4. 当前焦点
 
-下一步建议：`TF-GF-IMPL-04｜恢复记录最小实现`。
+当前完成：`TF-GF-IMPL-04｜恢复记录最小实现`。
 
-目标：补充节点从 `needs_review / blocked / paused` 等状态恢复继续时的最小事件记录能力。
+已落地能力：
 
-边界：
+- `resume-node`：从 `blocked / paused / needs_review / failed` 等状态恢复节点，记录 `fromStatus / toStatus / reason / evidence / actor / resumedAt`。
+- `append-event`：追加通用结构化事件，用于补充恢复依据、评审说明或证据引用。
+
+落地边界：
 
 - 不做完整状态机；
 - 不做 UI；
 - 不做 Runtime 自动调度；
-- 只补最小命令或事件追加能力，并用结构化 Markdown 运行副本验证。
+- 只补最小恢复事件与通用事件追加能力，并用 taskflow JSON 账本验证。
+
+下一步建议：`TF-GF-REVIEW-01｜Guarded Flow 产品化映射评审`。
 
 ---
 
@@ -76,3 +81,4 @@
 |---|---|---|
 | 2026-05-24 | 新建 GF-IMPL 工作项文档，统一管理 01/02/03/04 状态 | WorkItem 层级收口 |
 | 2026-05-24 | DOC-CLOSEOUT：清理已完成任务的历史 run/report，保留本工作项状态摘要作为当前入口 | 文档瘦身与事实源收口 |
+| 2026-05-25 | TF-GF-IMPL-04：落地恢复记录最小实现，新增 `resume-node` / `append-event` 并生成 Task 正式记录 | 恢复记录最小闭环 |

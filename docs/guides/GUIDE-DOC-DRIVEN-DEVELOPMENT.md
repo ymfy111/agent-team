@@ -44,7 +44,7 @@
 | 主需求 / 主设计 / 子设计 | `docs/specs/` | 长期基线，定义产品、系统和专项设计边界。 |
 | 计划 / 阶段 / 路线图 | `docs/plans/` | 管目标、阶段和工作项清单，不写详细执行日志。 |
 | 工作项 | `docs/workitems/` | 一个主文档对应一个 WorkItem，管理一组相关 TaskFlow。 |
-| 任务流运行记录 | `docs/workitems/runs/` | 记录某次 TaskFlow 执行的节点、事件、证据和审计。 |
+| 任务流运行记录 | `docs/tasks/<WorkItemId>/` | 记录某次 TaskFlow 执行的节点、事件、证据和审计。 |
 | 评审 / 验证 / 复盘 | `docs/reports/` | 保存关键任务后的评审、验证和复盘结论。 |
 | 建议类文档 | `docs/recs/` | 产品化建议、演进建议、方案建议。 |
 | 规范 / 指南 | `docs/guides/` | 方法、规范、执行规则。 |
@@ -109,7 +109,7 @@ WorkItem 文档是活文档，不建议在文件名里带版本号；状态变�
 TaskFlow 执行时动态生成步骤 / TaskTicket。步骤默认记录在：
 
 ```text
-docs/workitems/runs/<TaskFlowId>-RUN-vX.md
+docs/tasks/<WorkItemId>/<TaskFlowId>-RUN-vX.md
 ```
 
 评审、验证、复盘记录默认放在：
@@ -148,7 +148,7 @@ docs/reports/RPT-<TaskFlowId>-<主题>-vX.md
 |---|---|
 | `docs/templates/STRUCTURED-PLAN-MD-TEMPLATE.md` | `docs/plans/PLAN-*.md` |
 | `docs/templates/STRUCTURED-WORKITEM-MD-TEMPLATE.md` | `docs/workitems/*.md` |
-| `docs/templates/STRUCTURED-TASKFLOW-MD-TEMPLATE.md` | `docs/workitems/runs/*-RUN-*.md` 或 TaskFlow 执行结构 |
+| `docs/templates/STRUCTURED-TASKFLOW-MD-TEMPLATE.md` | `docs/tasks/<WorkItemId>/*-RUN-*.md` 或 TaskFlow 执行结构 |
 | `docs/templates/STRUCTURED-REVIEW-MD-TEMPLATE.md` | `docs/reports/RPT-*.md` |
 | `docs/templates/STRUCTURED-DECISION-MD-TEMPLATE.md` | DecisionItem / 待决策记录 |
 
@@ -163,7 +163,7 @@ docs/reports/RPT-<TaskFlowId>-<主题>-vX.md
 完成一个 TaskFlow 后，默认更新：
 
 1. `docs/workitems/<WorkItem>.md`：更新 TaskFlow 状态、关键产出、Run / Report 链接和下一步。
-2. `docs/workitems/runs/<TaskFlowId>-RUN-vX.md`：保存执行节点、事件、证据和审计。
+2. `docs/tasks/<WorkItemId>/<TaskFlowId>-RUN-vX.md`：保存执行节点、事件、证据和审计。
 3. `docs/reports/RPT-<TaskFlowId>-<主题>-vX.md`：保存评审、验证或复盘。
 4. `docs/changes/CHANGELOG-vX.md`：记录重要文档、命名、目录或设计口径变化。
 5. `docs/project-memory.md`：只记录对后续持续有影响的结论。

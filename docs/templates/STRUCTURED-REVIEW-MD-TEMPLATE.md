@@ -25,7 +25,7 @@ updatedAt: 2026-05-25
 |---|---|---|
 | WorkItem | TF-EXAMPLE-IMPL | 所属工作项 |
 | TaskFlow | TF-EXAMPLE-001 | 本次评审任务 |
-| Run | `docs/workitems/runs/TF-EXAMPLE-001-RUN-vX.md` | 执行记录 |
+| Run | `docs/tasks/TF-EXAMPLE/TASK_TF-EXAMPLE-001.md` | 执行记录 |
 | Artifact | `path/to/artifact` | 评审对象 |
 
 ## 2. 评审结论

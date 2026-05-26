@@ -23,21 +23,21 @@
 ```text
 docs/plans/             计划 / 阶段 / 路线图
 docs/workitems/         工作项文档，一个主文档对应一个 WorkItem
-docs/workitems/runs/    任务运行记录，即 TaskFlow Run
+docs/tasks/<WorkItemId>/    任务运行记录，即 TaskFlow Run
 docs/reports/           评审、验证、复盘报告
 ```
 
 正式任务示例：
 
 ```text
-docs/workitems/runs/TF-PROD-MODEL-02-RUN-v0.6.33.45.md
+docs/tasks/<WorkItemId>/TF-PROD-MODEL-02-RUN-v0.6.33.45.md
 docs/reports/RPT-TF-PROD-MODEL-02-Review-v0.6.33.45.md
 ```
 
 临时任务示例：
 
 ```text
-docs/workitems/runs/TF-TEMP-DOC-SYNC-01-RUN-v0.6.33.45.md
+docs/tasks/<WorkItemId>/TF-TEMP-DOC-SYNC-01-RUN-v0.6.33.45.md
 docs/reports/RPT-TF-TEMP-DOC-SYNC-01-Review-v0.6.33.45.md
 ```
 
@@ -57,7 +57,7 @@ docs/reports/RPT-TF-TEMP-DOC-SYNC-01-Review-v0.6.33.45.md
 优先用脚本根据 run 记录生成报告：
 
 ```bash
-node tools/taskflow/taskflow-md.mjs render-report --file docs/workitems/runs/<TaskFlowId>-RUN-vX.md
+node tools/taskflow/taskflow-md.mjs render-report --file docs/tasks/<WorkItemId>/<TaskFlowId>-RUN-vX.md
 ```
 
 报告应使用用户侧命名：任务、步骤、工作项。表格设计上，短字段列保持窄，关键产出 / 问题内容列保留更大宽度。

@@ -72,4 +72,4 @@ currentFocus: WI-EXAMPLE-IMPL
 1. Plan 文档说明阶段目标和工作项，不写详细 TaskTicket 节点。
 2. 一个计划可以包含多个阶段，一个阶段可以包含多个工作项。
 3. 工作项状态变化后，应回写本计划的“工作项总览”或“当前焦点”。
-4. 任务流执行细节放入 `docs/workitems/runs/`，不要复制进 Plan。
+4. Task 正式记录放入 `docs/tasks/<WorkItemId>/`，不要复制进 Plan。

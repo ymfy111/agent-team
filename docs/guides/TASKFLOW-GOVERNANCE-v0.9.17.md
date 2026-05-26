@@ -85,7 +85,7 @@ v0.9.17 将“检查点模式”降级为测试/降级/人工验收专用。真�
 缓存事实源仍是：
 
 ```text
-.taskflow/taskflows/<taskflowId>.json
+.runtime/exec/taskflows/<taskflowId>.json
 ```
 
 最小链路：

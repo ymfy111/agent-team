@@ -2,7 +2,7 @@
 
 > 版本：v0.6.33  
 > 文档更新批次：2026-05-21 / Agent Team 编排架构回写  
-> 最新原型安全基线：v0.6.33.29  
+> 最新原型安全基线：v0.6.33.45  
 > 状态：补充“主智能体任务清单驱动 → 轻量状态约束 → 程序状态机编排 → Runtime 工厂化调度”的分阶段系统设计。
 
 ---
@@ -102,10 +102,13 @@ REPLAN            调用协同规划岗重规划
 ```text
 RuntimeHost
 RuntimeNode
+RuntimeGateway
 WorkerRuntimeBinding
+WorkspaceBinding
 SkillSnapshot
 Workspace
 AgentRoute
+RuntimeDiagnostics
 ToolPermissionProfile
 ExecutionLease
 Heartbeat
@@ -114,6 +117,10 @@ AuditLog
 ```
 
 该阶段支持多项目、多团队、多数字员工并发、失败恢复、超时处理、工具权限和运行统计。
+
+阶段 D 的设计原则是：**不要把智能软件工厂做成 Web IDE，而是把 Web IDE/Gateway 能力变成数字员工运行体的基础设施**。因此，RuntimeGateway / Workspace / 文件 / 终端 / 日志能力不应成为产品主入口，而应作为 TaskFlow、数字员工、任务证据、故障诊断和执行租约的底层支撑。
+
+阶段 D 可借鉴 CoStrict Cloud 的设备注册、设备侧 daemon、工作空间绑定、连接路由和诊断入口，但必须保持 TaskFlow First：用户先围绕计划、工作项、任务流和数字员工推进交付，必要时才下钻到运行体和工作空间。
 
 ---
 
@@ -273,7 +280,7 @@ DecisionEvent
 
 ## 6. 与行业参考能力的关系
 
-OpenCode 的 primary agents / subagents、Claude Code Agent Teams / Subagents / Hooks、LangGraph 的长任务状态化执行、Magentic-One 的 Task Ledger / Progress Ledger，都说明业内正在从“单次对话式 Agent”走向“任务清单、状态、编排器、人机门控”的方向。
+OpenCode 的 primary agents / subagents、Claude Code Agent Teams / Subagents / Hooks、LangGraph 的长任务状态化执行、Magentic-One 的 Task Ledger / Progress Ledger，都说明业内正在从“单次对话式 Agent”走向“任务清单、状态、编排器、人机门控”的方向。CoStrict Cloud 则从另一个角度说明：Web 控制面可以通过设备侧 Gateway 连接本地 / 私有服务器上的执行体、工作空间、日志与诊断能力。
 
 本系统不直接依赖某一个实现作为核心架构，而是将这些能力抽象为：
 
@@ -285,7 +292,11 @@ PlannerAgent             协同规划岗
 WorkerAgent              实现验证岗
 ReviewerAgent            交付审查岗
 DecisionWorkbench        用户待决策入口
+RuntimeGateway           设备侧执行体接入、连接代理与诊断边界
 RuntimeBinding           数字员工到运行体的绑定
+WorkspaceBinding         项目 / 数字员工 / 工作目录 / 技能快照绑定
+AgentRoute               Web / agent-web-kit 到具体运行体会话的路由
+ExecutionLease           后续防止多任务并发写同一工作空间的租约
 ```
 
 参考资料包括：
@@ -309,7 +320,16 @@ Magentic-One: https://www.microsoft.com/en-us/research/articles/magentic-one-a-g
 待决策工作台：保持，作为 NEEDS_DECISION / Human-in-the-loop 节点。
 员工 Runtime 绑定页：保持，作为阶段 D 的运行体编排预留。
 岗位 / 技能页：保持，作为 AgentTemplate / TemplateSkillMapping / SkillSnapshot 表达。
+Runtime / Gateway 辅助入口：后续可增加 RuntimeHost、WorkspaceBinding、AgentRoute、Diagnostics 和 Lease 冲突视图，但必须服务于任务流和数字员工，不把原型改成 Web IDE。
 ```
+
+后续原型改动建议采用“任务流优先、运行体辅助”的表达方式：
+
+1. 在协作全景增加运行体健康摘要，如在线主机数、占用工作区、异常运行体。
+2. 在数字员工详情 / 抽屉展示 RuntimeHost、WorkspaceBinding、AgentRoute、最近心跳、当前任务绑定。
+3. 在待决策面板增加 Runtime 异常、Lease 冲突、Workspace 占用等待处理类型。
+4. 在管理视图预留 RuntimeHost 列表和 Diagnostics 面板。
+5. 不把首页、员工页或项目页改成文件编辑器 / 终端 / Web IDE 中心。
 ---
 
 ## 8. 结构化 Markdown 文档族

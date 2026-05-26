@@ -38,7 +38,7 @@ currentTaskFlow: TF-EXAMPLE-IMPL-01
 
 | TaskFlow | 状态 | 目标 | 关键产出 | Run | Report | 下一步 |
 |---|---:|---|---|---|---|---|
-| TF-EXAMPLE-IMPL-01 | running | 完成某项能力 | 待产出 | `docs/workitems/runs/TF-EXAMPLE-IMPL-01-RUN-vX.md` | `docs/reports/RPT-TF-EXAMPLE-IMPL-01-Review-vX.md` | 执行中 |
+| TF-EXAMPLE-IMPL-01 | running | 完成某项能力 | 待产出 | `docs/tasks/TF-EXAMPLE-IMPL/TASK_TF-EXAMPLE-IMPL-01.md` | `docs/reports/RPT-TF-EXAMPLE-IMPL-01-Review-vX.md` | 执行中 |
 | TF-EXAMPLE-IMPL-02 | planned | 后续能力 | 待产出 | 待生成 | 待生成 | 待执行 |
 
 状态建议：`planned / ready / running / done / accepted / blocked / deferred / superseded`。
@@ -57,7 +57,7 @@ currentTaskFlow: TF-EXAMPLE-IMPL-01
 
 | 类型 | 文件 | 说明 |
 |---|---|---|
-| Run | `docs/workitems/runs/...` | 某次 TaskFlow 执行记录 |
+| Run | `docs/tasks/<WorkItemId>/TASK_<TaskId>.md` | 某次 TaskFlow 执行记录 |
 | Report | `docs/reports/...` | 评审、验证或复盘报告 |
 
 ## 7. 更新记录
