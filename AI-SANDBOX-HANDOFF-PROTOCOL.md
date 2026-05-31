@@ -3,6 +3,9 @@
 > 适用范围：ChatGPT 沙箱、OpenCode 本地工作区、后续可接入的其他 AI 执行沙箱。  
 > 本文档放在项目根目录，避免 `docs/` 全量更新时被覆盖。  
 > 本文档与代码版本无关，不使用版本号命名。  
+> Status: active / v1 baseline  
+> ProtocolVersion: 1  
+> UpdatedAt: 2026-06-01  
 > 目标：让多个 AI 环境可以围绕同一项目持续产出 `docs`、`apps`、`skills`，并通过明确交接协议完成同步、验证和发布。
 
 ---
@@ -87,7 +90,7 @@ skills/task-runner/...
 {
   "protocolVersion": "1",
   "operationMode": "merge-ready",
-  "packageId": "UPD-YYYYMMDD-001",
+  "packageId": "UPD-CG-OC-YYYYMMDD-001",
   "producer": "chatgpt-sandbox",
   "consumer": "opencode-local",
   "targetProject": "agent-team",
@@ -107,6 +110,7 @@ skills/task-runner/...
       "protectedPaths": [
         "AI-SANDBOX-HANDOFF-PROTOCOL.md",
         "docs/doc-nav.md",
+        "docs/文档导航.md",
         "docs/project-memory.md",
         ".gitignore"
       ],
@@ -114,6 +118,24 @@ skills/task-runner/...
       "deletePolicy": "manifest-only",
       "deletePaths": [],
       "expectedChangedPaths": []
+    },
+    {
+      "path": "agent-team-apps-current-YYYYMMDD.zip",
+      "sha256": "<zip sha256>",
+      "fileCount": 45,
+      "target": "apps",
+      "mode": "overlay",
+      "allowedPaths": ["apps/web/src/features/overview/**", "apps/web/qa/**"],
+      "protectedPaths": ["package.json", "package-lock.json", ".gitignore"],
+      "localOnlyPaths": [".env", ".env.local", "node_modules/**", "dist/**", "coverage/**", "backup/**", "update/**"],
+      "deletePolicy": "manifest-only",
+      "deletePaths": [],
+      "expectedChangedPaths": ["apps/web/src/features/overview/page.js"],
+      "affectedPaths": ["apps/web/src/features/overview/page.js"],
+      "changeIntent": "增强 overview 页面动态工作流表达",
+      "localVerification": ["npm run qa in apps/web"],
+      "screenshotEvidence": ["apps/web/qa/screenshots/overview-after.png"],
+      "forbiddenOverwritePaths": ["apps/web/package.json", "apps/web/package-lock.json"]
     }
   ],
   "handoff": "HANDOFF-OPENCODE-YYYYMMDD.md",
@@ -142,6 +164,8 @@ skills/task-runner/...
 }
 ```
 
+路径作用域规则：`allowedPaths`、`protectedPaths`、`localOnlyPaths`、`deletePaths`、`expectedChangedPaths` 均使用 project-root 相对路径，不得使用绝对路径。路径匹配以项目根目录为基准，不以 package target 或 zip 内部目录为基准。
+
 `operationMode` 可选值：
 
 | operationMode | 含义 | OpenCode 行为 |
@@ -160,6 +184,10 @@ skills/task-runner/...
 
 删除规则：除 `full-replace` 的目标目录替换语义外，任何删除 tracked 文件都必须列入 `deletePaths`。`overlay` 和 `patch` 默认不允许删除文件。
 
+`mode=full-replace` 时，目标目录内因替换产生的删除不必逐项列入 `deletePaths`。但 OpenCode 必须在 staging diff 中展示 deleted files，并确认删除未触及 `protectedPaths`、`localOnlyPaths` 或 manifest 未授权路径。
+
+`allowedPaths` 表示本包允许触及的最大范围。`expectedChangedPaths` 表示生产者预期本轮实际变化的路径。diff 超出 `allowedPaths` 必须停止；diff 在 `allowedPaths` 内但明显超出 `expectedChangedPaths`，必须标记为 `unexpected diff` 并人工审查后才可继续。
+
 `apps/` 包默认不得使用 `full-replace`。ChatGPT 参与前端开发时，默认只能 `overlay` / `patch` 到 manifest 的 `allowedPaths`；若需要 `full-replace apps/`，必须由用户明确授权。
 
 ---
@@ -171,6 +199,7 @@ skills/task-runner/...
 ```text
 AI-SANDBOX-HANDOFF-PROTOCOL.md
 docs/doc-nav.md
+docs/文档导航.md
 docs/project-memory.md
 .gitignore
 package.json
@@ -179,13 +208,13 @@ pnpm-lock.yaml
 yarn.lock
 ```
 
-`docs/文档导航.md` 仅是旧中文入口跳转页，可保留但不得重新升级为主导航。
+`docs/doc-nav.md` 是 ASCII 主入口。`docs/文档导航.md` 是中文兼容入口，可保留入口引用、长期事实摘要和跳转说明，但不再承载完整长导航。
 
 `docs` full-replace 后必须执行 entry reconciliation：
 
 1. `docs/doc-nav.md` 仍包含 `AI-SANDBOX-HANDOFF-PROTOCOL.md` 入口。
 2. `docs/project-memory.md` 仍记录沙箱交接协议和当前 active runner 口径。
-3. `docs/文档导航.md` 若存在，只能作为跳转页。
+3. `docs/文档导航.md` 若存在，仍为中文兼容入口，不得回退为完整长导航。
 4. 不允许入口文件回退到不含协议入口的旧版本。
 
 ---
@@ -204,7 +233,7 @@ OpenCode 收到 `update/` 包后，必须按以下顺序执行：
 8. 按 manifest 的 `mode` 合入。
 9. 验证必要路径、`docs/doc-nav.md`、`docs/project-memory.md`、关键 package 文件。
 10. 运行 smoke / QA / 语法检查；若环境缺依赖，记录真实失败原因并补充可执行的替代检查。
-11. 审查 `git diff` 与 `git status`，确认 diff 不超出 `allowedPaths`。
+11. 审查 `git diff` 与 `git status`，确认 diff 不超出 `allowedPaths`，并标记是否超出 `expectedChangedPaths`。
 12. 只暂存本轮目标范围。
 13. 提交并同时推送到 `origin` 和 `github`。
 
@@ -246,9 +275,12 @@ OpenCode 必须完成本地 QA、截图验证、diff 审查后才能提交。页
 3. `baseCommit` 与 `HEAD` 不一致且触及相同 target / 文件。
 4. `full-replace` 请求用于 `apps/` 且没有用户明确授权。
 5. diff 超出 `allowedPaths`。
-6. required check 失败。
-7. `protectedPaths` 被意外覆盖。
-8. 删除 tracked 文件但未列入 `deletePaths`。
+6. diff 在 `allowedPaths` 内但明显超出 `expectedChangedPaths`，且未完成人工审查。
+7. required check 失败。
+8. `protectedPaths` 被意外覆盖。
+9. 删除 tracked 文件但未列入 `deletePaths`，且不是 `full-replace` 目标目录替换产生的已审查删除。
+
+`pushPolicy.requiredRemotes` 中列出的 remote 必须存在。若 remote 缺失，OpenCode 必须在 push 前停止并报告 `REMOTE_MISSING`；不得自动新增、修改或重定向 remote。
 
 若已 commit 但只成功推送一个 remote，状态必须标记为 `PARTIAL_PUSH`，不得标记同步完成。
 
@@ -312,3 +344,5 @@ staging 解压
 ```
 
 当用户只要求“先看看”或“评审一下交接包”时，OpenCode 只读取 handoff、manifest 和 zip 清单，不做解压覆盖。
+
+当用户说“先预演合入”或“staging 看看”时，默认按 `stage-only` 执行：只解压到 staging、校验结构、生成 diff / 风险结论，不修改工作区。

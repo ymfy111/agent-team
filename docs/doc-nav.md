@@ -3,7 +3,7 @@
 > 当前同步批次：DOC-REORG / v0.6.33.45 / 生成层架构口径同步。  
 > 当前阶段：ORCH / Runtime / Task 目录口径收口；OpenCode 联调包使用 `.runtime/orch` 与 `docs/tasks` 新口径。  
 > 当前事实主线：AI 原生应用平台生成层 / AI 动态工作流 / WorkItem / Task Runner 执行闭环。  
-> 维护提示：本文件是人类与 AI 沙箱统一文档入口；中文旧入口 `docs/文档导航.md` 仅保留跳转页。
+> 维护提示：本文件是人类与 AI 沙箱统一文档入口；中文入口 `docs/文档导航.md` 仅保留关键入口摘要和跳转说明，不承载完整长导航。
 
 ---
 
@@ -12,7 +12,7 @@
 | 用途 | 当前入口 | 说明 |
 |---|---|---|
 | 项目长期事实源 | `docs/project-memory.md` | 当前基线、关键结论、目录口径和下一步。 |
-| AI 沙箱双向交接协议 | `AI-SANDBOX-HANDOFF-PROTOCOL.md` | 可执行合入协议：manifest 必需、保护路径、合入模式、停止条件、回滚和双远程推送规则；放在项目根目录，避免 docs 全量更新覆盖。 |
+| AI 沙箱双向交接协议 | `AI-SANDBOX-HANDOFF-PROTOCOL.md` | active / v1 baseline；manifest 必需、路径作用域、保护路径、合入模式、expectedChangedPaths、停止条件、回滚和双远程推送规则。 |
 | 文档目录与命名规范 | `docs/guides/GUIDE-DOC-DIRECTORY-NAMING-v0.6.33.md` | `docs/workitems`、`docs/tasks`、`.runtime/orch`、`.runtime/exec` 规范。 |
 | 总路线图 | `docs/plans/PLAN-SMART-FACTORY.md` | TaskFlow First 总路线图。 |
 | 当前 ORCH 子设计 | `docs/specs/SDD-TEAM-ORCHESTRATOR-v0.6.33.md` | ORCH / Task Loop Driver / Task 派工颗粒度设计。 |
@@ -80,7 +80,7 @@ skills/task-batch-runner/    v1.0.2，执行一个 TaskBatch，顺序调度 Task
 ```text
 docs/
 ├── doc-nav.md               # 统一文档入口
-├── 文档导航.md              # 旧中文入口，仅跳转到 doc-nav.md
+├── 文档导航.md              # 中文兼容入口，保留关键入口摘要和跳转说明
 ├── project-memory.md
 ├── plans/
 ├── workitems/               # WorkItem 主文档
@@ -99,7 +99,7 @@ docs/
 ## 6. 维护约定
 
 1. 每次更新 docs 时，必须同步 `docs/doc-nav.md` 和 `docs/project-memory.md`。
-2. `docs/文档导航.md` 只保留跳转页，避免双导航漂移。
+2. `docs/文档导航.md` 只保留关键入口摘要和跳转说明，避免双导航漂移。
 3. 新工作项放 `docs/workitems/<WorkItemId>.md`。
 4. 新 Task 正式记录放 `docs/tasks/<WorkItemId>/TASK_<TaskId>.md`；临时任务放 `docs/tasks/TEMP/`。
 5. 旧 `docs/workitems/runs/`、`docs/tasks/runs/`、`.taskflow/` 不再作为新任务默认输出位置。
@@ -168,4 +168,4 @@ docs/
 - 新增根目录协议文档：`AI-SANDBOX-HANDOFF-PROTOCOL.md`。
 - 当前协作口径：ChatGPT 沙箱 docs 为主、可参与部分前端开发；OpenCode 本地 apps 为主、负责本地集成、验证、提交和同时推送 `origin` / `github`。
 - 双方通过 `update/` 下的 handoff、manifest 和 zip 包双向同步；除 `review-only` 外 manifest 为合入必需。
-- 协议已补充 `protectedPaths`、`allowedPaths`、`deletePaths`、`full-replace/overlay/patch` 语义、基线漂移、停止条件和回滚规则。
+- 协议状态为 active / v1 baseline；已补充 project-root 相对路径作用域、`docs/文档导航.md` 保护、`protectedPaths`、`allowedPaths`、`expectedChangedPaths`、`deletePaths`、`full-replace/overlay/patch` 语义、基线漂移、停止条件、`REMOTE_MISSING` 和回滚规则。

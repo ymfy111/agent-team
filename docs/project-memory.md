@@ -52,7 +52,7 @@ Project
 | `.runtime/orch/` | ORCH 调度运行态：`state.json`、`dispatches.jsonl`、`packets/<TaskId>.md`。 |
 | `.runtime/exec/` | 智能体 / taskflow skill 执行运行态：Task 内部步骤账本。 |
 
-当前统一文档导航入口：`docs/doc-nav.md`。`docs/文档导航.md` 仅保留为旧中文入口跳转页。
+当前统一文档导航入口：`docs/doc-nav.md`。`docs/文档导航.md` 是中文兼容入口，只保留关键入口摘要和跳转说明，不承载完整长导航。
 当前命名规范入口：`docs/guides/GUIDE-DOC-DIRECTORY-NAMING-v0.6.33.md`。
 
 历史兼容说明：旧 `docs/workitems/runs/`、`docs/tasks/runs/` 与 `.taskflow/` 不再作为新任务默认输出位置；旧 `RUN_*` 已按 Task 正式记录口径迁移到 `docs/tasks/`。
@@ -168,7 +168,7 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 1. 当前事实源、路线图、工作项、设计、模板和通用指南应保留。
 2. 已完成任务的 run / report / 测试记录不默认长期保留。
 3. 若完成任务有复用价值，应先沉淀到通用文档，再清理原始过程文件。
-4. 每次 docs 包更新必须同步 `docs/doc-nav.md` 与本文件；`docs/文档导航.md` 仅保留跳转页，避免双导航漂移。
+4. 每次 docs 包更新必须同步 `docs/doc-nav.md` 与本文件；`docs/文档导航.md` 只保留关键入口摘要和跳转说明，避免双导航漂移。
 5. 旧目录或旧版本可以保留作历史参考，但当前入口不得继续指向旧版本。
 6. 本包只包含 `docs/` 时，不包含 `skills/`、`apps/`、`prototypes/` 根目录和图片资源；若需要完整交接，应另附源码或说明来源。
 
@@ -259,10 +259,11 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 
 - 已新增根目录文档 `AI-SANDBOX-HANDOFF-PROTOCOL.md`，不绑定代码版本号，用于规范 ChatGPT 沙箱与 OpenCode 本地工作区的双向同步；放在项目根目录，避免 `docs/` 全量更新时被覆盖。
 - 当前分工：ChatGPT 沙箱 docs 为主、可参与部分前端开发；OpenCode 本地 apps 为主、负责本地集成、验证、提交和同时推送 `origin` / `github`。
-- 标准交接通过 `update/` 下的 handoff、manifest 和 zip 包完成；除 `review-only` 外 manifest 为合入必需。OpenCode 接班时必须校验 `baseCommit`、`sha256`、`rootInZip`、`allowedPaths`、`protectedPaths` 和 `deletePaths`，先备份、staging 解压、运行 smoke/QA 或替代检查，再只提交目标范围。
-- 协议已补充 `full-replace/overlay/patch` 语义、ChatGPT apps 包门禁、停止条件、双远程推送失败状态和回滚规则。
+- 协议状态为 active / v1 baseline。标准交接通过 `update/` 下的 handoff、manifest 和 zip 包完成；除 `review-only` 外 manifest 为合入必需。
+- OpenCode 接班时必须校验 `baseCommit`、`sha256`、`rootInZip`、project-root 相对路径作用域、`allowedPaths`、`expectedChangedPaths`、`protectedPaths` 和 `deletePaths`，先备份、staging 解压、运行 smoke/QA 或替代检查，再只提交目标范围。
+- 协议已补充 `full-replace/overlay/patch` 语义、ChatGPT apps 包门禁、中文兼容入口保护、停止条件、`REMOTE_MISSING` / `PARTIAL_PUSH` 状态和回滚规则。
 
 ## 2026-06-01｜文档导航入口收敛
 
 - 已将 `docs/doc-nav.md` 收敛为人类与 AI 沙箱统一文档入口，保留 ASCII 文件名以降低跨沙箱、zip、shell 和 Git 环境的中文路径风险。
-- `docs/文档导航.md` 改为极简跳转页，不再承载完整导航，避免 `doc-nav.md` 与中文导航双写漂移。
+- `docs/文档导航.md` 改为中文兼容入口，只保留关键入口摘要和跳转说明，不再承载完整导航，避免 `doc-nav.md` 与中文导航双写漂移。
