@@ -8,7 +8,7 @@
       "version": "v0.6.33.45",
       "mode": "no-build-esm-structured-shell",
       "runtime": "legacy-prototype-runtime",
-      "mountedAt": "2026-05-23T15:35:24.331Z",
+      "mountedAt": "2026-05-28T12:12:44.827Z",
       "dataProvider": {
         "version": "p0b.1",
         "kind": "classic-script-data-provider",
@@ -41,7 +41,7 @@
       "kind": "legacy-compatible-app-shell",
       "bridgeInstalled": true,
       "menuGroups": 2,
-      "menuItems": 8,
+      "menuItems": 9,
       "router": {
         "version": "p0b.6",
         "kind": "legacy-compatible-router",
@@ -51,55 +51,81 @@
             "id": "overview",
             "pageElementId": "page-overview",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": true,
+            "featureId": "overview"
           },
           {
             "id": "teams",
             "pageElementId": "page-teams",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": true,
+            "featureId": "teams"
           },
           {
             "id": "projects",
             "pageElementId": "page-projects",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": true,
+            "featureId": "projects"
           },
           {
             "id": "decisions",
             "pageElementId": "page-decisions",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": false,
+            "featureId": "decisions"
+          },
+          {
+            "id": "runtime-gateway",
+            "pageElementId": "page-runtime-gateway",
+            "exists": true,
+            "hidden": false,
+            "legacy": false,
+            "featureId": "runtime-gateway"
           },
           {
             "id": "roles",
             "pageElementId": "page-roles",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": true,
+            "featureId": "roles"
           },
           {
             "id": "pool",
             "pageElementId": "page-pool",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": true,
+            "featureId": "pool"
           },
           {
             "id": "skills",
             "pageElementId": "page-skills",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": false,
+            "featureId": "skills"
           },
           {
             "id": "settings",
             "pageElementId": "page-settings",
             "exists": true,
-            "hidden": false
+            "hidden": false,
+            "legacy": false,
+            "featureId": "settings"
           },
           {
             "id": "team-detail-template",
             "pageElementId": "page-team-detail-template",
             "exists": true,
-            "hidden": true
+            "hidden": true,
+            "legacy": true,
+            "featureId": null
           }
         ]
       },
@@ -114,55 +140,81 @@
           "id": "overview",
           "pageElementId": "page-overview",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "overview"
         },
         {
           "id": "teams",
           "pageElementId": "page-teams",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "teams"
         },
         {
           "id": "projects",
           "pageElementId": "page-projects",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "projects"
         },
         {
           "id": "decisions",
           "pageElementId": "page-decisions",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": false,
+          "featureId": "decisions"
+        },
+        {
+          "id": "runtime-gateway",
+          "pageElementId": "page-runtime-gateway",
+          "exists": true,
+          "hidden": false,
+          "legacy": false,
+          "featureId": "runtime-gateway"
         },
         {
           "id": "roles",
           "pageElementId": "page-roles",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "roles"
         },
         {
           "id": "pool",
           "pageElementId": "page-pool",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "pool"
         },
         {
           "id": "skills",
           "pageElementId": "page-skills",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": false,
+          "featureId": "skills"
         },
         {
           "id": "settings",
           "pageElementId": "page-settings",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": false,
+          "featureId": "settings"
         },
         {
           "id": "team-detail-template",
           "pageElementId": "page-team-detail-template",
           "exists": true,
-          "hidden": true
+          "hidden": true,
+          "legacy": true,
+          "featureId": null
         }
       ]
     },
@@ -175,55 +227,81 @@
           "id": "overview",
           "pageElementId": "page-overview",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "overview"
         },
         {
           "id": "teams",
           "pageElementId": "page-teams",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "teams"
         },
         {
           "id": "projects",
           "pageElementId": "page-projects",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "projects"
         },
         {
           "id": "decisions",
           "pageElementId": "page-decisions",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": false,
+          "featureId": "decisions"
+        },
+        {
+          "id": "runtime-gateway",
+          "pageElementId": "page-runtime-gateway",
+          "exists": true,
+          "hidden": false,
+          "legacy": false,
+          "featureId": "runtime-gateway"
         },
         {
           "id": "roles",
           "pageElementId": "page-roles",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "roles"
         },
         {
           "id": "pool",
           "pageElementId": "page-pool",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": true,
+          "featureId": "pool"
         },
         {
           "id": "skills",
           "pageElementId": "page-skills",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": false,
+          "featureId": "skills"
         },
         {
           "id": "settings",
           "pageElementId": "page-settings",
           "exists": true,
-          "hidden": false
+          "hidden": false,
+          "legacy": false,
+          "featureId": "settings"
         },
         {
           "id": "team-detail-template",
           "pageElementId": "page-team-detail-template",
           "exists": true,
-          "hidden": true
+          "hidden": true,
+          "legacy": true,
+          "featureId": null
         }
       ]
     },
@@ -254,6 +332,7 @@
       "page-projects",
       "page-pool",
       "page-decisions",
+      "page-runtime-gateway",
       "page-settings",
       "page-roles",
       "page-skills",
@@ -312,6 +391,14 @@
       "activeNav": "skills",
       "activePage": [
         "page-skills"
+      ]
+    },
+    {
+      "requested": "runtime-gateway",
+      "currentPage": "runtime-gateway",
+      "activeNav": "runtime-gateway",
+      "activePage": [
+        "page-runtime-gateway"
       ]
     },
     {

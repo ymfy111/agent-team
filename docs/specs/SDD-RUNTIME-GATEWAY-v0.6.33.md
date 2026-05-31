@@ -50,7 +50,13 @@ RuntimeGateway 在服务器本地执行实际动作
 6. **OpenCode RuntimeNode 是数字员工的具体执行壳**  
    数字员工可独立创建，但只有加入 AgentTeam，且该 Team 绑定可用 RuntimeGateway 后，才能初始化具体 OpenCode RuntimeNode。
 
-7. **先做最小可运行闭环，再扩展多智能体和异常流**  
+7. **Team 绑定 Gateway，成员运行体隐式初始化**  
+   一个 RuntimeGateway 可以服务多个 AgentTeam；当前版本推荐一个 Team 默认绑定一个 RuntimeGateway。Team 成员加入后，由平台和 Gateway 隐式完成 RuntimeSandbox 分配、OpenCodeRuntimeNode 启动、DigitalEmployeeRuntimeBinding 建立，以及 skills / rules / MCP / memory 同步。
+
+8. **网关注册是持久资源台账，心跳只更新状态**  
+   RuntimeGateway 注册后不因心跳异常自动消失；离线或不可用时在界面置灰并保留关联关系。删除必须由用户手动触发，并检查 Team、RuntimeSandbox、OC、数字员工绑定和运行记录。
+
+9. **先做最小可运行闭环，再扩展多智能体和异常流**  
    初期先支持一个团队、一个项目、一个默认执行者、一个 TeamOrchestrator 正向流程。多智能体派发、DecisionPacket、复杂权限和跨网关调度后续逐步增加。
 
 ---
@@ -177,13 +183,42 @@ loopDriver:
 lastEventAt: 2026-05-26T03:40:00+08:00
 ```
 
-### 3.6 OpenCodeRuntimeNode
+### 3.6 RuntimeSandbox / OpenCodeWorkspace
+
+RuntimeSandbox 是 RuntimeGateway 下的独立运行工位，也可称 OpenCodeWorkspace。它不是项目事实源本身，而是某台服务器上用于承载 OpenCodeRuntimeNode 的隔离工作区。
+
+```yaml
+sandboxId: rs-dev-001
+gatewayId: gateway-001
+name: p1-dev
+directoryPath: /srv/agent-factory/runtime/sandboxes/p1-dev
+status: available | bound | running | stopped | pending-reset | resetting | error | retired
+boundEmployeeId: emp-dev-001
+boundRuntimeNodeId: orn-dev-001
+boundTeamId: team-core
+boundProjectId: proj-demo
+boundExecutionSessionId: pes-demo-001
+createdAt: 2026-05-28T10:00:00+08:00
+lastActiveAt: 2026-05-28T10:25:00+08:00
+```
+
+关键规则：
+
+```text
+RuntimeGateway 代表服务器级生产线资源；
+RuntimeSandbox 代表生产线上的独立工位；
+一个 RuntimeSandbox 同一时刻最多绑定一个 active OpenCodeRuntimeNode；
+解绑后的沙箱不能直接复用，必须进入 pending-reset / resetting，清理旧员工状态后才能重新 available。
+```
+
+### 3.7 OpenCodeRuntimeNode
 
 OpenCodeRuntimeNode 是某个数字员工对应的具体执行壳。
 
 ```yaml
 runtimeNodeId: orn-dev-001
 gatewayId: gateway-001
+sandboxId: rs-dev-001
 employeeId: emp-dev-001
 assignmentId: tpa-agent-team-demo-001
 status: idle | busy | blocked | offline | error
@@ -197,23 +232,24 @@ currentTaskTicketId: null
 lastHeartbeatAt: 2026-05-26T03:40:00+08:00
 ```
 
-### 3.7 WorkerRuntimeBinding
+### 3.8 DigitalEmployeeRuntimeBinding
 
-WorkerRuntimeBinding 表示数字员工与具体 OpenCode RuntimeNode 的绑定。
+DigitalEmployeeRuntimeBinding 表示数字员工与具体 RuntimeSandbox / OpenCodeRuntimeNode 的运行绑定。
 
 ```yaml
-bindingId: wrb-emp-dev-001
+bindingId: derb-emp-dev-001
 employeeId: emp-dev-001
 agentTeamId: team-core
 assignmentId: tpa-agent-team-demo-001
 gatewayId: gateway-001
+sandboxId: rs-dev-001
 runtimeNodeId: orn-dev-001
 workspaceDir: /srv/agent-factory/projects/proj-demo/.workers/dev-001
 status: active | inactive | migrating | error
 boundAt: 2026-05-26T03:40:00+08:00
 ```
 
-### 3.8 RuntimeDiagnostics
+### 3.9 RuntimeDiagnostics
 
 ```yaml
 diagnosticsId: diag-orn-dev-001
@@ -428,13 +464,22 @@ starting → running → paused / blocked / error / stopped
 initializing → idle → busy → idle / blocked / error / offline
 ```
 
-### 6.5 状态不能混用
+### 6.5 RuntimeSandbox 状态
+
+```text
+available → bound → running / stopped → unbinding → pending-reset → resetting → available
+```
+
+说明：沙箱解绑后必须进入 `pending-reset` 或 `resetting`，不得直接作为干净工位分配给新员工。
+
+### 6.6 状态不能混用
 
 必须避免把以下状态混成一个字段：
 
 - Gateway 是否在线；
 - Assignment 是否激活；
 - Orchestrator 是否运行；
+- RuntimeSandbox 是否可复用；
 - RuntimeNode 是否可用；
 - DigitalEmployee 是否启用；
 - TaskTicket 是否完成；
@@ -472,6 +517,20 @@ initializing → idle → busy → idle / blocked / error / offline
 ## 8. 前端展示建议
 
 Gateway 相关前端页面应是运行基础设施监控和下钻入口，而不是 Web IDE 主入口。
+
+### 8.1 运行网关页当前产品口径
+
+运行网关页定位为服务器级生产资源监控页：
+
+```text
+左侧：已注册网关列表。离线网关置灰但保留。
+右侧：所选网关监控区，展示注册时间、运行时长、沙箱数量、CPU / 内存使用率。
+中部：Team 筛选，默认全部 Team。
+下方：沙箱 / OC 卡片，穿透查看员工、Team、OC 状态、当前任务和最近活动。
+```
+
+该页面只做监控与穿透查看，不承担 Team 绑定 Gateway、员工换沙箱、Skill/MCP/Rules/Memory 同步和任务调度主操作。
+
 
 建议 Gateway 详情页展示：
 

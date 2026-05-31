@@ -65,7 +65,10 @@ def run():
         # Wait for original render functions to complete.
         page.wait_for_timeout(1500)
         try:
-            page.evaluate("() => window.__AGENT_TEAM_FACTORY_API_READY__")
+            page.evaluate("""() => Promise.race([
+              window.__AGENT_TEAM_FACTORY_API_READY__ || Promise.resolve({ status: 'missing' }),
+              new Promise((resolve) => setTimeout(() => resolve({ status: 'timeout' }), 1500)),
+            ])""")
             page.wait_for_timeout(300)
         except Exception as e:
             console.append({'type':'factory-api-ready-error','text':str(e)[:500]})
@@ -102,7 +105,7 @@ def run():
         }""")
         # switch all primary menu pages through switchNav -> router bridge.
         nav_results = []
-        for name, file in [('teams','02-teams.png'), ('pool','03-workers.png'), ('decisions','04-decisions.png'), ('projects','05-projects.png'), ('roles','06-roles.png'), ('skills','07-skills.png'), ('settings','08-settings.png')]:
+        for name, file in [('teams','02-teams.png'), ('pool','03-workers.png'), ('decisions','04-decisions.png'), ('projects','05-projects.png'), ('roles','06-roles.png'), ('skills','07-skills.png'), ('runtime-gateway','08-runtime-gateway.png'), ('settings','09-settings.png')]:
             try:
                 page.evaluate(f"() => {{ if (typeof window.switchNav === 'function') window.switchNav('{name}'); }}")
                 page.wait_for_timeout(500)

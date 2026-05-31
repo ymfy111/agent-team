@@ -1346,7 +1346,7 @@ function renderWorkerPool() {
       const activeNav = document.querySelector(`.nav-item[data-target="${target}"]`);
       if(activeNav) activeNav.classList.add('active');
       
-      if (['overview', 'teams', 'projects', 'pool', 'decisions', 'roles', 'skills', 'settings'].includes(target)) {
+      if (['overview', 'teams', 'projects', 'pool', 'decisions', 'runtime-gateway', 'roles', 'skills', 'settings'].includes(target)) {
         switchTab(target);
       }
     }
@@ -1362,6 +1362,7 @@ function renderWorkerPool() {
           'projects': '项目',
           'pool': '员工',
           'decisions': '待决策',
+          'runtime-gateway': '运行网关',
           'roles': '岗位',
           'skills': '技能',
           'settings': '设置'

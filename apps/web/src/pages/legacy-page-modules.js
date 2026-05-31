@@ -1,8 +1,15 @@
-/* P0b.6 Page module registry - wraps existing legacy DOM pages. */
+/* UI Arch: Page module registry - wraps legacy DOM pages and feature pages. */
 import { PAGE_REGISTRY } from '../app/page-registry.js'
+import { findFeature } from '../features/index.js'
 import { createLegacyPageModule } from './legacy-page-module.js'
 
-const modules = new Map(PAGE_REGISTRY.map((page) => [page.id, createLegacyPageModule(page)]))
+function createPageModule(page) {
+  const feature = findFeature(page.featureId || page.id)
+  if (feature && typeof feature.createPageModule === 'function') return feature.createPageModule(feature)
+  return createLegacyPageModule(page)
+}
+
+const modules = new Map(PAGE_REGISTRY.map((page) => [page.id, createPageModule(page)]))
 
 export function getLegacyPageModule(pageId) {
   return modules.get(pageId) || null
@@ -13,8 +20,8 @@ export function listLegacyPageModules() {
 }
 
 export const legacyPageModules = Object.freeze({
-  version: 'p0b.6',
-  kind: 'legacy-page-module-registry',
+  version: 'ui-arch-02',
+  kind: 'feature-page-module-registry',
   get: getLegacyPageModule,
   list: listLegacyPageModules,
 })

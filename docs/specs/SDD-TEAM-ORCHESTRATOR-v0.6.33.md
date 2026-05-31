@@ -317,3 +317,31 @@ Decision resolved
 - RUN 记录和 Diagnostics 下钻。
 
 但前端仍应坚持 TaskFlow First，不能把主界面做成 Web IDE 或后台进程管理器。
+
+## 4.6 ORCH 调度规则与 Runner 前置门禁
+
+Team Orchestrator 调度 runner 时必须遵守：`docs/guides/GUIDE-ORCH-SCHEDULING-RULES-v0.6.33.md`。
+
+核心边界：
+
+```text
+Plan / Stage / WorkItem 由规划层与 ORCH 监督维护；
+WorkItem 启动前必须细化 Task[]；
+ORCH 只能派发 Task 或 TaskBatch；
+ORCH 不能直接派发 Step / Node；
+Step / Node 由 task-runner 在单个 Task 内部动态生成。
+```
+
+调度前置门禁：
+
+| 输入状态 | ORCH 动作 | Runner |
+|---|---|---|
+| Plan / Stage / WorkItem 不明确 | 暂停，先规划或补上下文 | 不调用 |
+| WorkItem 未细化 Task[] | 生成候选 Task 清单，等待确认或规则授权 | 不调用 |
+| 单个 Task 明确 | 生成 `TaskDispatchPacket` | `task-runner` |
+| 同一 WorkItem 下多个 Task 明确 | 生成 `TaskBatchDispatchPacket` | `task-batch-runner` |
+| 只有 Step / Node | 不派发；要求回到 Task 边界 | 不调用 |
+
+派工包必须包含 `contextDocs[]`，至少包括 ORCH 调度规则、AI 动态工作流规则、Skill 触发规则和对应 WorkItem 文档。
+
+本子设计中的 Team Orchestrator 是未来后台服务 / Loop Driver；当前不新增普通 skill 来替代 ORCH。若 ChatGPT / OpenCode 临时模拟 ORCH，也必须遵守同一调度门禁。

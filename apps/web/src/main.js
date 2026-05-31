@@ -5,6 +5,15 @@ import { getDataProvider, listEntityCounts } from './adapters/data-provider.js'
 import { getFactoryApi, getFactoryApiHealth } from './services/factory-api.js'
 import { initAppShell } from './app/app-shell.js'
 import { mountTopBannerTemplate } from './templates/top-banner-template.js'
+import { mountSettingsPage } from './features/settings/page.js'
+import { mountRuntimeGatewayPage } from './features/runtime-gateway/page.js'
+import { mountSkillsPage } from './features/skills/page.js'
+import { mountDecisionsPage } from './features/decisions/page.js'
+import { mountPoolPage } from './features/pool/page.js'
+import { mountTeamsPage } from './features/teams/page.js'
+import { mountProjectsPage } from './features/projects/page.js'
+import { mountRolesPage } from './features/roles/page.js'
+import { mountOverviewPage } from './features/overview/page.js'
 
 // P0a/P0b keeps the legacy prototype runtime as classic scripts.
 // This module proves new browser-native ESM code can coexist with the legacy
@@ -64,6 +73,15 @@ document.documentElement.dataset.appShell = appEnvironment.mode
 queueMicrotask(() => {
   try {
     const topBannerTemplate = mountTopBannerTemplate()
+    mountOverviewPage()
+    mountSettingsPage()
+    mountRuntimeGatewayPage()
+    mountSkillsPage()
+    mountDecisionsPage()
+    mountPoolPage()
+    mountTeamsPage()
+    mountProjectsPage()
+    mountRolesPage()
     const shell = initAppShell()
     window.__AGENT_TEAM_APP__ = Object.freeze({ ...window.__AGENT_TEAM_APP__, topBannerTemplate, appShell: shell })
   } catch (error) {

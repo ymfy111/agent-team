@@ -1,0 +1,23 @@
+{
+  "skills": {
+    "currentPage": "skills",
+    "activeNav": "skills",
+    "activePage": [
+      "page-skills"
+    ],
+    "featureMounted": "skills",
+    "legacy": false,
+    "hasSkillStudio": true,
+    "hasTableRows": 9,
+    "hasMapping": 70,
+    "text": "技能\nSkill 配置、SKILL.md、岗位技能匹配与发布生效\nSkill 工作台：左侧保持项目文件树，右侧编辑 SKILL.md；保存草稿不影响运行，发布生效后才更新岗位模板和数字员工实例的生效技能版本。\nSkill 配置\n技能资产\n岗位技能匹配\n项目文件\n+ ⟳\n▣ SKILL.md\n▸ sc"
+  },
+  "runtime": {
+    "activeNav": "runtime-gateway",
+    "activePage": [
+      "page-runtime-gateway"
+    ],
+    "text": "运行网关\n网关运行状态监控 · 沙箱/OC 运行概览 · 默认全部 Team · 监控与穿透查看，不做绑定/解绑主操作\n运行网关\n\n已注册网关台账，离线不自动消失\n\n⌕ 搜索网关 / 主机 / Tea"
+  },
+  "errors": []
+}

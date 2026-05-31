@@ -1,0 +1,62 @@
+{
+  "ok": true,
+  "metric": {
+    "currentPage": "runtime-gateway",
+    "activeNav": "runtime-gateway",
+    "activePage": [
+      "page-runtime-gateway"
+    ],
+    "hasRuntimeTitle": true,
+    "hasSandboxCards": true,
+    "runtimeGatewayText": "运行网关\n网关运行状态监控 · 沙箱/OC 运行概览 · 默认全部 Team · 监控与穿透查看，不做绑定/解绑主操作\n运行网关\n\n已注册网关台账，离线不自动消失\n\n⌕ 搜索网关 / 主机 / Team\ngw-prod-01\n12 秒前\nonline · dev-host-01\nTeam 3 · 沙箱 8/12 · CPU 42%\ngw-lab-02\n2 分钟前\ndegraded · lab-host-02\nTeam 1 · 沙箱 6/10 · CPU 76%\ngw-old-03\n30 分钟前\noffline · old-host-03\nTeam 2 · 沙箱 0/8 · 心跳超时\ngw-free-04\n8 秒前\nonline · free-host-04\nTeam 2 · 沙箱 4/6 · CPU 18%\n＋ 注册新网关\n高级运维入口\ngw-prod-01｜运行网关监控\nonline\n\nonline · 最近心跳 12 秒前 · 延迟 36 ms · dev-host-01 · http://10.10.8.21:8080\n\n网关操作⌄\n▣\n注册时间\n2026-05-28\n已登记为持久资源\n◴\n运行时长\n2天13小时\n自最近一次启动\n◇\n沙箱数量\n8 / 12\n已用 / 总容量\n▣\nCPU / 内存\n42% / 68%\n资源负载监控\n本页仅用于监控与穿透查看；Team 绑定网关、员工换沙箱、Skill/MCP/规则/记忆同步请在 Team / 数字员工页面完成。\nTeam 筛选\n全部 Team 6\n智能工厂研发组 3\n低代码迁移组 1\n平台运维组 1\n未绑定 1\n沙箱 / OC 卡片\n卡片风格贴近员工卡；点击只穿透查看，不在此处改绑定。\np1-dev\nrunning\n员工\n孙悟空\nTeam\n智能工厂研发组\nOC\nonline\n任务\n实现用户认证模块\n最近活动：1 分钟前\n",
+    "pageRegistry": {
+      "id": "runtime-gateway",
+      "pageElementId": "page-runtime-gateway",
+      "exists": true,
+      "hidden": false,
+      "legacy": false,
+      "featureId": "runtime-gateway"
+    }
+  },
+  "screenshot": "/mnt/data/workspaces/agent-team-current/apps/web/qa/screenshots/click-runtime-gateway.png",
+  "pageErrors": [],
+  "httpErrors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/global-adapters.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/data/mock-state.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/prototype-store.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/legacy/prototype-runtime.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/main.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/global-adapters.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/data/mock-state.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/adapters/prototype-store.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    },
+    {
+      "type": "warning",
+      "text": "A parser-blocking, cross site (i.e. different eTLD+1) script, https://agent-team.local/src/legacy/prototype-runtime.js, is invoked via document.write. The network request for this script MAY be blocked by the browser in this or a future page load due to poor network connectivity. If blocked in this page load, it will be confirmed in a subsequent console message. See https://www.chromestatus.com/feature/5718547946799104 for more details."
+    }
+  ]
+}

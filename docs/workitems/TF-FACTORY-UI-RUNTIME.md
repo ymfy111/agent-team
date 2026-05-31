@@ -5,7 +5,7 @@
 > 所属计划：`docs/plans/PLAN-SMART-FACTORY.md`  
 > 关联阶段：G｜Runtime / Gateway / UI / 自动调度  
 > 状态：planned  
-> 当前焦点：先完成前端信息架构与运行体辅助视图设计，不直接进入实现。  
+> 当前焦点：先完成前端信息架构与运行体辅助视图设计；已补充总览页 AI 动态工作流表达设计，不直接进入大范围实现。  
 
 ---
 
@@ -24,6 +24,7 @@
 - Runtime / Gateway 参考子设计：`docs/specs/SDD-COSTRICT-CLOUD-REFERENCE-v0.6.33.md`
 - 当前原型参考：`docs/prototypes/agent-team-v0.6.33.45-prototype.html`
 - 项目长期事实源：`docs/project-memory.md`
+- 总览页 AI 动态工作流表达设计：`docs/specs/SDD-OVERVIEW-DYNAMIC-WORKFLOW-UI-v0.6.33.md`
 
 ---
 
@@ -43,6 +44,7 @@
 | TaskFlow | 状态 | 目标 | 具体任务清单 | 关键产出 | 下一步 |
 |---|---|---|---|---|---|
 | TF-FACTORY-UI-RUNTIME-01 | ready | 前端信息架构与导航落点设计 | 1）梳理当前原型页面；2）确定 Runtime/Gateway 入口位置；3）明确哪些信息放首页、项目页、团队页、员工页、网关页；4）输出页面级信息架构 | 页面入口与信息架构说明 | 下一步建议执行 |
+| TF-FACTORY-UI-RUNTIME-01A | ready | 总览页动态工作流表达增强 | 1）围绕 Plan/Stage/WorkItem/Task/Step 调整首页信息表达；2）员工活动绑定到 Task/Step；3）右侧团队动态改为 WorkItem/DecisionPacket 事件流；4）详情抽屉展示任务列表、执行与验收、停止策略；5）输出前后截图 | overview 动态工作流增强实现 | 建议作为下一步小步实现 |
 | TF-FACTORY-UI-RUNTIME-02 | planned | RuntimeGateway 列表与详情视图 | 1）设计 Gateway 列表字段；2）设计 Gateway 详情分区；3）展示承载的 TeamOrchestrator；4）展示 OpenCode RuntimeNode；5）设计日志/诊断入口 | Gateway 视图设计 | 后续 |
 | TF-FACTORY-UI-RUNTIME-03 | planned | TeamProjectAssignment 与 TeamOrchestrator 视图 | 1）展示 Team 与 Project 的阶段性绑定；2）展示 ProjectContextSnapshot；3）展示编排器状态、当前工作项、阻塞与最近调度事件；4）设计启动/暂停/恢复等操作边界 | 团队项目绑定与编排器状态视图 | 后续 |
 | TF-FACTORY-UI-RUNTIME-04 | planned | 数字员工运行体绑定视图 | 1）展示员工生命周期：已创建/已入组/可初始化/已运行；2）展示绑定的 Gateway、OpenCode RuntimeNode、workspace；3）展示 skill/MCP/AGENTS.md/memory snapshot 版本；4）展示当前任务与 Lease | 员工详情运行体区块 | 后续 |
@@ -100,3 +102,4 @@
 | 时间 | 变更 | 依据 |
 |---|---|---|
 | 2026-05-26 | 新建迁移目标网站 Runtime / Gateway 前端改造工作项，拆解为 8 个 TaskFlow | 用户要求将迁移目标网站前端更新纳入正式计划并拆解任务清单 |
+| 2026-05-31 | 根据用户首页和工作项详情抽屉截图，新增总览页 AI 动态工作流表达设计，并建议后续以 TF-FACTORY-UI-RUNTIME-01A 小步实现 | 用户截图与补充口径：软件工厂以 AI 动态工作流、计划/阶段/任务项/任务/步骤驱动 |

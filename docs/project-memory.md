@@ -1,8 +1,8 @@
 # project-memory｜agent-team 当前项目记忆
 
-> 更新时间：2026-05-25  
+> 更新时间：2026-06-01 01:16:27 +0800
 > 当前基线：v0.6.33.45  
-> 当前主线：TaskFlow First / WorkPackage / Guarded Flow 最小实现  
+> 当前主线：AI 原生应用平台生成层 / AI 动态工作流 / Task Runner 执行闭环  
 > 当前治理参考：taskflow governance v0.9.29  
 > 当前 docs 状态：目录口径已收口到 `docs/workitems/`、`docs/tasks/` 与 `.runtime/orch` / `.runtime/exec`；旧 `runs` 与 `.taskflow` 仅作历史兼容。
 
@@ -168,3 +168,86 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 4. 每次 docs 包更新必须同步 `docs/文档导航.md` 与本文件。
 5. 旧目录或旧版本可以保留作历史参考，但当前入口不得继续指向旧版本。
 6. 本包只包含 `docs/` 时，不包含 `skills/`、`apps/`、`prototypes/` 根目录和图片资源；若需要完整交接，应另附源码或说明来源。
+
+## 2026-05-28｜运行网关页面实现
+
+已在 apps/web 新增 `runtime-gateway` 独立 feature 页面：左侧网关列表，右侧网关监控、关键指标卡、Team 筛选和沙箱/OC 卡片。运行网关页只做监控与穿透查看；Team 绑定网关、员工换沙箱、Skill/MCP/规则/记忆同步放到 Team / 数字员工侧。
+
+## 前端模块化最新进展（2026-05-28）
+
+- 运行网关页面已按 v5 监控版实现，定位为网关注册状态监控与沙箱 / OC 穿透查看。
+- `skills` 页面已从 legacy DOM 迁出为独立 feature page：`apps/web/src/features/skills/feature.js` + `page.js`。
+- 当前页面拆分策略：先结构解耦，再统一业务功能；一次只拆一个页面，拆分前后做截图和真实点击验证。
+- 后续建议优先拆 `decisions / pool`，再拆 `teams / projects`，总览页最后收口。
+
+
+## 2026-05-28 20:13:27 +0800｜TF-FACTORY-UI-ARCH-08
+
+- 已完成 `decisions` 页面独立拆分，新增 `apps/web/src/features/decisions/page.js`，`decisions` 在 page registry 中为 `legacy=false`。
+- 本轮保持待决策页面业务语义、文案、视觉样式和交互不变，仅完成结构迁移。
+- 真实点击 `decisions` 菜单验证通过；后续建议继续拆 `pool` 页面，为数字员工运行绑定相关能力做结构准备。
+
+## 2026-05-28｜TF-FACTORY-UI-ARCH-09/10 页面拆分
+
+- 通过 task-stack 顺序执行两个独立任务：`TF-FACTORY-UI-ARCH-09`（pool 页面独立拆分）与 `TF-FACTORY-UI-ARCH-10`（teams 页面独立拆分）。
+- 两个任务均保留独立 Task 文件、QA 报告、`.runtime/exec` 运行账本和截图证据；主对话仅合并输出 batch 汇总。
+- 当前已独立 feature page 包括：`settings`、`runtime-gateway`、`skills`、`decisions`、`pool`、`teams`。
+- 后续建议继续拆 `projects`，最后处理依赖最多的 `overview`。
+
+
+
+## 2026-05-28｜TF-FACTORY-UI-ARCH-11/12 批量拆分
+- 通过 TaskBatch `TB-FACTORY-UI-ARCH-01` 连续执行 `TF-FACTORY-UI-ARCH-11` 与 `TF-FACTORY-UI-ARCH-12`。
+- `projects` 与 `overview` 已迁出为独立 `feature.js + page.js` 页面，`feature.js` 中 `legacy=false`。
+- 两个任务保持独立 Task 文件、QA 报告、`.runtime/exec` 账本与截图证据；批次日志记录在 `.runtime/batches/TB-FACTORY-UI-ARCH-01.json`。
+
+## 2026-05-28｜TF-TEMP-ROLES-PAGE-SPLIT-FIX-01
+
+- 修正前端模块化拆分漏项：`roles` 页面此前仅有 `feature.js`，仍为 legacy 注册页。
+- 已补齐 `apps/web/src/features/roles/page.js`，并将 `roles/feature.js` 改为 `legacy=false`。
+- 真实点击“岗位”菜单验证通过，`featureMounted=roles`，岗位卡片保持 3 个，页面文案和视觉保持现有 v0.6.33 收口口径。
+- 当前已独立 feature page 包括：`overview`、`teams`、`projects`、`decisions`、`runtime-gateway`、`roles`、`pool`、`skills`、`settings`。
+
+
+## 2026-05-28 23:20:00 +0800｜TF-FACTORY-UI-ARCH-13 阶段收口
+
+- 已完成前端模块化阶段评审与收口。
+- `overview / teams / projects / decisions / runtime-gateway / roles / pool / skills / settings` 均已具备 `feature.js + page.js`，并在 feature registry 中为 `legacy=false`。
+- `apps/web/src/legacy/prototype-runtime.js` 仍保留旧原型兼容职责，后续应在业务逻辑统一后单独清理。
+- 下一阶段优先做 Team 页面运行资源区、数字员工运行绑定、Project 执行态和 DecisionPacket 待决策能力。
+
+## 2026-05-29｜docs 已完成任务归档清理脚本
+
+- 已新增 `docs/archive-completed-workitems.mjs`，用于阶段收口后归档已完成任务明细。
+- 脚本支持 `--dry-run`、`--archive`、`--clean`，默认流程是先 dry-run 预览，再 archive 归档，最后经用户确认后才 clean。
+- 已对 `TF-FACTORY-UI-ARCH` 执行 dry-run 与 archive，归档包位于 `/mnt/data/agent-team-archives/TF-FACTORY-UI-ARCH/TF-FACTORY-UI-ARCH-completed-archive.zip`。
+- 本轮未执行 clean。项目内必须保留 WorkItem 状态总账、阶段收口报告、project-memory、文档导航和未完成任务，避免清理后丢失“当前做到哪、下一步做什么”的判断依据。
+
+
+- 2026-05-29 00:10:16 +0800: TF-FACTORY-UI-ARCH completed task details archived and cleaned. Archive: `/mnt/data/agent-team-archives/TF-FACTORY-UI-ARCH/TF-FACTORY-UI-ARCH-completed-archive.zip`; retained WorkItem ledger and closeout report.
+
+## 2026-05-31｜总览页 AI 动态工作流表达口径
+
+- 用户明确：智能软件工厂应以 AI 动态工作流驱动，页面表达要围绕 `计划 Plan → 阶段 Stage → 任务项/工作项 WorkItem → 任务 Task → 步骤 Step/Node`。
+- 总览页不应只是静态团队 / 员工看板；Team 卡片、团队动态和详情抽屉都应表达当前 WorkItem、TaskBatch、Task、Step、DecisionPacket 和员工活动。
+- 员工状态必须落实到具体活动：谁在执行哪个 Task/Step，谁在协同/验证/组长把关，谁被阻塞或等待决策。
+- `0/4`、`1/4` 等进度表达为当前 TaskBatch 的任务进度，不能误写成泛化的“任务完成”。
+- 已新增设计文档：`docs/specs/SDD-OVERVIEW-DYNAMIC-WORKFLOW-UI-v0.6.33.md`。后续首页实现建议采用小步任务 `TF-FACTORY-UI-RUNTIME-01A`，只增强 overview 动态工作流表达，不扩大到全站重构。
+
+
+
+## 2026-06-01｜生成层定位与五层架构映射
+
+- 用户补充两张架构图后，当前产品定位进一步明确：智能软件工厂是 **AI 原生应用平台中的生成层 / 建层产品化工作台**。
+- 软件工厂不是普通项目管理工具或员工看板，而是围绕业务输入和业务本体，通过 AI 动态工作流把 `Plan → Stage → WorkItem → Task → Step` 编排起来，持续生成应用蓝图、页面、服务、配置、测试、发布包和运行反馈。
+- 五层映射：输入层提供业务目标、规范、流程、指标、数据和案例；语义层提供概念、关系、规则、指标、流程、场景；生成层由软件工厂承载应用建模与代码生成；执行层由 ORCH、task-runner、task-batch-runner、RuntimeGateway 和数字员工推进；治理层由 DecisionPacket、QA、Review、Evidence、版本和风险闭环保障。
+- 已新增上位设计文档：`docs/specs/SDD-GENERATION-LAYER-ARCHITECTURE-v0.6.33.md`。
+- 已更新总览页设计：`docs/specs/SDD-OVERVIEW-DYNAMIC-WORKFLOW-UI-v0.6.33.md`。后续 overview 页面修改必须体现生成活动：业务目标、计划、阶段、工作项、任务批次、任务、步骤、员工活动、生成产物、待决策和验收反馈。
+
+
+## 2026-06-01｜任务规划与页面截图自查规则
+
+- 已新增 `docs/guides/GUIDE-TASK-PLANNING-RULES-v0.6.33.md`，用于沉淀“怎么写计划 / 怎么拆任务 / 怎么设计 Step / 怎么做截图验证与自查”的执行经验。
+- 后续智能体执行前必须遵循：Plan / Stage / WorkItem 先规划；WorkItem 启动前细化 Tasks；Task 执行时再动态拆 Steps。
+- 页面 / 前端 / 原型类 Task 必须把 Playwright 截图、智能体自查、必要修复与重新截图、验收截图 / 前后对比图作为自己的 Step；未截图自查不得标记完全 PASS。
+- 新智能体接手时应通过 `docs/doc-nav.md`、本文件、`GUIDE-TASK-PLANNING-RULES`、`GUIDE-ORCH-SCHEDULING-RULES` 和 runner `SKILL.md` 读取这些门禁。

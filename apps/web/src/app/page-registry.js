@@ -1,13 +1,8 @@
-/* P0b.4 Page Registry - maps pageId to existing legacy DOM containers. */
-import { MENU_ITEMS } from './menu-config.js'
+/* UI Arch: Page Registry - derived from feature registry with legacy compatibility. */
+import { buildFeaturePageRegistry } from '../features/index.js'
 
 export const PAGE_REGISTRY = Object.freeze([
-  ...MENU_ITEMS.map((item) => Object.freeze({
-    id: item.id,
-    title: item.label,
-    pageElementId: `page-${item.id}`,
-    legacy: true,
-  })),
+  ...buildFeaturePageRegistry(),
   Object.freeze({ id: 'team-detail-template', title: '团队详情模板', pageElementId: 'page-team-detail-template', legacy: true, hidden: true }),
 ])
 
@@ -31,5 +26,7 @@ export function validatePageRegistry() {
     pageElementId: page.pageElementId,
     exists: Boolean(document.getElementById(page.pageElementId)),
     hidden: Boolean(page.hidden),
+    legacy: page.legacy !== false,
+    featureId: page.featureId || null,
   }))
 }

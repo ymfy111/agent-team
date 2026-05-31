@@ -34,9 +34,9 @@ currentTaskFlow: TF-EXAMPLE-IMPL-01
 | 当前状态 | running |
 | 当前焦点 | TF-EXAMPLE-IMPL-01 |
 
-## 3. TaskFlow 状态清单
+## 3. Task 状态清单
 
-| TaskFlow | 状态 | 目标 | 关键产出 | Run | Report | 下一步 |
+| Task | 状态 | 目标 | 关键产出 | Run | Report | 下一步 |
 |---|---:|---|---|---|---|---|
 | TF-EXAMPLE-IMPL-01 | running | 完成某项能力 | 待产出 | `docs/tasks/TF-EXAMPLE-IMPL/TASK_TF-EXAMPLE-IMPL-01.md` | `docs/reports/RPT-TF-EXAMPLE-IMPL-01-Review-vX.md` | 执行中 |
 | TF-EXAMPLE-IMPL-02 | planned | 后续能力 | 待产出 | 待生成 | 待生成 | 待执行 |
@@ -69,7 +69,9 @@ currentTaskFlow: TF-EXAMPLE-IMPL-01
 
 ## 使用规则
 
-1. WorkItem 是阶段下的工作组织单元，不是单个 TaskTicket。
-2. WorkItem 文档只维护任务流清单、状态和链接，不复制运行日志。
-3. TaskFlow 执行完成后，回写 TaskFlow 状态、关键产出、Run / Report 链接和下一步。
-4. 文件名通常不带版本号，作为活文档持续维护。
+1. WorkItem 是阶段下的工作组织单元，不是单个 Task。
+2. WorkItem 准备执行前，应先细化 `Task[]`，每个 Task 是最小派工单元，必须可独立验收和独立记录。
+3. WorkItem 文档维护 Task 清单、状态和链接，不复制 Task 内部 Step 运行日志。
+4. Task 执行时再由 `task-runner` 动态生成 `Step[] / nodes[]`；Step 是最小活动单元，不作为平台级派工对象。
+5. Task 执行完成后，回写 Task 状态、关键产出、Run / Report 链接和下一步。
+6. 文件名通常不带版本号，作为活文档持续维护。
