@@ -135,8 +135,7 @@ function collectWorkItemFiles(workitemId) {
   const preserveFiles = [
     rel(workitemFile),
     'docs/project-memory.md',
-    'docs/文档导航.md',
-    'docs/#U6587#U6863#U5bfc#U822a.md',
+    'docs/doc-nav.md',
     'docs/reports/RPT-FRONTEND-UI-ARCH-13-CLOSEOUT.md',
   ].filter((p) => exists(path.join(repoRoot, p)));
 
@@ -249,8 +248,7 @@ function cleanFromManifest(manifestPath) {
   const protectedPrefixes = [
     'docs/workitems/',
     'docs/project-memory.md',
-    'docs/文档导航.md',
-    'docs/#U6587#U6863#U5bfc#U822a.md',
+    'docs/doc-nav.md',
     'docs/reports/RPT-',
     'apps/', // protect app source; qa files under apps/web/qa are allowed below
   ];

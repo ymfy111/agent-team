@@ -22,7 +22,8 @@ docs/            人类可读的正式事实源，适合提交 Git
 ```text
 docs/
 ├── project-memory.md
-├── 文档导航.md
+├── doc-nav.md              # 统一文档入口
+├── 文档导航.md             # 旧中文入口跳转页，可废弃
 ├── plans/                  # Plan / Stage：路线图、阶段计划
 ├── workitems/              # WorkItem：工作项主文档
 ├── tasks/                  # Task：任务正式记录，按 WorkItem 分组

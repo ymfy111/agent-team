@@ -3,7 +3,7 @@
 > 更新时间：2026-06-01 01:16:27 +0800
 > 当前基线：v0.6.33.45  
 > 当前主线：AI 原生应用平台生成层 / AI 动态工作流 / Task Runner 执行闭环  
-> 当前治理参考：taskflow governance v0.9.29  
+> 当前治理参考：历史 taskflow governance v0.9.29 + 当前 task-runner / task-batch-runner 门禁  
 > 当前 docs 状态：目录口径已收口到 `docs/workitems/`、`docs/tasks/` 与 `.runtime/orch` / `.runtime/exec`；旧 `runs` 与 `.taskflow` 仅作历史兼容。
 
 ---
@@ -14,7 +14,9 @@
 
 对话是用户与智能体的交互入口；WorkItem / Task 是项目推进的事实主线。
 
-当前 ORCH / taskflow 口径：Orchestrator 派发 Task，不派 skill 内部 Step / Node；智能体收到 Task 后使用 taskflow skill 自主拆步骤、执行、验证、总结，完成后输出 `TASK_DONE`、`BLOCKED` 或 `NEED_USER_DECISION`。
+当前 ORCH / runner 口径：Orchestrator 派发 Task 或 TaskBatch，不派 skill 内部 Step / Node；智能体收到 Task 后使用 `task-runner` 或 `task-batch-runner` 自主拆步骤、执行、验证、总结，完成后输出 `TASK_DONE`、`BLOCKED` 或 `NEED_USER_DECISION`。
+
+历史说明：本文中 `taskflow`、TaskFlow、TaskTicket 等表述是早期治理经验与对象模型沉淀；当前 active skill 名称已收口为 `task-runner` 与 `task-batch-runner`，不得把旧 `taskflow` / `task-batch` 当作 active skill 调用。
 
 当前项目 `agent-team` 已经是智能软件工厂的一个简化雏形：
 
@@ -50,7 +52,7 @@ Project
 | `.runtime/orch/` | ORCH 调度运行态：`state.json`、`dispatches.jsonl`、`packets/<TaskId>.md`。 |
 | `.runtime/exec/` | 智能体 / taskflow skill 执行运行态：Task 内部步骤账本。 |
 
-当前文档导航入口：`docs/文档导航.md`。
+当前统一文档导航入口：`docs/doc-nav.md`。`docs/文档导航.md` 仅保留为旧中文入口跳转页。
 当前命名规范入口：`docs/guides/GUIDE-DOC-DIRECTORY-NAMING-v0.6.33.md`。
 
 历史兼容说明：旧 `docs/workitems/runs/`、`docs/tasks/runs/` 与 `.taskflow/` 不再作为新任务默认输出位置；旧 `RUN_*` 已按 Task 正式记录口径迁移到 `docs/tasks/`。
@@ -59,7 +61,7 @@ Project
 
 ## 3. 当前必读文档
 
-1. `docs/文档导航.md`
+1. `docs/doc-nav.md`
 2. `docs/plans/PLAN-SMART-FACTORY.md`
 3. `docs/plans/PLAN-SMART-FACTORY-GUARDED-FLOW.md`
 4. `docs/workitems/TF-GF-IMPL.md`
@@ -69,6 +71,7 @@ Project
 8. `docs/guides/TASKFLOW-GOVERNANCE-v0.9.29.md`
 9. `docs/changes/CHANGELOG-v0.6.33.md`
 10. `docs/prototypes/agent-team-v0.6.33.45-prototype.html`
+11. `AI-SANDBOX-HANDOFF-PROTOCOL.md`
 
 ---
 
@@ -84,7 +87,7 @@ Project
 | `TF-GF-IMPL-03` | done | 验证失败状态最小实现，落地 `validate-statuses`，摘要见 `TF-GF-IMPL` 工作项。 |
 | `TF-DOC-MERGE-01 / 02` | done | TaskFlow / TaskTicket 子设计与 recs 口径收口。 |
 | `TF-DOC-WP-01` | done | 补充 WorkPackage / TaskFlowGroup 层级，并调整 plans / workitems 文档组织口径。 |
-| `DOC-CLOSEOUT` | done | 清理历史过程文件与过时入口；当前事实入口收口到本文件与 `docs/文档导航.md`。 |
+| `DOC-CLOSEOUT` | done | 清理历史过程文件与过时入口；当前事实入口收口到本文件与 `docs/doc-nav.md`。 |
 
 有复用价值的结论应沉淀到当前文档；历史 run / report / patch / 测试记录不默认长期保留。
 
@@ -145,9 +148,9 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 
 ---
 
-## 7. taskflow 执行经验
+## 7. 历史 taskflow 执行经验
 
-当前 taskflow skill 已收敛到以下口径：
+以下内容为历史治理经验，已迁移为当前 `task-runner` / `task-batch-runner` 的执行口径参考；不表示旧 `taskflow` skill 仍为 active skill。
 
 - 默认模式：`batch-auto-summary`，无人值守完成任务流，最终给完整审计。
 - 对话框报告默认四段式：执行概览、步骤摘要、问题与遗留、产物与下一步。
@@ -165,7 +168,7 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 1. 当前事实源、路线图、工作项、设计、模板和通用指南应保留。
 2. 已完成任务的 run / report / 测试记录不默认长期保留。
 3. 若完成任务有复用价值，应先沉淀到通用文档，再清理原始过程文件。
-4. 每次 docs 包更新必须同步 `docs/文档导航.md` 与本文件。
+4. 每次 docs 包更新必须同步 `docs/doc-nav.md` 与本文件；`docs/文档导航.md` 仅保留跳转页，避免双导航漂移。
 5. 旧目录或旧版本可以保留作历史参考，但当前入口不得继续指向旧版本。
 6. 本包只包含 `docs/` 时，不包含 `skills/`、`apps/`、`prototypes/` 根目录和图片资源；若需要完整交接，应另附源码或说明来源。
 
@@ -251,3 +254,15 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 - 后续智能体执行前必须遵循：Plan / Stage / WorkItem 先规划；WorkItem 启动前细化 Tasks；Task 执行时再动态拆 Steps。
 - 页面 / 前端 / 原型类 Task 必须把 Playwright 截图、智能体自查、必要修复与重新截图、验收截图 / 前后对比图作为自己的 Step；未截图自查不得标记完全 PASS。
 - 新智能体接手时应通过 `docs/doc-nav.md`、本文件、`GUIDE-TASK-PLANNING-RULES`、`GUIDE-ORCH-SCHEDULING-RULES` 和 runner `SKILL.md` 读取这些门禁。
+
+## 2026-06-01｜AI 沙箱双向交接协议
+
+- 已新增根目录文档 `AI-SANDBOX-HANDOFF-PROTOCOL.md`，不绑定代码版本号，用于规范 ChatGPT 沙箱与 OpenCode 本地工作区的双向同步；放在项目根目录，避免 `docs/` 全量更新时被覆盖。
+- 当前分工：ChatGPT 沙箱 docs 为主、可参与部分前端开发；OpenCode 本地 apps 为主、负责本地集成、验证、提交和同时推送 `origin` / `github`。
+- 标准交接通过 `update/` 下的 handoff、manifest 和 zip 包完成；除 `review-only` 外 manifest 为合入必需。OpenCode 接班时必须校验 `baseCommit`、`sha256`、`rootInZip`、`allowedPaths`、`protectedPaths` 和 `deletePaths`，先备份、staging 解压、运行 smoke/QA 或替代检查，再只提交目标范围。
+- 协议已补充 `full-replace/overlay/patch` 语义、ChatGPT apps 包门禁、停止条件、双远程推送失败状态和回滚规则。
+
+## 2026-06-01｜文档导航入口收敛
+
+- 已将 `docs/doc-nav.md` 收敛为人类与 AI 沙箱统一文档入口，保留 ASCII 文件名以降低跨沙箱、zip、shell 和 Git 环境的中文路径风险。
+- `docs/文档导航.md` 改为极简跳转页，不再承载完整导航，避免 `doc-nav.md` 与中文导航双写漂移。

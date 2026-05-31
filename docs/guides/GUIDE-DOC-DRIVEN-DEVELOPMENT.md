@@ -167,7 +167,7 @@ docs/reports/RPT-<TaskFlowId>-<主题>-vX.md
 3. `docs/reports/RPT-<TaskFlowId>-<主题>-vX.md`：保存评审、验证或复盘。
 4. `docs/changes/CHANGELOG-vX.md`：记录重要文档、命名、目录或设计口径变化。
 5. `docs/project-memory.md`：只记录对后续持续有影响的结论。
-6. `docs/文档导航.md`：新增或移动正式文档时必须同步。
+6. `docs/doc-nav.md`：新增或移动正式文档时必须同步。
 
 ### 6.2 结论沉淀优先级
 
@@ -219,7 +219,7 @@ TaskFlow batch 执行完成后，主对话默认输出四段式报告：
 
 - [ ] 是否放在正确目录。
 - [ ] 是否使用正确命名。
-- [ ] 是否更新 `docs/文档导航.md`。
+- [ ] 是否更新 `docs/doc-nav.md`。
 - [ ] 是否需要更新 `docs/project-memory.md`。
 - [ ] 是否需要更新 `docs/changes/CHANGELOG-vX.md`。
 - [ ] 是否引用了正确模板。
