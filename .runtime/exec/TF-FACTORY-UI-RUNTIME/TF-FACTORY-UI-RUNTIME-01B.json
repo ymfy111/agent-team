@@ -1,0 +1,81 @@
+{
+  "taskId": "TF-FACTORY-UI-RUNTIME-01B",
+  "workItemId": "TF-FACTORY-UI-RUNTIME",
+  "skill": "task-runner",
+  "skillVersion": "v1.0.2",
+  "mode": "PLANNED_INTERACTIVE",
+  "status": "PASS",
+  "startedAt": "2026-06-01 16:43:26 +0800",
+  "finishedAt": "2026-06-01 16:43:26 +0800",
+  "nodes": [
+    {
+      "id": "S01",
+      "title": "RED 结构测试",
+      "status": "PASS",
+      "artifacts": [
+        "apps/web/tests/overview-01b.test.mjs"
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "备份将修改的文件",
+      "status": "PASS",
+      "artifacts": [
+        "backup/TF-FACTORY-UI-RUNTIME-01B/apps/web/src/features/overview/page.js.before"
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "实现 WorkItem 详情抽屉表达",
+      "status": "PASS",
+      "artifacts": [
+        "apps/web/src/features/overview/page.js"
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "GREEN 验证和语法检查",
+      "status": "PASS",
+      "artifacts": [
+        "apps/web/tests/overview-01b.test.mjs"
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "浏览器截图与错误检查",
+      "status": "PASS",
+      "artifacts": [
+        "tmp/TF-FACTORY-UI-RUNTIME-01B-overview-after.png"
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "记录证据与交付",
+      "status": "PASS",
+      "artifacts": [
+        "docs/reports/QA-TF-FACTORY-UI-RUNTIME-01B.md",
+        "docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01B.md",
+        "docs/workitems/TF-FACTORY-UI-RUNTIME.md"
+      ]
+    }
+  ],
+  "visibleOutputCompliance": {
+    "planShown": true,
+    "planCodeBlock": true,
+    "userConfirmed": true,
+    "summaryShown": true,
+    "summaryCodeBlock": true,
+    "complianceStatus": "PASS"
+  },
+  "artifacts": [
+    "apps/web/src/features/overview/page.js",
+    "apps/web/tests/overview-01b.test.mjs",
+    "tmp/TF-FACTORY-UI-RUNTIME-01B-overview-after.png",
+    "docs/reports/QA-TF-FACTORY-UI-RUNTIME-01B.md"
+  ],
+  "issues": [],
+  "next": [
+    "用户验收 01B 截图",
+    "后续执行 TF-FACTORY-UI-RUNTIME-01C"
+  ]
+}

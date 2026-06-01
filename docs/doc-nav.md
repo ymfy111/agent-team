@@ -166,7 +166,9 @@ docs/
 ### TF-FACTORY-UI-RUNTIME 首批 Task 细化（2026-06-01）
 
 - 已将 `docs/workitems/TF-FACTORY-UI-RUNTIME.md` 细化为 `TF-FACTORY-UI-RUNTIME-01A` 至 `01E` 五个正式 Task。
-- 下一步推荐执行：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01A.md`。
+- 已完成：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01A.md`，验证报告 `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01A.md`。
+- 已完成：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01B.md`，验证报告 `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01B.md`。
+- 下一步推荐执行：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01C.md`。
 - 执行原则：一次只派发一个 Task；页面类任务必须先备份、修改、启动服务、截图自查、检查浏览器错误，再交付验收。
 
 ### AI 沙箱双向交接协议（2026-06-01）

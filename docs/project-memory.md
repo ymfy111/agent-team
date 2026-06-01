@@ -1,6 +1,6 @@
 # project-memory｜agent-team 当前项目记忆
 
-> 更新时间：2026-06-01 01:16:27 +0800
+> 更新时间：2026-06-01 16:43:26 +0800
 > 当前基线：v0.6.33.45  
 > 当前主线：AI 原生应用平台生成层 / AI 动态工作流 / Task Runner 执行闭环  
 > 当前治理参考：历史 taskflow governance v0.9.29 + 当前 task-runner / task-batch-runner 门禁  
@@ -272,5 +272,7 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 ## 2026-06-01｜TF-FACTORY-UI-RUNTIME 首批 Task 细化
 
 - 已将 `TF-FACTORY-UI-RUNTIME` 从 WorkItem 级目标细化为 `01A` 至 `01E` 五个正式 Task，任务记录位于 `docs/tasks/TF-FACTORY-UI-RUNTIME/`。
-- 下一步应执行 `TF-FACTORY-UI-RUNTIME-01A｜总览页动态工作流表达增强`，只增强 overview 首页表达，不扩到全站重构。
+- 已完成 `TF-FACTORY-UI-RUNTIME-01A｜总览页动态工作流表达增强`，截图 `tmp/TF-FACTORY-UI-RUNTIME-01A-overview-after.png`，报告 `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01A.md`。
+- 已完成 `TF-FACTORY-UI-RUNTIME-01B｜总览页工作项详情抽屉增强`，截图 `tmp/TF-FACTORY-UI-RUNTIME-01B-overview-after.png`，报告 `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01B.md`。
+- 下一步应执行 `TF-FACTORY-UI-RUNTIME-01C｜团队动态事件流增强`，只增强右侧团队动态事件流，不扩到全站重构。
 - 页面类 Task 必须按规则先备份、再修改、再启动本地服务截图自查并检查浏览器错误；未完成截图自查不得标记完全 PASS。
