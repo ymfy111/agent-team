@@ -163,6 +163,12 @@ docs/
 - 新增规则文档：`docs/guides/GUIDE-TASK-PLANNING-RULES-v0.6.33.md`。
 - 关键口径：WorkItem 启动前细化 Task；Task 执行时动态拆 Step；页面类 Task 必须由智能体自己截图验证、自查、必要修复后再交付用户验收。
 
+### TF-FACTORY-UI-RUNTIME 首批 Task 细化（2026-06-01）
+
+- 已将 `docs/workitems/TF-FACTORY-UI-RUNTIME.md` 细化为 `TF-FACTORY-UI-RUNTIME-01A` 至 `01E` 五个正式 Task。
+- 下一步推荐执行：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01A.md`。
+- 执行原则：一次只派发一个 Task；页面类任务必须先备份、修改、启动服务、截图自查、检查浏览器错误，再交付验收。
+
 ### AI 沙箱双向交接协议（2026-06-01）
 
 - 新增根目录协议文档：`AI-SANDBOX-HANDOFF-PROTOCOL.md`。

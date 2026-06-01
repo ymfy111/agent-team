@@ -268,3 +268,9 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 
 - 已将 `docs/doc-nav.md` 收敛为人类与 AI 沙箱统一文档入口，保留 ASCII 文件名以降低跨沙箱、zip、shell 和 Git 环境的中文路径风险。
 - `docs/文档导航.md` 改为中文兼容入口，只保留关键入口摘要和跳转说明，不再承载完整导航，避免 `doc-nav.md` 与中文导航双写漂移。
+
+## 2026-06-01｜TF-FACTORY-UI-RUNTIME 首批 Task 细化
+
+- 已将 `TF-FACTORY-UI-RUNTIME` 从 WorkItem 级目标细化为 `01A` 至 `01E` 五个正式 Task，任务记录位于 `docs/tasks/TF-FACTORY-UI-RUNTIME/`。
+- 下一步应执行 `TF-FACTORY-UI-RUNTIME-01A｜总览页动态工作流表达增强`，只增强 overview 首页表达，不扩到全站重构。
+- 页面类 Task 必须按规则先备份、再修改、再启动本地服务截图自查并检查浏览器错误；未完成截图自查不得标记完全 PASS。
