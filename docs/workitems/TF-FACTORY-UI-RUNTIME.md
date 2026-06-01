@@ -5,7 +5,7 @@
 > 所属计划：`docs/plans/PLAN-SMART-FACTORY.md`  
 > 关联阶段：G｜Runtime / Gateway / UI / 自动调度  
 > 状态：ready  
-> 当前焦点：已细化首批 `Task[]`，下一步执行 `TF-FACTORY-UI-RUNTIME-01A`，只增强 overview 总览页动态工作流表达。  
+> 当前焦点：`TF-FACTORY-UI-RUNTIME-01A` 已完成，下一步可执行 `TF-FACTORY-UI-RUNTIME-01B` 工作项详情抽屉增强。  
 
 ---
 
@@ -43,8 +43,8 @@
 
 | Task | 状态 | 目标 | 具体任务清单 | 关键产出 | 任务记录 | 下一步 |
 |---|---|---|---|---|---|
-| TF-FACTORY-UI-RUNTIME-01A | ready | 总览页动态工作流表达增强 | 1）备份 overview 页面；2）围绕 Plan/Stage/WorkItem/Task/Step 调整首页信息表达；3）员工活动绑定到 Task/Step；4）输出前后截图 | overview 动态工作流增强实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01A.md` | 下一步执行 |
-| TF-FACTORY-UI-RUNTIME-01B | planned | 总览页工作项详情抽屉增强 | 1）补充 WorkItem 详情抽屉字段；2）展示 TaskBatch / Task / Step 列表；3）展示执行、验收、停止策略；4）截图验证 | 工作项详情抽屉增强实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01B.md` | 01A 后执行 |
+| TF-FACTORY-UI-RUNTIME-01A | done | 总览页动态工作流表达增强 | 1）备份 overview 页面；2）围绕 Plan/Stage/WorkItem/Task/Step 调整首页信息表达；3）员工活动绑定到 Task/Step；4）输出前后截图 | overview 动态工作流增强实现；截图 `tmp/TF-FACTORY-UI-RUNTIME-01A-overview-after.png`；QA `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01A.md` | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01A.md` | 等待用户验收 / 可进入 01B |
+| TF-FACTORY-UI-RUNTIME-01B | ready | 总览页工作项详情抽屉增强 | 1）补充 WorkItem 详情抽屉字段；2）展示 TaskBatch / Task / Step 列表；3）展示执行、验收、停止策略；4）截图验证 | 工作项详情抽屉增强实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01B.md` | 下一步执行 |
 | TF-FACTORY-UI-RUNTIME-01C | planned | 团队动态事件流增强 | 1）将右侧团队动态改为 WorkItem / DecisionPacket / QA 事件流；2）突出阻塞、待决策、验收反馈；3）截图验证 | 团队动态事件流增强实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01C.md` | 01B 后执行 |
 | TF-FACTORY-UI-RUNTIME-01D | planned | 员工活动与 Task / Step 绑定 | 1）员工卡片展示当前 Task / Step；2）展示协同 / 审查 / 阻塞状态；3）避免回退到静态员工看板；4）截图验证 | 员工活动绑定实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01D.md` | 01C 后执行 |
 | TF-FACTORY-UI-RUNTIME-01E | planned | 首页截图验证、回归检查与阶段收口 | 1）跑本地服务；2）浏览器截图自查；3）检查 JS errors；4）生成 QA 报告；5）回写 WorkItem 状态 | QA 报告、截图证据、收口结论 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01E.md` | 01D 后执行 |
@@ -123,3 +123,4 @@ docs/guides/GUIDE-TASK-PLANNING-RULES-v0.6.33.md
 | 2026-05-26 | 新建迁移目标网站 Runtime / Gateway 前端改造工作项，拆解为 8 个 TaskFlow | 用户要求将迁移目标网站前端更新纳入正式计划并拆解任务清单 |
 | 2026-05-31 | 根据用户首页和工作项详情抽屉截图，新增总览页 AI 动态工作流表达设计，并建议后续以 TF-FACTORY-UI-RUNTIME-01A 小步实现 | 用户截图与补充口径：软件工厂以 AI 动态工作流、计划/阶段/任务项/任务/步骤驱动 |
 | 2026-06-01 | 将运行态业务逻辑统一阶段细化为 01A-01E 五个正式 Task，并创建 planned Task 文档 | 遵循 runner 门禁：WorkItem 执行前必须先细化 Task[]，Task 执行时再动态拆 Step |
+| 2026-06-01 | 完成 `TF-FACTORY-UI-RUNTIME-01A` 总览页动态工作流表达增强 | 已完成页面最小范围增强、截图自查和浏览器错误检查 |

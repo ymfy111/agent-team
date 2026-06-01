@@ -1,7 +1,7 @@
 # TASK_TF-FACTORY-UI-RUNTIME-01A｜总览页动态工作流表达增强
 
 > WorkItem: `TF-FACTORY-UI-RUNTIME`  
-> Status: ready  
+> Status: done  
 > RecommendedSkill: `task-runner`  
 > Mode: PLANNED_INTERACTIVE  
 > Scope: `apps/web/src/features/overview/**` 及必要 mock / QA 证据  
@@ -44,3 +44,18 @@
 - `tmp/` 下前后截图或验收截图。
 - `.runtime/exec/TF-FACTORY-UI-RUNTIME/TF-FACTORY-UI-RUNTIME-01A.json`
 - `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01A.md`
+
+## Result
+
+Status: done  
+FinishedAt: 2026-06-01 16:32:14 +0800
+
+已在 `apps/web/src/features/overview/page.js` 增加 AI 动态工作流总览区，展示 `Plan → Stage → WorkItem → Task → Step / Gate`，并补充员工活动到 Task / Step 的绑定、生成产物和 DecisionPacket / 验收反馈入口表达。
+
+## Evidence
+
+- 修改文件：`apps/web/src/features/overview/page.js`
+- 备份文件：`backup/TF-FACTORY-UI-RUNTIME-01A/apps/web/src/features/overview/page.js.before`
+- 截图证据：`tmp/TF-FACTORY-UI-RUNTIME-01A-overview-after.png`
+- QA 报告：`docs/reports/QA-TF-FACTORY-UI-RUNTIME-01A.md`
+- 执行账本：`.runtime/exec/TF-FACTORY-UI-RUNTIME/TF-FACTORY-UI-RUNTIME-01A.json`
