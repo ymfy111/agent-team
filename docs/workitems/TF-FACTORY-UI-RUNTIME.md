@@ -5,7 +5,7 @@
 > 所属计划：`docs/plans/PLAN-SMART-FACTORY.md`  
 > 关联阶段：G｜Runtime / Gateway / UI / 自动调度  
 > 状态：ready  
-> 当前焦点：`TF-FACTORY-UI-RUNTIME-01B` 已完成，下一步可执行 `TF-FACTORY-UI-RUNTIME-01C` 团队动态事件流增强。  
+> 当前焦点：`TF-FACTORY-UI-RUNTIME-01C` 已完成，下一步可执行 `TF-FACTORY-UI-RUNTIME-01D` 员工活动与 Task / Step 绑定。  
 
 ---
 
@@ -45,8 +45,8 @@
 |---|---|---|---|---|---|
 | TF-FACTORY-UI-RUNTIME-01A | done | 总览页动态工作流表达增强 | 1）备份 overview 页面；2）围绕 Plan/Stage/WorkItem/Task/Step 调整首页信息表达；3）员工活动绑定到 Task/Step；4）输出前后截图 | overview 动态工作流增强实现；截图 `tmp/TF-FACTORY-UI-RUNTIME-01A-overview-after.png`；QA `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01A.md` | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01A.md` | 等待用户验收 / 可进入 01B |
 | TF-FACTORY-UI-RUNTIME-01B | done | 总览页工作项详情抽屉增强 | 1）补充 WorkItem 详情抽屉字段；2）展示 TaskBatch / Task / Step 列表；3）展示执行、验收、停止策略；4）截图验证 | 工作项详情抽屉增强实现；截图 `tmp/TF-FACTORY-UI-RUNTIME-01B-overview-after.png`；QA `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01B.md` | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01B.md` | 等待用户验收 / 可进入 01C |
-| TF-FACTORY-UI-RUNTIME-01C | ready | 团队动态事件流增强 | 1）将右侧团队动态改为 WorkItem / DecisionPacket / QA 事件流；2）突出阻塞、待决策、验收反馈；3）截图验证 | 团队动态事件流增强实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01C.md` | 下一步执行 |
-| TF-FACTORY-UI-RUNTIME-01D | planned | 员工活动与 Task / Step 绑定 | 1）员工卡片展示当前 Task / Step；2）展示协同 / 审查 / 阻塞状态；3）避免回退到静态员工看板；4）截图验证 | 员工活动绑定实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01D.md` | 01C 后执行 |
+| TF-FACTORY-UI-RUNTIME-01C | done | 团队动态事件流增强 | 1）将右侧团队动态改为 WorkItem / DecisionPacket / QA 事件流；2）突出阻塞、待决策、验收反馈；3）截图验证 | 团队动态事件流增强实现；截图 `tmp/TF-FACTORY-UI-RUNTIME-01C-overview-after.png`；QA `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01C.md` | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01C.md` | 等待用户验收 / 可进入 01D |
+| TF-FACTORY-UI-RUNTIME-01D | ready | 员工活动与 Task / Step 绑定 | 1）员工卡片展示当前 Task / Step；2）展示协同 / 审查 / 阻塞状态；3）避免回退到静态员工看板；4）截图验证 | 员工活动绑定实现 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01D.md` | 01C 后执行 |
 | TF-FACTORY-UI-RUNTIME-01E | planned | 首页截图验证、回归检查与阶段收口 | 1）跑本地服务；2）浏览器截图自查；3）检查 JS errors；4）生成 QA 报告；5）回写 WorkItem 状态 | QA 报告、截图证据、收口结论 | `docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01E.md` | 01D 后执行 |
 | TF-FACTORY-UI-RUNTIME-02 | planned | RuntimeGateway 列表与详情视图 | 1）设计 Gateway 列表字段；2）设计 Gateway 详情分区；3）展示承载的 TeamOrchestrator；4）展示 OpenCode RuntimeNode；5）设计日志/诊断入口 | Gateway 视图设计 | 待生成 | 后续 |
 | TF-FACTORY-UI-RUNTIME-03 | planned | TeamProjectAssignment 与 TeamOrchestrator 视图 | 1）展示 Team 与 Project 的阶段性绑定；2）展示 ProjectContextSnapshot；3）展示编排器状态、当前工作项、阻塞与最近调度事件；4）设计启动/暂停/恢复等操作边界 | 团队项目绑定与编排器状态视图 | 待生成 | 后续 |
@@ -102,12 +102,12 @@
 
 ## 7. 当前下一步
 
-下一步执行：`TF-FACTORY-UI-RUNTIME-01C｜团队动态事件流增强`。
+下一步执行：`TF-FACTORY-UI-RUNTIME-01D｜员工活动与 Task / Step 绑定`。
 
 执行前必须读取：
 
 ```text
-docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01C.md
+docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01D.md
 docs/specs/SDD-OVERVIEW-DYNAMIC-WORKFLOW-UI-v0.6.33.md
 docs/guides/GUIDE-TASK-PLANNING-RULES-v0.6.33.md
 ```
@@ -125,3 +125,4 @@ docs/guides/GUIDE-TASK-PLANNING-RULES-v0.6.33.md
 | 2026-06-01 | 将运行态业务逻辑统一阶段细化为 01A-01E 五个正式 Task，并创建 planned Task 文档 | 遵循 runner 门禁：WorkItem 执行前必须先细化 Task[]，Task 执行时再动态拆 Step |
 | 2026-06-01 | 完成 `TF-FACTORY-UI-RUNTIME-01A` 总览页动态工作流表达增强 | 已完成页面最小范围增强、截图自查和浏览器错误检查 |
 | 2026-06-01 | 完成 `TF-FACTORY-UI-RUNTIME-01B` 总览页工作项详情抽屉增强 | 已完成 TDD 结构检查、页面最小范围增强、截图自查和浏览器错误检查 |
+| 2026-06-01 | 完成 `TF-FACTORY-UI-RUNTIME-01C` 团队动态事件流增强 | 已完成 TDD RED/GREEN、带类型标签事件流实现、DOM 验证 has-decision=true、截图自查和浏览器错误检查 |
