@@ -30,5 +30,10 @@ for (const text of requiredContext) {
 
 assert.ok(source.includes('activity-card'), 'team activity should use card-style event items')
 assert.ok(source.includes('重点动态 Top 5'), 'team activity should expose a Top 5 capsule')
+assert.ok(source.includes('OVERVIEW_WORK_ITEMS'), 'overview should use shared work item mock data')
+assert.ok(source.includes('openOverviewWorkItemDrawer'), 'overview should provide a matching work item drawer')
+assert.ok(source.includes('overview-workitem-drawer'), 'drawer should use the target work item drawer layout')
+assert.ok(source.includes('installTeamDecisionDrawerHandler'), 'team card decisions should open the same work item drawer')
+assert.ok(source.includes('openDrawerForTeamCard'), 'team card drawer handler should derive data from the clicked card')
 assert.ok(css.includes('grid-template-columns: repeat(2, minmax(0, 1fr))'), 'team overview should use a two-column grid')
 assert.ok(css.includes('.activity-card.decision-card'), 'decision event card style should be defined')
