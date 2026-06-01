@@ -28,6 +28,14 @@ ChatGPT 沙箱产出 docs / apps / skills / handoff / manifest
   → ChatGPT 基于远程新基线继续生产下一轮产物
 ```
 
+目录约定：
+
+```text
+update/    入站目录，放其他沙箱交给 OpenCode 合入或评审的包。
+outgoing/  出站目录，放 OpenCode 交给 ChatGPT 或其他沙箱的包。
+backup/    本地备份目录，放合入前备份与回滚材料。
+```
+
 ---
 
 ## 2. 职责边界
@@ -114,7 +122,7 @@ skills/task-runner/...
         "docs/project-memory.md",
         ".gitignore"
       ],
-      "localOnlyPaths": [".env", ".env.local", "node_modules/**", "dist/**", "coverage/**", "backup/**", "update/**"],
+      "localOnlyPaths": [".env", ".env.local", "node_modules/**", "dist/**", "coverage/**", "backup/**", "update/**", "outgoing/**"],
       "deletePolicy": "manifest-only",
       "deletePaths": [],
       "expectedChangedPaths": []
@@ -127,7 +135,7 @@ skills/task-runner/...
       "mode": "overlay",
       "allowedPaths": ["apps/web/src/features/overview/**", "apps/web/qa/**"],
       "protectedPaths": ["package.json", "package-lock.json", ".gitignore"],
-      "localOnlyPaths": [".env", ".env.local", "node_modules/**", "dist/**", "coverage/**", "backup/**", "update/**"],
+      "localOnlyPaths": [".env", ".env.local", "node_modules/**", "dist/**", "coverage/**", "backup/**", "update/**", "outgoing/**"],
       "deletePolicy": "manifest-only",
       "deletePaths": [],
       "expectedChangedPaths": ["apps/web/src/features/overview/page.js"],
@@ -319,7 +327,7 @@ ChatGPT 下一轮应以远程最新 commit 为基线继续产出，避免基线�
 
 1. 若本地存在未提交改动，OpenCode 不得自动覆盖无关文件。
 2. 若交接包的 `baseCommit` 与本地 HEAD 不一致，应先判断是否可安全合入；高风险时询问用户。
-3. `update/` 和 `backup/` 不进入 Git。
+3. `update/`、`outgoing/` 和 `backup/` 不进入 Git。
 4. ChatGPT 参与前端开发时，只能通过 `apps/` 包交接，不直接跳过 OpenCode 本地验证。
 5. OpenCode 修改 docs 时，必须保持导航和项目记忆同步。
 6. 页面类变更必须执行截图验证；缺少浏览器依赖时，必须记录缺失依赖并至少完成语法检查。

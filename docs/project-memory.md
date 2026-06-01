@@ -262,6 +262,7 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 - 协议状态为 active / v1 baseline。标准交接通过 `update/` 下的 handoff、manifest 和 zip 包完成；除 `review-only` 外 manifest 为合入必需。
 - OpenCode 接班时必须校验 `baseCommit`、`sha256`、`rootInZip`、project-root 相对路径作用域、`allowedPaths`、`expectedChangedPaths`、`protectedPaths` 和 `deletePaths`，先备份、staging 解压、运行 smoke/QA 或替代检查，再只提交目标范围。
 - 协议已补充 `full-replace/overlay/patch` 语义、ChatGPT apps 包门禁、中文兼容入口保护、停止条件、`REMOTE_MISSING` / `PARTIAL_PUSH` 状态和回滚规则。
+- 目录约定：`update/` 是入站目录，`outgoing/` 是出站交接目录，`backup/` 是本地备份目录；三者均不进入 Git。
 
 ## 2026-06-01｜文档导航入口收敛
 
