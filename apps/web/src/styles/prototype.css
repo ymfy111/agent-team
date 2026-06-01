@@ -6781,6 +6781,8 @@
   #page-overview .activity-card-head,
   #page-overview .activity-card-foot { display:flex!important; align-items:center!important; justify-content:space-between!important; gap:8px!important; }
   #page-overview .activity-card-title { font-size:15px!important; font-weight:900!important; color:#0f172a!important; margin:8px 0 10px!important; }
+  #page-overview .activity-card-status { display:flex!important; justify-content:flex-end!important; margin:-2px 0 4px!important; }
+  #page-overview .activity-status-running { display:inline-flex!important; align-items:center!important; height:26px!important; padding:0 10px!important; border-radius:999px!important; color:#2563eb!important; background:#eff6ff!important; font-size:12px!important; font-weight:900!important; }
   #page-overview .activity-card-task,
   #page-overview .activity-card-alert { border-radius:12px!important; padding:10px 12px!important; font-size:13px!important; font-weight:800!important; margin-bottom:10px!important; }
   .overview-workitem-drawer { width:min(460px, calc(100vw - 76px))!important; background:#fff!important; }

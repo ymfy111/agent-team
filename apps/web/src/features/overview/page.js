@@ -74,7 +74,7 @@ const OVERVIEW_WORK_ITEMS = [
     team: '研发三组',
     project: 'ERP 系统',
     title: 'ERP 系统 当前交付工作项',
-    status: '待决策',
+    status: '进行中',
     stage: '系统实现',
     batch: 'ORCH 当前调度',
     planned: '01:19',
@@ -83,7 +83,7 @@ const OVERVIEW_WORK_ITEMS = [
     eventType: 'decision',
     eventTime: '2m 前',
     currentTask: '采购订单到入库单链路重构',
-    decision: 'ERP 财务凭证生成规则需人工确认',
+    decision: '确认业务取舍或技术边界',
     tasks: [
       ['采购订单到入库单链路重构', 'WO-ERP-001', '执行中'],
       ['库存台账接口契约补齐', 'WO-ERP-002', '执行中'],
@@ -147,6 +147,7 @@ function renderActivityCard(item) {
   const action = item.decision ? '处理 →' : item.eventType === 'qa' ? '报告 →' : '查看 →'
   return `<div class="activity-card ${typeClass}" onclick="window.openOverviewWorkItemDrawer && window.openOverviewWorkItemDrawer('${esc(item.id)}')">
 <div class="activity-card-head"><span>${esc(item.team)} · ${esc(item.project)}</span><span>${esc(item.eventTime)}</span></div>
+<div class="activity-card-status"><span class="activity-status-running">进行中</span></div>
 <div class="activity-card-title">${esc(item.title)}</div>
 <div class="activity-progress"><i style="width:${Math.max(4, item.progress)}%;"></i></div>
 <div class="activity-card-task">${esc(item.currentTask)}</div>
@@ -221,6 +222,17 @@ function installTeamDecisionDrawerHandler() {
   })
 }
 
+function normalizeTeamDecisionState() {
+  document.querySelectorAll('#topologyHtml .topo-team-card').forEach(card => {
+    const focus = card.querySelector('.topo-focus-bar')
+    if (!focus || !/待决策|阻塞|待处理/.test(focus.textContent || '')) return
+    const parts = Array.from(focus.children)
+    if (parts[0]) parts[0].innerHTML = '<b>进行中</b>'
+    const action = parts[parts.length - 1]
+    if (action && /查看|详情/.test(action.textContent || '')) action.textContent = '处理 →'
+  })
+}
+
 // Ensure typed stream persists after legacy runtime overwrites
 function installActivityStreamGuard() {
   applyTypedActivityStream()
@@ -246,6 +258,7 @@ export function mountOverviewPage() {
   page.dataset.featureMounted = 'overview'
   window.openOverviewWorkItemDrawer = openOverviewWorkItemDrawer
   applyTypedActivityStream()
+  normalizeTeamDecisionState()
   setTimeout(installTeamDecisionDrawerHandler, 0)
   return true
 }
@@ -267,7 +280,9 @@ export function createOverviewPageModule(feature) {
       if (typeof window.renderOverview === 'function') window.renderOverview()
       if (typeof window.renderTopology === 'function') window.renderTopology()
       applyTypedActivityStream()
+      normalizeTeamDecisionState()
       setTimeout(applyTypedActivityStream, 120)
+      setTimeout(normalizeTeamDecisionState, 180)
       setTimeout(installTeamDecisionDrawerHandler, 160)
       document.documentElement.dataset.currentPageModule = feature.id
       document.documentElement.dataset.enteringPage = ''
