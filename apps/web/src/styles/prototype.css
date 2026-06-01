@@ -333,12 +333,13 @@
     .page { display: none; animation: fadeIn 0.2s ease; }
     .page.active { display: block; }
 
-    /* Overview 全屏撑满：自身不滚，内部卡片滚动 */
+    /* Overview uses page-level scrolling; inner cards can still scroll where needed. */
     #page-overview.page.active {
       display: flex !important;
       flex-direction: column;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     #page-overview .stat-cards-row,
     #page-overview .page-title { flex-shrink: 0; }
