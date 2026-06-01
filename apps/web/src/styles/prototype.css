@@ -343,7 +343,7 @@
     }
     #page-overview .stat-cards-row,
     #page-overview .page-title { flex-shrink: 0; }
-    #page-overview .overview-grid { flex: 1; min-height: 0; overflow: hidden; }
+    #page-overview .overview-grid { flex: 1; min-height: 0; overflow: hidden; grid-template-columns: minmax(0, 2fr) minmax(360px, 1fr) !important; }
     #page-overview .overview-grid > .card:first-child,
     #page-overview .overview-grid > .card:nth-child(2) {
       display: flex;
@@ -394,21 +394,21 @@
       border-radius: 50%;
       flex-shrink: 0;
     }    #topologyHtml {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
       padding: 4px 2px 8px;
       align-content: flex-start;
     }
     #topologyHtml .topo-team-card {
-      flex: 0 0 292px;
-      width: 292px;
+      flex: none;
+      width: 100%;
       background:
         radial-gradient(circle at 18% 0%, rgba(22, 119, 255, 0.08), transparent 34%),
         linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
       border: 1px solid rgba(148, 163, 184, 0.28);
       border-radius: 16px;
-      padding: 16px;
+      padding: 18px;
       box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
       transition: box-shadow 0.18s, transform 0.18s, opacity 0.18s, border-color 0.18s;
       cursor: default;
@@ -472,8 +472,8 @@
     #topologyHtml .topo-master {
       display: flex; align-items: center; gap: 10px;
       width: 100%;
-      padding: 10px 12px; border-radius: 14px;
-      border: 1px solid rgba(96, 165, 250, 0.28);
+      padding: 16px 18px; border-radius: 18px;
+      border: 1px solid rgba(251, 191, 36, 0.72);
       cursor: pointer;
       margin-bottom: 12px;
       color: #0f172a;
@@ -482,15 +482,15 @@
       letter-spacing: 0;
       background: linear-gradient(135deg, rgba(239,246,255,0.96), rgba(255,255,255,0.98));
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.9), 0 8px 18px rgba(59,130,246,0.12);
-      min-height: 58px;
-      padding-right: 70px;
+      min-height: 118px;
+      padding-right: 110px;
     }
-    #topologyHtml .topo-master.online-healthy { border-color: rgba(59,130,246,0.34); }
+    #topologyHtml .topo-master.online-healthy { border-color: rgba(251,191,36,0.72); }
     #topologyHtml .topo-master.online-warning { border-color: rgba(245,158,11,0.42); background: linear-gradient(135deg, #fff7ed, #ffffff); }
     #topologyHtml .topo-master.offline        { border-color: #cbd5e1; background: #f8fafc; color: #64748b; }
     #topologyHtml .persona-avatar {
-      width: 42px; height: 42px;
-      border-radius: 12px;
+      width: 78px; height: 78px;
+      border-radius: 18px;
       display: inline-flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       background: transparent;
@@ -500,7 +500,7 @@
       overflow: visible;
     }
     #topologyHtml .persona-avatar.worker {
-      width: 36px; height: 36px;
+      width: 46px; height: 46px;
       background: transparent;
       box-shadow: none;
     }
@@ -538,9 +538,9 @@
     #topologyHtml .topo-worker.offline .persona-avatar { box-shadow: none; filter: grayscale(0.35); }
     #topologyHtml .persona-main { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 3px; }
     #topologyHtml .persona-name-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
-    #topologyHtml .topo-master-name { font-size: 14px; font-weight: 800; color: #0f172a; }
+    #topologyHtml .topo-master-name { font-size: 20px; font-weight: 900; color: #0f172a; }
     #topologyHtml .persona-role-tag {
-      font-size: 10px;
+      font-size: 13px;
       line-height: 1;
       padding: 3px 6px;
       border-radius: 999px;
@@ -558,7 +558,7 @@
       white-space: nowrap;
     }
     #topologyHtml .topo-node-action {
-      width: auto; height: 26px; padding: 0 9px;
+      width: auto; height: 44px; padding: 0 18px;
       display: inline-flex; align-items: center; justify-content: center;
       gap: 4px;
       background: #1677ff; border: 1px solid #1677ff;
@@ -567,9 +567,9 @@
       flex-shrink: 0;
       opacity: 1;
       position: absolute;
-      right: 8px; top: 50%; transform: translateY(-50%);
-      font-size: 12px;
-      font-weight: 700;
+      right: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px;
+      font-weight: 900;
       color: #fff;
       box-shadow: 0 6px 14px rgba(22,119,255,0.22);
     }
@@ -581,21 +581,21 @@
     #topologyHtml .topo-workers {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      gap: 10px;
     }
     #topologyHtml .topo-worker {
-      padding: 8px;
-      border-radius: 12px;
-      font-size: 12px; font-weight: 600; color: #1677ff;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 13px; font-weight: 700; color: #1677ff;
       cursor: pointer;
       border: 1px solid rgba(147,197,253,0.64);
       background: rgba(255,255,255,0.86);
       box-shadow: 0 3px 10px rgba(15,23,42,0.04);
-      display: flex; align-items: center; gap: 7px; justify-content: flex-start;
+      display: flex; align-items: center; gap: 10px; justify-content: flex-start;
       position: relative;
       overflow: hidden;
       min-width: 0;
-      min-height: 52px;
+      min-height: 76px;
       transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
     }
     #topologyHtml .topo-worker:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(37,99,235,0.10); }
@@ -606,8 +606,8 @@
       box-shadow: inset 3px 0 0 #1677ff, 0 8px 20px rgba(22,119,255,0.12) !important;
     }
     #topologyHtml .topo-worker-text { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-    #topologyHtml .topo-worker-name { color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    #topologyHtml .topo-worker-role { font-size: 10px; color: #64748b; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #topologyHtml .topo-worker-name { color: #0f172a; font-size: 16px; font-weight:900; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #topologyHtml .topo-worker-role { font-size: 12px; color: #64748b; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     #topologyHtml .topo-worker-task { grid-column: 1 / -1; font-size: 11px; color: #64748b; background: rgba(248,250,252,0.82); border: 1px dashed rgba(148,163,184,0.35); border-radius: 10px; padding: 6px 8px; }
     #topologyHtml .topo-worker.idle    { background: #ffffff; color: #1677ff; border-color: rgba(147,197,253,0.64); }
     #topologyHtml .topo-worker.busy    { background: linear-gradient(135deg, #f5f3ff, #eff6ff); color: #1677ff; border-color: rgba(124,58,237,0.34); animation: busyPulse 2s ease-in-out infinite; }
@@ -625,14 +625,10 @@
       flex: 1;
       min-height: 0;
       overflow-y: auto;
-      /* 竖线+圆点全在padding内：去掉border-left，用背景线代替 */
       border-left: none;
       margin-left: 0;
-      padding-left: 36px;  /* 竖线左侧留10px + 竖线2px + 右侧24px文本间距 */
-      background-image: linear-gradient(var(--border), var(--border));
-      background-size: 2px 100%;
-      background-position: 10px 0;  /* 竖线在距左10px处 */
-      background-repeat: no-repeat;
+      padding: 0 2px 2px;
+      background-image: none;
       scrollbar-width: thin;
       scrollbar-color: transparent transparent;
     }
@@ -660,6 +656,22 @@
     #page-overview .overview-grid > .card:nth-child(2) .activity-item::before {
       left: -33px;
     }
+    .activity-top-pill { font-size: 12px; padding: 6px 12px; border-radius: 999px; color: #2563eb; background: #eff6ff; font-weight: 800; white-space: nowrap; }
+    .activity-capsule { display:inline-flex; align-items:center; height:28px; padding:0 12px; border-radius:999px; border:1px solid #e2e8f0; color:#64748b; background:#fff; font-size:12px; font-weight:700; margin:0 6px 8px 0; }
+    .activity-capsule.active { color:#2563eb; border-color:#bfdbfe; background:#eff6ff; }
+    .activity-capsule.warning { color:#dc2626; border-color:#fecaca; background:#fff7f7; }
+    .activity-card { border:1px solid #e2e8f0; border-radius:18px; padding:14px; margin-bottom:12px; background:#fff; box-shadow:0 8px 20px rgba(15,23,42,0.05); }
+    .activity-card.decision-card { border-color:#fed7aa; background:#fffaf2; }
+    .activity-card.qa-card { border-color:#ddd6fe; background:#faf7ff; }
+    .activity-card-head { display:flex; align-items:center; justify-content:space-between; gap:8px; color:#64748b; font-size:12px; font-weight:700; margin-bottom:8px; }
+    .activity-card-title { color:#0f172a; font-size:15px; font-weight:900; line-height:1.35; margin-bottom:10px; }
+    .activity-progress { height:5px; border-radius:999px; background:#e5e7eb; overflow:hidden; margin:8px 0 10px; }
+    .activity-progress i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#f59e0b,#3b82f6); }
+    .activity-card-task { border:1px solid #e2e8f0; border-radius:12px; background:#f8fafc; color:#334155; padding:10px 12px; font-size:13px; font-weight:800; margin-bottom:10px; }
+    .activity-card-alert { border:1px solid #fed7aa; border-radius:12px; background:#fff7ed; color:#9a3412; padding:10px 12px; font-size:12px; font-weight:800; margin-bottom:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .activity-card-alert b { display:inline-flex; margin-right:8px; padding:2px 8px; border-radius:999px; color:#d97706; background:#fef3c7; }
+    .activity-card-foot { display:flex; justify-content:space-between; gap:8px; color:#94a3b8; font-size:12px; font-weight:800; }
+    .activity-card-foot b { color:#2563eb; white-space:nowrap; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     
     .page-title { font-size: 20px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; justify-content: space-between; }
@@ -6743,3 +6755,32 @@
 
   #page-overview #topologyHtml .topo-worker.worker-busy .topo-worker-state{border-color:rgba(251,146,60,.72)!important;background:#fff7ed!important;color:#c2410c!important;}
   #page-overview #topologyHtml .topo-worker.worker-offline .topo-worker-state{border-color:rgba(203,213,225,.9)!important;background:#f8fafc!important;color:#64748b!important;}
+
+  /* v0.6.33.45 final overview target: dashboard first, two-column team cards, card-style events. */
+  #page-overview.page.active { overflow-y:auto!important; overflow-x:hidden!important; }
+  #page-overview .overview-grid { display:grid!important; grid-template-columns:minmax(0,2fr) minmax(360px,1fr)!important; gap:20px!important; min-height:540px!important; overflow:visible!important; }
+  #page-overview #topologyHtml { display:grid!important; grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:16px!important; align-items:start!important; padding:4px 2px 10px!important; }
+  #page-overview #topologyHtml .topo-team-card { width:100%!important; min-width:0!important; flex:none!important; box-sizing:border-box!important; border-radius:18px!important; padding:18px!important; overflow:hidden!important; }
+  #page-overview #topologyHtml .topo-master { min-height:118px!important; padding:16px 112px 16px 18px!important; border-radius:18px!important; border-color:rgba(251,191,36,.72)!important; background:linear-gradient(135deg,#fffaf0,#fff)!important; }
+  #page-overview #topologyHtml .topo-master .persona-avatar { width:78px!important; height:78px!important; border-radius:18px!important; }
+  #page-overview #topologyHtml .topo-master-name { font-size:20px!important; font-weight:900!important; }
+  #page-overview #topologyHtml .persona-role-tag { font-size:13px!important; padding:4px 10px!important; }
+  #page-overview #topologyHtml .topo-node-action { min-width:80px!important; height:44px!important; padding:0 18px!important; border-radius:999px!important; font-size:16px!important; font-weight:900!important; right:14px!important; }
+  #page-overview #topologyHtml .topo-focus-bar { display:flex!important; align-items:center!important; justify-content:space-between!important; gap:10px!important; border:1px solid #dbeafe!important; background:#f8fbff!important; border-radius:14px!important; padding:10px 12px!important; margin:12px 0!important; }
+  #page-overview #topologyHtml .topo-workers { display:grid!important; grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:10px!important; }
+  #page-overview #topologyHtml .topo-worker { min-height:76px!important; padding:12px!important; border-radius:14px!important; gap:10px!important; background:#fff!important; }
+  #page-overview #topologyHtml .topo-worker .persona-avatar.worker { width:46px!important; height:46px!important; }
+  #page-overview #topologyHtml .topo-worker-name { font-size:16px!important; font-weight:900!important; }
+  #page-overview #topologyHtml .topo-worker-role,
+  #page-overview #topologyHtml .topo-worker-mode { font-size:12px!important; font-weight:700!important; }
+  #page-overview .overview-activity-card { overflow:hidden!important; }
+  #page-overview #typedActivityStream { display:block!important; padding:0 2px 4px!important; background:none!important; overflow-y:auto!important; }
+  #page-overview .activity-card { border:1px solid #e2e8f0!important; border-radius:18px!important; padding:14px!important; margin-bottom:12px!important; background:#fff!important; box-shadow:0 8px 20px rgba(15,23,42,.05)!important; }
+  #page-overview .activity-card.decision-card { border-color:#fed7aa!important; background:#fffaf2!important; }
+  #page-overview .activity-card.qa-card { border-color:#ddd6fe!important; background:#faf7ff!important; }
+  #page-overview .activity-card-head,
+  #page-overview .activity-card-foot { display:flex!important; align-items:center!important; justify-content:space-between!important; gap:8px!important; }
+  #page-overview .activity-card-title { font-size:15px!important; font-weight:900!important; color:#0f172a!important; margin:8px 0 10px!important; }
+  #page-overview .activity-card-task,
+  #page-overview .activity-card-alert { border-radius:12px!important; padding:10px 12px!important; font-size:13px!important; font-weight:800!important; margin-bottom:10px!important; }
+  @media (max-width:1180px) { #page-overview .overview-grid { grid-template-columns:1fr!important; } #page-overview #topologyHtml { grid-template-columns:1fr!important; } }

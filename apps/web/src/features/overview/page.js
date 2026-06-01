@@ -50,35 +50,48 @@ const OVERVIEW_HTML = String.raw`
 </div>
 </div>
 </div>
-<div class="card">
-<div class="card-title" style="margin-bottom:12px;">工作项事件流</div>
+<div class="card overview-activity-card">
+<div class="card-title" style="margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+<span>团队动态</span>
+<span class="activity-top-pill">重点动态 Top 5 · 最新在前</span>
+</div>
 <div class="activity-team-tabs" id="activityTeamTabs">
-<!-- Rendered via JS -->
+<span class="activity-capsule active">全部 (5)</span>
+<span class="activity-capsule">研发一组 (1)</span>
+<span class="activity-capsule">研发二组 (1)</span>
+<span class="activity-capsule warning">待决策 (2)</span>
 </div>
 <div class="activity-timeline" id="typedActivityStream">
-<div class="activity-item event-type-decision" style="border-left:3px solid #dc2626; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">2m 前 · 研发一组</div>
-<div style="font-size:13px;"><b style="color:#dc2626;">待决策</b> DecisionPacket · 原型架构边界需确认 <span style="color:#64748b;">→ 阻塞 Task 01C</span></div>
+<div class="activity-card event-type-decision decision-card">
+<div class="activity-card-head"><span>研发二组 · ERP 系统</span><span>2m 前</span></div>
+<div class="activity-card-title">ERP 系统 当前交付工作项</div>
+<div class="activity-progress"><i style="width:4%;"></i></div>
+<div class="activity-card-task">采购订单到入库单链路重构</div>
+<div class="activity-card-alert"><b>待决策</b> 当前任务等待决策：ERP 财务凭证生成规则需人工确认</div>
+<div class="activity-card-foot"><span>0/4 任务完成 · 实现3-1 · 实现验证岗</span><b>处理 →</b></div>
 </div>
-<div class="activity-item event-type-task" style="border-left:3px solid #ea580c; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">5m 前 · 研发二组</div>
-<div style="font-size:13px;"><b style="color:#ea580c;">Task </b>01B · S03 抽屉实现 <span style="color:#16a34a;">done</span> · @fixer 回写执行反馈</div>
+<div class="activity-card event-type-task task-card">
+<div class="activity-card-head"><span>研发一组 · HR 代码迁移项目</span><span>1m 前</span></div>
+<div class="activity-card-title">HR 代码迁移项目 当前交付工作项</div>
+<div class="activity-progress"><i style="width:0%;"></i></div>
+<div class="activity-card-task">Vue3 工程骨架与路由迁移</div>
+<div class="activity-card-foot"><span>0/4 任务完成 · 实现1-1 / 实现1-3</span><b>查看 →</b></div>
 </div>
-<div class="activity-item event-type-qa" style="border-left:3px solid #7c3aed; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">8m 前 · 研发一组</div>
-<div style="font-size:13px;"><b style="color:#7c3aed;">QA</b> 截图验证通过 · TF-FACTORY-UI-RUNTIME-01B · errors=[]</div>
+<div class="activity-card event-type-qa qa-card">
+<div class="activity-card-head"><span>研发五组 · 智能软件工厂</span><span>2m 前</span></div>
+<div class="activity-card-title">QA 截图验证通过 · TF-FACTORY-UI-RUNTIME-01B</div>
+<div class="activity-card-task">errors=[] · 首页布局回归通过</div>
+<div class="activity-card-foot"><span>验收反馈已回写</span><b>报告 →</b></div>
 </div>
-<div class="activity-item event-type-decision" style="border-left:3px solid #dc2626; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">12m 前 · 研发三组</div>
-<div style="font-size:13px;"><b style="color:#dc2626;">待决策</b> DecisionPacket · 财务凭证规则审查 <span style="color:#64748b;">→ 阻塞 Task 03A</span></div>
+<div class="activity-card event-type-decision decision-card compact">
+<div class="activity-card-head"><span>研发三组 · 财务凭证规则</span><span>4m 前</span></div>
+<div class="activity-card-title">DecisionPacket · 财务凭证规则审查</div>
+<div class="activity-card-foot"><span>阻塞 Task 03A</span><b>处理 →</b></div>
 </div>
-<div class="activity-item event-type-task" style="border-left:3px solid #2563eb; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">15m 前 · 研发四组</div>
-<div style="font-size:13px;"><b style="color:#2563eb;">Task </b>02 · Step 规划中 · @explorer 定位代码入口</div>
-</div>
-<div class="activity-item event-type-task" style="border-left:3px solid #16a34a; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">20m 前 · 研发五组</div>
-<div style="font-size:13px;"><b style="color:#16a34a;">Task </b>01A · 总览页表达增强 <span style="color:#16a34a;">done</span> · 验收通过</div>
+<div class="activity-card event-type-task task-card compact">
+<div class="activity-card-head"><span>研发四组 · 设备管理系统</span><span>6m 前</span></div>
+<div class="activity-card-title">Task 02 · Step 规划中</div>
+<div class="activity-card-foot"><span>@explorer 定位代码入口</span><b>查看 →</b></div>
 </div>
 </div>
 <div class="activity-timeline" id="overviewActivityStream" style="display:none;"></div>
@@ -88,29 +101,36 @@ const OVERVIEW_HTML = String.raw`
 `
 
 const TYPED_ACTIVITY_HTML = `
-<div class="activity-item event-type-decision" style="border-left:3px solid #dc2626; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">2m 前 · 研发一组</div>
-<div style="font-size:13px;"><b style="color:#dc2626;">待决策</b> DecisionPacket · 原型架构边界需确认 <span style="color:#64748b;">→ 阻塞 Task 01C</span></div>
+<div class="activity-card event-type-decision decision-card">
+<div class="activity-card-head"><span>研发二组 · ERP 系统</span><span>2m 前</span></div>
+<div class="activity-card-title">ERP 系统 当前交付工作项</div>
+<div class="activity-progress"><i style="width:4%;"></i></div>
+<div class="activity-card-task">采购订单到入库单链路重构</div>
+<div class="activity-card-alert"><b>待决策</b> 当前任务等待决策：ERP 财务凭证生成规则需人工确认</div>
+<div class="activity-card-foot"><span>0/4 任务完成 · 实现3-1 · 实现验证岗</span><b>处理 →</b></div>
 </div>
-<div class="activity-item event-type-task" style="border-left:3px solid #ea580c; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">5m 前 · 研发二组</div>
-<div style="font-size:13px;"><b style="color:#ea580c;">Task </b>01B · S03 抽屉实现 <span style="color:#16a34a;">done</span> · @fixer 回写执行反馈</div>
+<div class="activity-card event-type-task task-card">
+<div class="activity-card-head"><span>研发一组 · HR 代码迁移项目</span><span>1m 前</span></div>
+<div class="activity-card-title">HR 代码迁移项目 当前交付工作项</div>
+<div class="activity-progress"><i style="width:0%;"></i></div>
+<div class="activity-card-task">Vue3 工程骨架与路由迁移</div>
+<div class="activity-card-foot"><span>0/4 任务完成 · 实现1-1 / 实现1-3</span><b>查看 →</b></div>
 </div>
-<div class="activity-item event-type-qa" style="border-left:3px solid #7c3aed; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">8m 前 · 研发一组</div>
-<div style="font-size:13px;"><b style="color:#7c3aed;">QA</b> 截图验证通过 · TF-FACTORY-UI-RUNTIME-01B · errors=[]</div>
+<div class="activity-card event-type-qa qa-card">
+<div class="activity-card-head"><span>研发五组 · 智能软件工厂</span><span>2m 前</span></div>
+<div class="activity-card-title">QA 截图验证通过 · TF-FACTORY-UI-RUNTIME-01B</div>
+<div class="activity-card-task">errors=[] · 首页布局回归通过</div>
+<div class="activity-card-foot"><span>验收反馈已回写</span><b>报告 →</b></div>
 </div>
-<div class="activity-item event-type-decision" style="border-left:3px solid #dc2626; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">12m 前 · 研发三组</div>
-<div style="font-size:13px;"><b style="color:#dc2626;">待决策</b> DecisionPacket · 财务凭证规则审查 <span style="color:#64748b;">→ 阻塞 Task 03A</span></div>
+<div class="activity-card event-type-decision decision-card compact">
+<div class="activity-card-head"><span>研发三组 · 财务凭证规则</span><span>4m 前</span></div>
+<div class="activity-card-title">DecisionPacket · 财务凭证规则审查</div>
+<div class="activity-card-foot"><span>阻塞 Task 03A</span><b>处理 →</b></div>
 </div>
-<div class="activity-item event-type-task" style="border-left:3px solid #2563eb; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">15m 前 · 研发四组</div>
-<div style="font-size:13px;"><b style="color:#2563eb;">Task </b>02 · Step 规划中 · @explorer 定位代码入口</div>
-</div>
-<div class="activity-item event-type-task" style="border-left:3px solid #16a34a; padding-left:10px; margin-bottom:10px;">
-<div style="font-size:11px; color:#64748b;">20m 前 · 研发五组</div>
-<div style="font-size:13px;"><b style="color:#16a34a;">Task </b>01A · 总览页表达增强 <span style="color:#16a34a;">done</span> · 验收通过</div>
+<div class="activity-card event-type-task task-card compact">
+<div class="activity-card-head"><span>研发四组 · 设备管理系统</span><span>6m 前</span></div>
+<div class="activity-card-title">Task 02 · Step 规划中</div>
+<div class="activity-card-foot"><span>@explorer 定位代码入口</span><b>查看 →</b></div>
 </div>
 `
 

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 
 const source = readFileSync(new URL('../src/features/overview/page.js', import.meta.url), 'utf8')
+const css = readFileSync(new URL('../src/styles/prototype.css', import.meta.url), 'utf8')
 
 // 01C: The activity stream should contain typed event items with task/decision/QA labels
 const requiredEventTypes = [
@@ -26,3 +27,8 @@ const requiredContext = [
 for (const text of requiredContext) {
   assert.ok(source.includes(text), `overview event stream should mention "${text}"`)
 }
+
+assert.ok(source.includes('activity-card'), 'team activity should use card-style event items')
+assert.ok(source.includes('重点动态 Top 5'), 'team activity should expose a Top 5 capsule')
+assert.ok(css.includes('grid-template-columns: repeat(2, minmax(0, 1fr))'), 'team overview should use a two-column grid')
+assert.ok(css.includes('.activity-card.decision-card'), 'decision event card style should be defined')
