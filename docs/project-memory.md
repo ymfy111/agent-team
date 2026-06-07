@@ -1,5 +1,7 @@
 # project-memory｜agent-team 当前项目记忆
 
+最后同步时间: 2026-06-07
+
 > 更新时间：2026-06-01 16:43:26 +0800
 > 当前基线：v0.6.33.45  
 > 当前主线：AI 原生应用平台生成层 / AI 动态工作流 / Task Runner 执行闭环  
@@ -9,6 +11,18 @@
 ---
 
 ## 1. 当前核心结论
+
+> 顶层升格（2026-06-07，v0.7.0）：产品主体已从 agent-team（智能软件工厂）升格为 **DEOS 数字员工操作系统**。四层架构总纲（4F 用户终端 / 3F 系统层 / 2F 运行层 / 1F 业务本体 + 安全合规全栈贯穿）见 `docs/specs/SDD-DEOS-ARCHITECTURE-v0.7.md`。agent-team 名称退场，并入 DEOS 作为「构建侧 + 运行 / 管理底座」既有实现；核心增量是接入应用型数字员工（应用侧）并显式化 2F 数字员工运行平台（运行支撑）。既有 SDD 降为历史参考；产品需求见 `docs/specs/PRD-v0.7.md`；子设计推进计划见 `docs/specs/PLAN-DEOS-SUBDESIGNS-v0.7.md`，当前收敛为运行平台、管理平台、运营平台、业务系统集成四份主子设计；M1 运行平台子设计见 `docs/specs/SDD-DE-RUNTIME-PLATFORM-v0.7.md`；应用侧索引见 `docs/specs/SDD-APPLICATION-DE-v0.7.md`。旧 agent-team / v0.6.33 / v0.6.33.45 文档已整体迁入 `docs/archive/agent-team-v0.6.33/`，新设计默认不再读取旧目录，除非明确标注「历史参考」。下述 v0.6.33 结论作为构建侧历史实现细节继续有效。
+
+> 运行平台契约封口（2026-06-07）：`docs/specs/SDD-DE-RUNTIME-PLATFORM-v0.7.md` 已补齐 RuntimeEvent 完整字段、RuntimeEvent → 运营指标映射、AppTask → RuntimeTaskEnvelope → RuntimeSession 转换、RuntimeSession 状态机、人机协同检查点协议和能力调用契约。运营平台后续应优先消费 RuntimeEvent，而不直接读取运行平台内部数据库。
+>
+> 技术实现架构（2026-06-07）：新增 `docs/specs/SDD-DEOS-TECH-ARCHITECTURE-v0.7.md`，技术实现/物理部署视图，与逻辑架构互补。核心决策（经 oracle 评审）：① 动态工作流不用 Temporal，用 PG 任务表 + Scheduler 驱动（DEOS 动态可调与 Temporal 确定性重放有根本张力）；② 事件总线 NATS JetStream，快路径派发+慢路径 PG 轮询兜底；③ 控制面/执行面分离：Runtime Gateway 中心管 Device 生命周期不做任务派发，每台 Device 跑 Sandbox Daemon+Scheduler+LiteLLM(本机)+DE 沙箱；④ 任务派发 Device 本地闭环，Scheduler 按 target_policy 认领本机 DE 任务；⑤ 数据层级 Plan→Stage→WorkItem→Task→Step 全在 PG。安全红线：DE 沙箱无 PG 直连凭据只走 REST API。状态机区分 blocked(依赖未解)/waiting(人机协同)。中间件栈：PostgreSQL + NATS JetStream + Redis + LiteLLM + OTel/Prometheus/Grafana。
+>
+> PG 运行侧 schema（2026-06-07，技术架构 §4）：已设计运行侧表骨架——plans/stages/work_items/tasks/sessions/checkpoints/events 7 张 + devices/de_instances/service_registrations 3 张服务注册表。决策：① Step 存 sessions.steps JSONB 不建独立表；② ServiceRoute 运行时计算不落表；③ device_commands M1 不建表（网关走 NATS 请求/回复下发指令）。边界：de_instances 的 team_id/role 权威主表在管理平台（SDD-DE-MANAGEMENT-PLATFORM），运行侧只做引用副本。推进顺序：运行 → 管理 → 运营。
+>
+> 管理平台子设计（2026-06-07）：新增 `docs/specs/SDD-DE-MANAGEMENT-PLATFORM-v0.7.md`（828 行），定义 3F 管理平台的完整设计。核心内容：① 6 个核心实体（Team/Position/DigitalEmployee/SkillBinding/Permission/DEConfig）；② PG 管理侧 6 张权威主表（mgmt schema，与运行侧跨 schema 逻辑外键）；③ 两类数字员工编制治理差异（构建型版本制 vs 应用型任务制）；④ 8 组 RESTful API（团队/岗位/编制/技能/权限/配置/同步/AuthContext）；⑤ RBAC 权限基线（super_admin > team_admin > auditor > viewer）+ AuthContext 颁发给运行侧；⑥ NATS 管理→运行同步契约（mgmt.employee.*/mgmt.team.*/mgmt.config.*，推送+拉取兜底，最终一致）。设计决策：permissions 多态关联（subject_type+subject_id）；de_configs 三级优先级（default/team/individual）；管理侧为数据权威，运行侧引用副本被覆盖。下一步：运营平台子设计（SDD-DE-OPERATIONS-PLATFORM-v0.7.md）。
+>
+> 技术架构图稿（2026-06-07）：新增 `docs/specs/03-tech-architecture-image-prompt.md`，含 ASCII 架构蓝本（文字精确版，作评审与出图基准）+ GPT-Image-2 提示词。正式评审以 ASCII 蓝本和 SDD 正文为准，生成图仅作 PPT/汇报。
 
 智能软件工厂的核心不是智能体对话，而是围绕 `TaskFlow / TaskTicket` 组织计划、执行、协作、验证、评审和交付。
 
@@ -276,3 +290,38 @@ P0 文档化阶段，`docs/workitems/*.md` 主文档可作为 WorkPackage 的轻
 - 已完成 `TF-FACTORY-UI-RUNTIME-01B｜总览页工作项详情抽屉增强`，截图 `tmp/TF-FACTORY-UI-RUNTIME-01B-overview-after.png`，报告 `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01B.md`。
 - 下一步应执行 `TF-FACTORY-UI-RUNTIME-01C｜团队动态事件流增强`，只增强右侧团队动态事件流，不扩到全站重构。
 - 页面类 Task 必须按规则先备份、再修改、再启动本地服务截图自查并检查浏览器错误；未完成截图自查不得标记完全 PASS。
+
+## 自动沉淀
+
+### 2026-06-05
+- 【BOS 整体框架·命名】对外整体产品名「智能业务操作系统 BOS」(Business Operating System)，副标「让数字员工跑起来，替你把业务干起来」(旧副标「数字员工驱动的业务操作系统」因层级歧义弃用，详见本日封面定案条)。主名落在价值(业务操作系统/基础设施级站位，对标 Windows 之于 PC)而非手段(数字员工)；副标接住数字员工叙事避免名实割裂；不降级为「数字员工平台」。
+- 【BOS 三件套构成】①运行底座=数字员工运行时内核(调度/记忆/工具调用/安全沙箱，让员工7×24跑起来)；②管理运营平台=人建·管·运营·治理数字员工的控制台(各类PC工作台是其前端)；③工具箱=数字员工可调用的工具/技能/API能力库(员工靠它长本事,区别于传统RPA)。运行那块统一称「运行底座」,工作台不单列。
+- 【agent-team 在 BOS 中的定位】agent-team 项目=BOS 三件套中的「数字员工运行底座」组件。本仓 TaskFlow/ORCH/task-runner/task-batch-runner/RuntimeGateway/数字员工运行绑定 即运行底座的技术实现(调度·路由·执行闭环·运行时治理)；管理运营平台与工具箱是同一 BOS 框架下的另两件。
+- 【对外叙事链】痛点(系统与AI两张皮+构建与运行断头路)→机理(业务本体共享语义+进化飞轮运行反哺构建)→产品(BOS·数字员工驱动)→部署(四层大楼:1F工位/2F设备/3F云端调度/4F终端)。此为 BOS 整体产品愿景叙事(PPT)。
+- 【BOS 封面定案·层级澄清】PPT 封面定案：主标题「智能业务操作系统 BOS」(立品类站位/对标 Windows)，副标「让数字员工跑起来，替你把业务干起来」。副标由旧版「数字员工驱动的业务操作系统」修正(旧版层级歧义)。三层关系：业务←数字员工驱动(要干的活)；数字员工←运行在 BOS 之上(干活主体)；BOS 运行底座→承载/调度/驱动数字员工(操作系统)。即数字员工运行在 BOS 之上、驱动的是业务而非 OS(类比应用跑在 Windows 上)；禁止写回「数字员工驱动操作系统」式表述。
+- 产品主名定为『数字员工操作系统』(DEOS方向)，主副标：数字员工越用越懂你，业务越跑越准
+- 图一三件套定稿文案——运行底座：让数字员工跑起来/调度·记忆·工具调用·安全沙箱；管理运营平台：让人像管员工一样管数字员工/招聘·配置·授权·计量·治理；工具箱：给数字员工手脚/MCP·API·技能库；底座横条：业务本体·动态知识工程；底部：让数字员工团队协同工作
+- 管理运营平台功能范围：数字员工招聘(调运行底座接口、利用现有资源创建沙箱)、岗位配置(skill/人设/mcp/文档/可用大模型/默认配额)、权限分配(账号·组织·角色↔数字员工关系)、用量统计(访问次数/token/高阶统计分析)、绑定关系(构建型数字员工↔开发的系统、应用型数字员工↔运行的系统)
+- 痛点页定稿：①企业智能化，困在两张皮 ②数字员工，卡在断头路（①先②后，②以『数字员工』收尾无缝接图一）
+- DEOS核心概念锁定：唯一主体=数字员工，「智能体」退场(降为底层引擎技术词，不作对外独立交付物)；传统智能体=被动功能接口(引擎)，数字员工=引擎+岗位+沙箱+记忆+自主权的工作主体
+- 两类数字员工：构建型=构建【应用】+构建【工具】(入工具箱)，产出沉淀进业务本体；应用型=用工具+操作应用系统完成业务+协同(人↔员工、员工↔员工)；构建型造的(应用+工具)正是应用型消费的，闭环
+- 三大设施(总称=数字员工操作系统)：运行底座(所有员工运行处，引擎=opencode类agentic内核) / 管理运营平台 / 工具箱(工具仓库设施，内置+构建型生成入库)
+- 管理运营平台=管理+运营两域：管理(面向管理员/HR/IT)=招聘·配置·授权·治理；运营(面向领导/决策层)=监控指标·人效考核·token成本·经营分析；名可合可拆但运营功能不能丢(领导关心的买单人视角)
+- 创造数字员工=人通过管理运营平台(非员工造员工)；业务本体·动态知识工程=应用+工具+业务知识的统一沉淀，应用型运行时依赖并反哺它(越跑越准飞轮核心)
+- 图一管理运营平台标签最终版：招聘·配置·授权｜监控·人效·成本(左管理右运营；旧版「招聘·配置·授权·计量·治理」作废)；副标保留「让人像管员工一样管数字员工」
+- 用词纪律(全片红线)：①'智能体'零出现彻底退场(连批判现状都不用) ②旧范式/现状称'AI助手/AI助手平台'，我方主体一律'数字员工' ③升级线锚点话术「它不该只是个AI助手——它该是能扱活的数字员工」 ④视觉:AI助手=机器人/工具感，数字员工=拟人/岗位化(工牌·同事感)
+- 业务本体·动态知识工程(修正定稿)：构建型与应用型数字员工都【用它+反哺它】，双向动态闭环——边用边喂、越喂越肥，是'越用越懂/越跑越准'飞轮机理(纠正原'构建型单向写'表述)
+- P1痛点页命名定稿：右卡'AI智能体平台'→'AI助手平台'；副标'智能体平台'→'AI助手平台'；三痛点卡'智能体'→'AI助手'(共5处)；机器人图标保留；改后全页AI用词统一(AI归AI/AI助手平台/AI助手)
+
+### 2026-06-07
+- 产品名正式定为数字员工操作系统(DEOS)，旧名BOS停用
+- 四层架构总纲已定稿：4F/3F/2F/1F+安全合规全栈贯穿
+- 运行平台=2F运行支撑带不含能力库
+- 子设计收敛为4份主文档
+- AppTask独立建模不复用TaskTicket
+- 旧agent-team文档已归档到docs/archive/agent-team-v0.6.33/
+- 新增 docs/specs/SDD-DEOS-TECH-ARCHITECTURE-v0.7.md（1099行，经 oracle 评审）
+- 新增 docs/specs/03-tech-architecture-image-prompt.md（ASCII蓝本+出图提示词）
+- SDD-DE-RUNTIME-PLATFORM-v0.7.md 补齐对外契约（363→585行）
+- 运行侧 PG 10 张表 schema 已设计
+- 核心技术决策定稿：不用Temporal/NATS/控制执行分离/安全红线/target_policy/blocked-vs-waiting

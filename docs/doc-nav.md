@@ -1,33 +1,28 @@
-# doc-nav｜文档导航统一入口
+# doc-nav｜DEOS 文档导航统一入口
 
-> 当前同步批次：DOC-REORG / v0.6.33.45 / 生成层架构口径同步。  
-> 当前阶段：ORCH / Runtime / Task 目录口径收口；OpenCode 联调包使用 `.runtime/orch` 与 `docs/tasks` 新口径。  
-> 当前事实主线：AI 原生应用平台生成层 / AI 动态工作流 / WorkItem / Task Runner 执行闭环。  
-> 维护提示：本文件是人类与 AI 沙箱统一文档入口；中文入口 `docs/文档导航.md` 仅保留关键入口摘要和跳转说明，不承载完整长导航。
+> 当前同步批次：DEOS-v0.7 / agent-team 历史资料归档。
+> 当前阶段：DEOS 数字员工操作系统顶层架构、产品需求、应用侧子设计立项。
+> 当前事实主线：DEOS = 4F 用户终端 / 3F 系统层 / 2F 运行层 / 1F 业务本体 + 安全合规；2F 数字员工运行平台对应「运行支撑」带。
+> 维护提示：本文件是当前导航唯一完整入口；中文入口 `docs/文档导航.md` 只保留关键入口摘要。
 
 ---
 
-## 1. 当前最新入口
+## 1. 文档清单
 
-| 用途 | 当前入口 | 说明 |
+| 类别 | 具体文件 | 用途说明 |
 |---|---|---|
-| 项目长期事实源 | `docs/project-memory.md` | 当前基线、关键结论、目录口径和下一步。 |
-| AI 沙箱双向交接协议 | `AI-SANDBOX-HANDOFF-PROTOCOL.md` | active / v1 baseline；manifest 必需、路径作用域、保护路径、合入模式、expectedChangedPaths、停止条件、回滚和双远程推送规则。 |
-| 文档目录与命名规范 | `docs/guides/GUIDE-DOC-DIRECTORY-NAMING-v0.6.33.md` | `docs/workitems`、`docs/tasks`、`.runtime/orch`、`.runtime/exec` 规范。 |
-| 总路线图 | `docs/plans/PLAN-SMART-FACTORY.md` | TaskFlow First 总路线图。 |
-| 当前 ORCH 子设计 | `docs/specs/SDD-TEAM-ORCHESTRATOR-v0.6.33.md` | ORCH / Task Loop Driver / Task 派工颗粒度设计。 |
-| RuntimeGateway 子设计 | `docs/specs/SDD-RUNTIME-GATEWAY-v0.6.33.md` | 平台后台只联系 Gateway，由 Gateway 承载本地执行。 |
-| 工作项目录 | `docs/workitems/` | 一个 WorkItem 一个主文档。 |
-| Task 正式记录 | `docs/tasks/` | 按 WorkItem 分组，每个 Task 一个 `TASK_<TaskId>.md`。 |
-| 评审报告 | `docs/reports/` | 独立评审、验证、复盘报告。 |
-| 系统设计 | `docs/specs/SDD-v0.6.33.md` | v0.6.33 系统设计正本。 |
-| 原型入口 | `docs/prototypes/agent-team-v0.6.33.45-prototype.html` | v0.6.33.45 静态原型。 |
-| 总览页 AI 动态工作流设计 | `docs/specs/SDD-OVERVIEW-DYNAMIC-WORKFLOW-UI-v0.6.33.md` | 首页以计划、阶段、任务项、任务、步骤驱动，员工活动落实到 Task / Step。 |
-| 生成层架构定位 | `docs/specs/SDD-GENERATION-LAYER-ARCHITECTURE-v0.6.33.md` | 软件工厂对应 AI 原生应用平台生成层 / 建层，负责应用建模、代码生成与动态工作流调度。 |
-| 任务规划与截图自查规则 | `docs/guides/GUIDE-TASK-PLANNING-RULES-v0.6.33.md` | 写计划、拆 Task / Step、页面类任务截图自查的必读规则。 |
-| 当前 skill 说明 | `skills/README.md` | 当前 active skills 入口。 |
-| 单任务执行器 | `skills/task-runner/SKILL.md` | 执行一个明确 Task。 |
-| 批次执行器 | `skills/task-batch-runner/SKILL.md` | 执行同一个 WorkItem 下的明确 Task 队列。 |
+| `docs/` 项目事实 | `docs/project-memory.md` | 项目长期事实源：当前基线、关键结论、目录口径和下一步。 |
+| `docs/specs/` 架构总纲 | `docs/specs/SDD-DEOS-ARCHITECTURE-v0.7.md` | DEOS 四层总体架构（v0.7.0）；统领当前 specs 下各 SDD 子设计。 |
+| `docs/specs/` 产品需求 | `docs/specs/PRD-v0.7.md` | DEOS 产品需求规格（v0.7.0）；保留构建侧 + 新增应用侧 + 显式化运行平台。 |
+| `docs/specs/` 子设计计划 | `docs/specs/PLAN-DEOS-SUBDESIGNS-v0.7.md` | DEOS 后续主子设计矩阵与 M1–M4 分期计划；采用少数主文档 + 章节承载细分内容。 |
+| `docs/specs/` 子设计 | `docs/specs/SDD-DE-RUNTIME-PLATFORM-v0.7.md` | M1 首个子设计；定义 2F 运行支撑：动态工作流引擎、任务调度/编排、服务注册/发现、RuntimeEvent 指标映射、人机协同检查点与能力调用契约。 |
+| `docs/specs/` 子设计 | `docs/specs/SDD-DE-MANAGEMENT-PLATFORM-v0.7.md` | M2 管理平台子设计；定义 3F 集中管理：团队/岗位/数字员工编制 CRUD、RBAC 权限、PG 管理侧 6 张表 schema、AuthContext 颁发、NATS 运行侧同步契约。 |
+| `docs/specs/` 技术架构 | `docs/specs/SDD-DEOS-TECH-ARCHITECTURE-v0.7.md` | 技术实现 / 物理部署视图；技术选型（不用 Temporal，PG 任务表+Scheduler+NATS）、进程拓扑、PG schema 与逻辑对象映射、安全红线、关键场景时序。经 oracle 评审。 |
+| `docs/specs/` 应用侧索引 | `docs/specs/SDD-APPLICATION-DE-v0.7.md` | 应用型数字员工概述与索引；具体子设计统一归入 DEOS 子设计计划。 |
+| `docs/specs/` 叙事规范 | `docs/specs/SPEC-NARRATIVE-TERMINOLOGY.md` | 对外材料统一口径：产品名 DEOS、两类数字员工口号、建造型/运营型命名。 |
+| `docs/specs/` 图稿规范 | `docs/specs/02-four-layer-architecture-image-prompt.md` | DEOS 四层架构图相关提示词与图稿约束。 |
+| `docs/specs/` 图稿规范 | `docs/specs/03-tech-architecture-image-prompt.md` | DEOS 技术架构图：ASCII 蓝本（精确版）+ GPT-Image-2 提示词，配套技术架构 SDD。 |
+| `docs/archive/` 历史归档 | `docs/archive/agent-team-v0.6.33/README.md` | 旧 agent-team / v0.6.33 / v0.6.33.45 文档整体归档入口。 |
 
 ---
 
@@ -35,145 +30,88 @@
 
 | 目录 | 当前用途 | 维护规则 |
 |---|---|---|
-| `docs/plans/` | Plan / Stage：计划、阶段目标、路线图 | 不放单次执行记录。 |
-| `docs/workitems/` | WorkItem：工作项主文档 | 记录目标、范围、任务清单、状态、依赖、下一步。 |
-| `docs/tasks/` | Task：任务正式记录 | `docs/tasks/<WorkItemId>/TASK_<TaskId>.md`；临时任务放 `docs/tasks/TEMP/`。 |
-| `docs/specs/` | PRD / SDD / 子设计 | 正式需求与系统设计事实源。 |
-| `docs/reports/` | 评审、验证、复盘报告 | 需要长期审计或复盘时保留。 |
-| `docs/guides/` | 治理规则、目录规范、方法说明 | 当前目录规范入口见 `GUIDE-DOC-DIRECTORY-NAMING-v0.6.33.md`。 |
-| `docs/recs/` | 产品化建议 | 当前建议类文档入口。 |
-| `docs/prototypes/` | 原型 HTML 与图片资源 | 当前原型入口为 v0.6.33.45。 |
-| `docs/changes/` | Changelog / 变更记录 | 记录版本级变更。 |
-
-运行态目录不属于正式 docs，但当前口径为：
-
-```text
-.runtime/orch/   ORCH 调度运行态：state / dispatches / packets
-.runtime/exec/   智能体执行运行态：Task 内部步骤账本
-```
+| `docs/specs/` | 当前 DEOS PRD / SDD / 规范 / 图稿提示词 | 只放当前有效设计事实源；历史 v0.6 文档已归档。 |
+| `docs/archive/agent-team-v0.6.33/` | 旧 agent-team 历史资料 | 只作历史查证，不作为新设计默认依据。 |
+| `docs/doc-nav.md` | 当前完整导航 | 新增/移动 docs 后必须同步。 |
+| `docs/文档导航.md` | 中文兼容入口 | 只保留关键入口摘要，避免双导航漂移。 |
+| `docs/project-memory.md` | 项目长期事实源 | 记录 DEOS 当前基线和关键决策。 |
 
 ---
 
-## 3. 当前工作项
-
-- `docs/workitems/TF-FACTORY-UI-RUNTIME.md`
-- `docs/workitems/TF-GF-IMPL.md`
-- `docs/workitems/TF-PROD-MODEL.md`
-- `docs/workitems/TF-RUNTIME-GATEWAY-DESIGN.md`
-- `docs/workitems/TF-RUNTIME-ORCH-POC.md`
-
----
-
-## 4. 当前 active skills
-
-```text
-skills/task-runner/          v1.0.2，执行一个 Task，生成 Step / Node / exec / QA / Summary
-skills/task-batch-runner/    v1.0.2，执行一个 TaskBatch，顺序调度 Task[] 并生成 batch Summary
-```
-
-历史名称 `taskflow`、`task-batch` 已不再作为 active skill 目录存在。
-
----
-
-## 5. 当前文档结构摘要
+## 3. 当前文档结构摘要
 
 ```text
 docs/
-├── doc-nav.md               # 统一文档入口
-├── 文档导航.md              # 中文兼容入口，保留关键入口摘要和跳转说明
+├── doc-nav.md
+├── 文档导航.md
 ├── project-memory.md
-├── plans/
-├── workitems/               # WorkItem 主文档
-├── tasks/                   # Task 正式记录，按 WorkItem 分组
 ├── specs/
-├── reports/
-├── guides/
-├── templates/
-├── recs/
-├── prototypes/
-└── changes/
+│   ├── SDD-DEOS-ARCHITECTURE-v0.7.md
+│   ├── PRD-v0.7.md
+│   ├── PLAN-DEOS-SUBDESIGNS-v0.7.md
+│   ├── SDD-DE-RUNTIME-PLATFORM-v0.7.md
+│   ├── SDD-DE-MANAGEMENT-PLATFORM-v0.7.md
+│   ├── SDD-DEOS-TECH-ARCHITECTURE-v0.7.md
+│   ├── SDD-APPLICATION-DE-v0.7.md
+│   ├── SPEC-NARRATIVE-TERMINOLOGY.md
+│   ├── 02-four-layer-architecture-image-prompt.md
+│   └── 03-tech-architecture-image-prompt.md
+└── archive/
+    └── agent-team-v0.6.33/
 ```
 
 ---
 
-## 6. 维护约定
+## 4. 维护约定
 
-1. 每次更新 docs 时，必须同步 `docs/doc-nav.md` 和 `docs/project-memory.md`。
-2. `docs/文档导航.md` 只保留关键入口摘要和跳转说明，避免双导航漂移。
-3. 新工作项放 `docs/workitems/<WorkItemId>.md`。
-4. 新 Task 正式记录放 `docs/tasks/<WorkItemId>/TASK_<TaskId>.md`；临时任务放 `docs/tasks/TEMP/`。
-5. 旧 `docs/workitems/runs/`、`docs/tasks/runs/`、`.taskflow/` 不再作为新任务默认输出位置。
-6. 评审、验证、复盘报告放 `docs/reports/`。
-7. 文档文件名优先使用英文缩写，文档标题可以使用中文。
+1. 新文档、新设计、新任务默认围绕 DEOS v0.7 展开。
+2. 旧 agent-team 文档默认不参与新设计，除非明确标注「历史参考」。
+3. 每次新增或移动 docs 后，必须同步 `docs/doc-nav.md`、`docs/文档导航.md` 和 `docs/project-memory.md`。
+4. 当前 docs 根目录保持轻量：只留导航、项目记忆、当前 specs、历史 archive。
 
 ---
 
-## 7. 近期同步记录
+## 5. 近期同步记录
 
-### 运行网关页面实现记录
+### DEOS 架构总纲升格（2026-06-07）
 
-- `docs/tasks/TF-FACTORY-UI-ARCH/TASK_TF-TEMP-RUNTIME-GATEWAY-PAGE-IMPLEMENT-01.md`
-- `docs/reports/QA-RUNTIME-GATEWAY-PAGE-IMPLEMENT-01.md`
+- 新增顶层架构总纲：`docs/specs/SDD-DEOS-ARCHITECTURE-v0.7.md`。
+- 产品主体从 agent-team（智能软件工厂）升格为 DEOS（数字员工操作系统）。
+- 既有 `SDD-*-v0.6.33` 降为历史参考，分层 / 术语冲突时以 DEOS 总纲为准。
 
-### 前端模块化工作项入口
+### DEOS 产品需求升格（2026-06-07）
 
-- 工作项：`docs/workitems/TF-FACTORY-UI-ARCH.md`
-- 最新任务：`docs/tasks/TF-FACTORY-UI-ARCH/TASK_TF-FACTORY-UI-ARCH-07.md`
-- 最新验证：`docs/reports/QA-FRONTEND-UI-ARCH-07.md`
+- 新增产品需求文档：`docs/specs/PRD-v0.7.md`。
+- 保留构建侧需求，新增应用型数字员工需求骨架，并显式化 2F 数字员工运行平台（运行支撑）。
 
-- `docs/tasks/TF-FACTORY-UI-ARCH/TASK_TF-FACTORY-UI-ARCH-08.md`：decisions 页面独立拆分任务记录。
-- `docs/reports/QA-FRONTEND-UI-ARCH-08.md`：decisions 页面拆分验证报告。
+### DEOS 应用侧子设计立项（2026-06-07）
 
-### 前端模块化页面拆分进展（2026-05-28）
+- 新增应用侧设计总纲：`docs/specs/SDD-APPLICATION-DE-v0.7.md`。
+- 新增子设计推进计划：`docs/specs/PLAN-DEOS-SUBDESIGNS-v0.7.md`。
+- 子设计矩阵收敛为运行平台、管理平台、运营平台、业务系统集成四份主文档；能力契约、安全、人机协同、本体回流等先作为章节承载。
+- 应用侧概述文档降为索引；具体内容统一归入 DEOS 主子设计矩阵。
+- 运行平台口径：数字员工运行平台对应架构图 2F 的「运行支撑」带；能力库是并列共享组件，不纳入运行平台范围。
 
-- `TF-FACTORY-UI-ARCH-09`：pool 页面独立拆分，见 `docs/tasks/TF-FACTORY-UI-ARCH/TASK_TF-FACTORY-UI-ARCH-09.md` 与 `docs/reports/QA-FRONTEND-UI-ARCH-09.md`。
-- `TF-FACTORY-UI-ARCH-10`：teams 页面独立拆分，见 `docs/tasks/TF-FACTORY-UI-ARCH/TASK_TF-FACTORY-UI-ARCH-10.md` 与 `docs/reports/QA-FRONTEND-UI-ARCH-10.md`。
+### M1 数字员工运行平台子设计（2026-06-07）
 
-### 临时修正：roles 页面独立拆分漏项补齐
+- 新增运行平台子设计：`docs/specs/SDD-DE-RUNTIME-PLATFORM-v0.7.md`。
+- 关键口径：运行平台只覆盖 2F 运行支撑，不含能力库、管理平台、运营平台、业务系统和用户终端。
+- 定义最小运行对象：`RuntimeTaskEnvelope`、`RuntimeSession`、`RuntimeEvent`，并补齐 RuntimeEvent 字段、运营指标映射、应用型任务入口转换、RuntimeSession 状态机、人机协同检查点协议和能力调用契约，作为后续应用型运行时和运营平台的接口基础。
 
-- `docs/tasks/TEMP/TASK_TF-TEMP-ROLES-PAGE-SPLIT-FIX-01.md`：补齐 roles 独立 feature page 的临时任务记录。
-- `docs/reports/QA-TF-TEMP-ROLES-PAGE-SPLIT-FIX-01.md`：roles 真实点击与截图验证报告。
+### DEOS 技术实现架构（2026-06-07）
 
-### 前端模块化阶段收口
+- 新增技术架构文档：`docs/specs/SDD-DEOS-TECH-ARCHITECTURE-v0.7.md`，定位技术实现 / 物理部署视图，与逻辑架构互补。
+- 核心技术决策：动态工作流用 PG 任务表 + Scheduler 驱动（不引入 Temporal）；事件总线 NATS JetStream；中心控制面（Runtime Gateway 管 Device 生命周期，不做任务派发）+ 分布式 Device 执行面（Sandbox Daemon + Scheduler + LiteLLM + DE 沙箱）。
+- 经 oracle 架构评审，已纳入 P0/P1 修正：PG schema ↔ SDD 逻辑对象映射层、DE 沙箱无 PG 直连凭据（安全红线）、CAS+SKIP LOCKED 幂等、孤儿任务回收策略、状态机区分 blocked（依赖）/waiting（人机协同）、target_policy 字段预留间接指派、网关 ServiceRouting 与 TaskDispatch 辨析。
+- 配套图稿：`docs/specs/03-tech-architecture-image-prompt.md`，含 ASCII 架构蓝本（精确版）+ GPT-Image-2 提示词。
 
-- `docs/tasks/TF-FACTORY-UI-ARCH/TASK_TF-FACTORY-UI-ARCH-13.md`：前端模块化阶段评审与收口任务记录。
-- `docs/reports/QA-FRONTEND-UI-ARCH-13.md`：阶段收口验证报告。
-- `docs/reports/RPT-FRONTEND-UI-ARCH-13-CLOSEOUT.md`：阶段评审与后续业务逻辑统一建议。
+### M2 数字员工管理平台子设计（2026-06-07）
 
-### docs 已完成任务归档清理工具
+- 新增管理平台子设计：`docs/specs/SDD-DE-MANAGEMENT-PLATFORM-v0.7.md`（828 行）。
+- 定义 3F 管理平台核心：团队/岗位/数字员工编制对象模型 + 两类员工编制治理差异 + PG 管理侧 6 张权威主表（mgmt schema）+ 8 组 RESTful API + RBAC 权限 + AuthContext 颁发 + NATS 管理→运行同步契约。
+- 关键设计决策：管理侧与运行侧跨 schema 逻辑外键（不建物理外键）；permissions 多态关联；de_configs 三级优先级（default/team/individual）；管理侧为数据权威，运行侧引用副本最终一致。
 
-- `docs/archive-completed-workitems.mjs`：用于阶段收口后归档已完成任务明细，支持 `--dry-run`、`--archive`、`--clean`。清理前必须先归档，并保留 WorkItem 状态总账、阶段收口报告、project-memory 和文档导航。
-- `docs/tasks/TEMP/TASK_TF-TEMP-DOC-ARCHIVE-CLEANUP-SCRIPT-01.md`：归档清理脚本临时任务记录。
-- `docs/reports/QA-TF-TEMP-DOC-ARCHIVE-CLEANUP-SCRIPT-01.md`：归档清理脚本验证报告。
+### agent-team 历史资料归档（2026-06-07）
 
-### 总览页动态工作流设计同步（2026-05-31）
-
-- 新增设计文档：`docs/specs/SDD-OVERVIEW-DYNAMIC-WORKFLOW-UI-v0.6.33.md`。
-- 关键口径：软件工厂首页以 `计划 → 阶段 → 任务项/工作项 → 任务 → 步骤` 驱动，员工活动必须落实到具体 Task / Step。
-- 截图参考：`docs/prototypes/pic/references/overview-dynamic-workflow-reference-01.png`、`docs/prototypes/pic/references/overview-workitem-drawer-reference-01.png`。
-
-### 生成层架构口径同步（2026-06-01）
-
-- 新增上位架构设计：`docs/specs/SDD-GENERATION-LAYER-ARCHITECTURE-v0.6.33.md`。
-- 参考图：`docs/prototypes/pic/references/generation-layer-ai-dynamic-workflow-architecture-01.png`、`docs/prototypes/pic/references/ai-native-platform-five-layer-architecture-01.png`。
-- 关键口径：智能软件工厂是 AI 原生应用平台的生成层 / 建层产品化工作台，不是普通员工看板或传统项目管理系统；首页、项目、团队、员工、技能、待决策页面应围绕应用生成链路逐步收敛。
-
-### 任务规划与截图自查规则同步（2026-06-01）
-
-- 新增规则文档：`docs/guides/GUIDE-TASK-PLANNING-RULES-v0.6.33.md`。
-- 关键口径：WorkItem 启动前细化 Task；Task 执行时动态拆 Step；页面类 Task 必须由智能体自己截图验证、自查、必要修复后再交付用户验收。
-
-### TF-FACTORY-UI-RUNTIME 首批 Task 细化（2026-06-01）
-
-- 已将 `docs/workitems/TF-FACTORY-UI-RUNTIME.md` 细化为 `TF-FACTORY-UI-RUNTIME-01A` 至 `01E` 五个正式 Task。
-- 已完成：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01A.md`，验证报告 `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01A.md`。
-- 已完成：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01B.md`，验证报告 `docs/reports/QA-TF-FACTORY-UI-RUNTIME-01B.md`。
-- 下一步推荐执行：`docs/tasks/TF-FACTORY-UI-RUNTIME/TASK_TF-FACTORY-UI-RUNTIME-01C.md`。
-- 执行原则：一次只派发一个 Task；页面类任务必须先备份、修改、启动服务、截图自查、检查浏览器错误，再交付验收。
-
-### AI 沙箱双向交接协议（2026-06-01）
-
-- 新增根目录协议文档：`AI-SANDBOX-HANDOFF-PROTOCOL.md`。
-- 当前协作口径：ChatGPT 沙箱 docs 为主、可参与部分前端开发；OpenCode 本地 apps 为主、负责本地集成、验证、提交和同时推送 `origin` / `github`。
-- 双方通过 `update/` 下的 handoff、manifest 和 zip 包双向同步；除 `review-only` 外 manifest 为合入必需。
-- 协议状态为 active / v1 baseline；已补充 project-root 相对路径作用域、`docs/文档导航.md` 保护、`protectedPaths`、`allowedPaths`、`expectedChangedPaths`、`deletePaths`、`full-replace/overlay/patch` 语义、基线漂移、停止条件、`REMOTE_MISSING` 和回滚规则。
+- 旧 `plans/`、`workitems/`、`tasks/`、`reports/`、`guides/`、`recs/`、`templates/`、`prototypes/`、`changes/` 已迁入 `docs/archive/agent-team-v0.6.33/`。
+- 旧 `docs/specs/*.md` 中除当前 DEOS v0.7、叙事术语和架构图提示词外，均迁入 `docs/archive/agent-team-v0.6.33/specs/`。
